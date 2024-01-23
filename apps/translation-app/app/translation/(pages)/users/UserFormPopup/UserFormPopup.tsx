@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { usePopup } from 'apps/translation-app/hooks/popup.hooks';
-import { request } from 'apps/translation-app/lib/apiClient';
+import { usePopup } from '@apps/translation-app/hooks/popup.hooks';
+import { request } from '@apps/translation-app/lib/apiClient';
 
 import { ProjectItem } from '../../../models/ResponseGetTranslationProject';
 import { User } from '../models/User';

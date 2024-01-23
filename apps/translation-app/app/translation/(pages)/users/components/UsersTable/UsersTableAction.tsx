@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { Role } from 'enums/Role.enum';
 import React from 'react';
-import { ProjectItem } from 'apps/translation-app/app/translation/models/ResponseGetTranslationProject';
-import { usePopup } from 'apps/translation-app/hooks/popup.hooks';
+import { ProjectItem } from '@frontend/app/translation/models/ResponseGetTranslationProject';
+import { usePopup } from '@frontend/hooks/popup.hooks';
 
 import UserFormPopup from '../../UserFormPopup/UserFormPopup';
 import { User } from '../../models/User';

@@ -1,7 +1,7 @@
 'use server';
 
 import queryString from 'query-string';
-import { request } from 'apps/translation-app/lib/apiClient';
+import { request } from '@frontend/lib/apiClient';
 
 import { ResponseGetTranslationNamespacesSchema } from '../models/ResponseGetNamespaces';
 import {

@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { request } from 'apps/translation-app/lib/apiClient';
+import { request } from '@apps/translation-app/lib/apiClient';
 
 export async function POST(params: NextRequest) {
   try {
@@ -32,7 +32,7 @@ export async function POST(params: NextRequest) {
       },
       {
         status: 401,
-      }
+      },
     );
   }
 }

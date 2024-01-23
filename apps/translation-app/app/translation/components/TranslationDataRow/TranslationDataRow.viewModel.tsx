@@ -2,8 +2,8 @@ import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { usePopup } from 'apps/translation-app/hooks/popup.hooks';
-import { request } from 'apps/translation-app/lib/apiClient';
+import { usePopup } from '@frontend/hooks/popup.hooks';
+import { request } from '@frontend/lib/apiClient';
 
 import { RequestUpdateTranslation } from '../../models/RequestUpdateTranslation';
 import { TranslationData } from '../../models/TranslationData';

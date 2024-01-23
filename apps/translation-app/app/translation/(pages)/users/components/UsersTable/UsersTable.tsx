@@ -1,7 +1,7 @@
 import React from 'react';
-import { getRole } from 'apps/translation-app/app/translation/services/auth.service';
-import { getProjects } from 'apps/translation-app/app/translation/services/project.service';
-import { getUsers } from 'apps/translation-app/app/translation/services/translation.service';
+import { getRole } from '@frontend/app/translation/services/auth.service';
+import { getProjects } from '@frontend/app/translation/services/project.service';
+import { getUsers } from '@frontend/app/translation/services/translation.service';
 
 import styles from './UsersTable.module.scss';
 import UsersTableAction from './UsersTableAction';
@@ -33,7 +33,8 @@ const UsersTable = async () => {
               {item.projects
                 ?.map(
                   (item) =>
-                    projects.find((project) => project.identifier == item)?.name
+                    projects.find((project) => project.identifier == item)
+                      ?.name,
                 )
                 .join(', ')}
             </td>

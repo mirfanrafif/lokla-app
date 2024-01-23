@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { LoginFormData } from 'apps/translation-app/app/(auth)/models/LoginFormData';
-import { buildTranslationListUrl } from 'apps/translation-app/app/translation/navigations/translations.navigation';
 
 import styles from './LoginForm.module.scss';
+import { buildTranslationListUrl } from '@apps/translation-app/app/translation/navigations/translations.navigation';
+import { LoginFormData } from '../../../models/LoginFormData';
 
 const LoginForm = () => {
   const form = useForm<LoginFormData>();

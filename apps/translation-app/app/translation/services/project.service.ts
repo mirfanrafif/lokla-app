@@ -1,4 +1,4 @@
-import { request } from 'apps/translation-app/lib/apiClient';
+import { request } from '@frontend/lib/apiClient';
 
 import { ResponseGetTranslationProjectSchema } from '../models/ResponseGetTranslationProject';
 import { getAccessToken } from './auth.service';
@@ -10,7 +10,7 @@ export const getProjects = async () => {
       method: 'GET',
       cache: 'no-cache',
     },
-    getAccessToken()
+    getAccessToken(),
   );
 
   const data = ResponseGetTranslationProjectSchema.parse(response);

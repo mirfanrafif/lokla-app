@@ -2,8 +2,8 @@
 
 import React from 'react';
 import toast from 'react-hot-toast';
-import { usePopup } from 'apps/translation-app/hooks/popup.hooks';
-import { request } from 'apps/translation-app/lib/apiClient';
+import { usePopup } from '@apps/translation-app/hooks/popup.hooks';
+import { request } from '@apps/translation-app/lib/apiClient';
 
 import { RequestCreateProject } from '../../models/RequestCreateProject';
 import CreateProjectPopup from './CreateProjectPopup';

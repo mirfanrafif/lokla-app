@@ -3,7 +3,7 @@
 import { faAdd } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { usePopup } from 'apps/translation-app/hooks/popup.hooks';
+import { usePopup } from '@apps/translation-app/hooks/popup.hooks';
 
 import { ProjectItem } from '../../../models/ResponseGetTranslationProject';
 import UserFormPopup from './UserFormPopup';

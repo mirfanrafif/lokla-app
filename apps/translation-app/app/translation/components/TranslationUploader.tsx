@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { request } from 'apps/translation-app/lib/apiClient';
+import { request } from '@frontend/lib/apiClient';
 
 import { ResponseGetTranslationProject } from '../models/ResponseGetTranslationProject';
 import styles from './TranslationUploader.module.scss';

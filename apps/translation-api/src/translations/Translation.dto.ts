@@ -48,7 +48,7 @@ export class RequestImportTranslationFromJson {
 }
 
 export class RequestImportTranslationFromCi {
-  data: any;
+  data: object;
 }
 
 export class RequestGetTranslationList extends PaginationType {

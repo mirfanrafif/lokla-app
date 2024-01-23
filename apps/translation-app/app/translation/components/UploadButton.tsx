@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { languages } from 'constants/languages';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { usePopup } from 'apps/translation-app/hooks/popup.hooks';
+import { usePopup } from '@frontend/hooks/popup.hooks';
 
 import { ResponseGetTranslationProject } from '../models/ResponseGetTranslationProject';
 import { TranslationUploader } from './TranslationUploader';
@@ -31,7 +31,7 @@ const UploadButton = (props: {
               router.refresh();
             }}
             accessToken={props.accessToken}
-          />
+          />,
         );
       }}
     >

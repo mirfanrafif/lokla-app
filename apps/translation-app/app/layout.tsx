@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { Noto_Sans, Noto_Sans_JP } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
-import Popup from 'apps/translation-app/components/Popup/Popup';
-import PopupContextProvider from 'apps/translation-app/context/PopupProvider';
 
 import './global.scss';
+import Popup from '../components/Popup/Popup';
+import PopupContextProvider from '../context/PopupProvider';
 
 export const metadata = {
   title: 'Welcome to apps/translation-app',

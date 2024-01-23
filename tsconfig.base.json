@@ -16,8 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@apps/*": ["apps/*"],
-      "@frontend/*": ["apps/translation-app/*"],
-      "@backend/*": ["apps/translation-api/*"]
+      "@backend/*": ["apps/translation-api/*"],
+      "@frontend/*": ["apps/translation-app/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

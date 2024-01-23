@@ -1,0 +1,12 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  column-gap: 8px;
+  margin-bottom: 8px;
+  margin-top: 16px;
+}
+
+.search {
+  flex: 1;
+}

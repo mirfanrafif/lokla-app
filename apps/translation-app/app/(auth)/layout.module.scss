@@ -1,0 +1,11 @@
+.mainContainer {
+  @apply flex h-screen w-screen flex-col items-center justify-center;
+}
+
+.cardWrapper {
+  @apply w-full max-w-[512px] rounded-2xl bg-white p-4;
+
+  input {
+    @apply w-full border-gray-200 bg-white;
+  }
+}

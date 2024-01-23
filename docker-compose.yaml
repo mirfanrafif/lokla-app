@@ -1,0 +1,46 @@
+version: '3'
+services:
+  translation-fe:
+    container_name: translation-fe
+    build:
+      context: .
+      target: production-fe
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: translation-be
+    ports:
+      - 4200:4200
+    depends_on:
+      - translation-be
+
+  translation-be:
+    container_name: translation-be
+    build:
+      context: .
+      target: production-be
+    ports:
+      - 3001:3001
+    environment:
+      API_PORT: 3001
+      MONGODB_URI: mongodb://admin:admin12345678@mongo:27017/?authSource=admin
+      JWT_SECRET: secret
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin12345678
+    volumes:
+      - mongodata:/data/db
+
+networks:
+  default:
+    name: example_dev_network
+    driver: bridge
+
+volumes:
+  mongodata:

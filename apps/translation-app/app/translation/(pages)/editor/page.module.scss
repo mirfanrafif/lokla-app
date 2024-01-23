@@ -1,0 +1,9 @@
+.titleRow {
+  display: flex;
+  flex-direction: row;
+  column-gap: 16px;
+}
+
+.title {
+  flex: 1;
+}

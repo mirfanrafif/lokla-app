@@ -1,0 +1,60 @@
+.usersTable {
+  @apply w-full;
+
+  thead tr th {
+    @apply bg-white p-4;
+    @apply dark:bg-neutral-800 dark:text-white;
+
+    &:first-child {
+      @apply rounded-tl-lg;
+    }
+
+    &:last-child {
+      @apply w-[150px] rounded-tr-lg;
+    }
+  }
+
+  tbody {
+    @apply border-t border-gray-200 dark:border-neutral-700;
+
+    tr {
+      td {
+        @apply bg-white p-4 text-center dark:bg-neutral-800 dark:text-white;
+      }
+
+      &:nth-child(2) {
+        td {
+          @apply bg-gray-100 dark:bg-neutral-700;
+        }
+      }
+
+      &:last-child {
+        td {
+          &:first-child {
+            @apply rounded-bl-lg;
+          }
+
+          &:last-child {
+            @apply rounded-br-lg;
+          }
+        }
+      }
+    }
+  }
+}
+
+.actionButton {
+  @apply aspect-square w-10 rounded-lg p-2 text-white;
+
+  &.edit {
+    @apply bg-blue-500;
+  }
+
+  &.reset {
+    @apply bg-gray-500;
+  }
+
+  &.delete {
+    @apply bg-red-400;
+  }
+}

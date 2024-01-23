@@ -1,0 +1,32 @@
+.sidebar {
+  width: 256px;
+  height: 100vh;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  padding: 16px;
+  overflow: auto;
+  background-color: var(--primary-700);
+  color: white;
+}
+
+.sidebarGroup {
+  @apply flex h-full flex-col gap-y-2;
+}
+
+.sidebarItem {
+  @apply hover:bg-primary-hover inline-block w-full rounded-lg bg-opacity-10 py-2 px-4 transition-colors;
+  @apply dark:hover:bg-primary-hover;
+}
+
+.groupTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 8px;
+  margin-bottom: 16px;
+}
+
+.logoutButton {
+  @apply mt-auto;
+}

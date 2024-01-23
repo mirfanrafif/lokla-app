@@ -1,0 +1,7 @@
+.paginationItem {
+  @apply bg-primary-default h-10 w-10 rounded-lg py-2 text-center text-white shadow-md;
+
+  &.active {
+    @apply text-primary-default bg-white;
+  }
+}

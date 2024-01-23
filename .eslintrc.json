@@ -16,7 +16,8 @@
                 "sourceTag": "*",
                 "onlyDependOnLibsWithTags": ["*"]
               }
-            ]
+            ],
+            "allowCircularSelfDependency": true
           }
         ]
       }

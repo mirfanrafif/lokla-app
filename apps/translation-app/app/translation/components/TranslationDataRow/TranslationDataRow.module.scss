@@ -1,0 +1,53 @@
+.row {
+  > td {
+    @apply bg-white py-2 px-2;
+    @apply dark:bg-primary-darkBg;
+
+    &:first-child {
+      @apply pl-4 pr-2;
+    }
+
+    &.key {
+      @apply w-[200px];
+    }
+  }
+
+  &:last-child {
+    > td {
+      &:first-child {
+        @apply rounded-bl-lg;
+      }
+
+      &:last-child {
+        @apply rounded-br-lg;
+      }
+    }
+  }
+
+  &.notTranslated {
+    > td {
+      @apply bg-red-200;
+      @apply dark:bg-opacity-20;
+    }
+  }
+}
+
+.actionButton {
+  @apply aspect-square  w-10  rounded-lg p-2 transition-colors;
+
+  &.update {
+    @apply bg-green-500 hover:bg-green-600;
+  }
+
+  &.reset {
+    @apply bg-gray-200 hover:bg-gray-300;
+  }
+
+  &.ignore {
+    @apply bg-amber-400 hover:bg-amber-500;
+  }
+}
+
+.actionRow {
+  @apply flex justify-center gap-x-2 px-2;
+}

@@ -15,8 +15,10 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY --from=builder /app/dist/apps/translation-fe ./
+COPY --from=builder /app/dist/apps/translation-app ./
 RUN npm install --only=production
+
+EXPOSE 4200
 
 CMD ["npm", "run", "start"]
 
@@ -26,8 +28,10 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY --from=builder /app/dist/apps/translation-be ./
+COPY --from=builder /app/dist/apps/translation-api ./
 RUN npm install --only=production
+
+EXPOSE 3001
 
 CMD ["node", "main.js"]
 

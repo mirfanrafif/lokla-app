@@ -22,12 +22,14 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY --from=builder /app/dist/apps/translation-app ./
-RUN npm install --only=production
+COPY --from=builder /app/dist/apps/translation-app/next.config.js ./
+COPY --from=builder /app/dist/apps/translation-app/public ./public
+COPY --from=builder /app/dist/apps/translation-app/.next/static ./dist/apps/translation-app/.next/static
+COPY --from=builder /app/dist/apps/translation-app/.next/standalone ./
 
-EXPOSE 4200
+EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+CMD ["node", "apps/translation-app/server.js"]
 
 # Production Image - Backend
 FROM node:18.18.2-buster-slim as production-be

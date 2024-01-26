@@ -18,15 +18,12 @@ jobs:
         run: docker build --target production-fe -t translation-app .
         
 
-      - name: Push to github registry
-        run: docker tag production-be docker.pkg.github.com/username/repo-name/production-be:latest
-        
-      - name: Login to github registry
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+      - name: Push to github container registry
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker tag translation-api ghcr.io/translation-app/translation-api:latest
+          docker tag translation-app ghcr.io/translation-app/translation-app:latest
+          docker push ghcr.io/translation-app/translation-api:latest
+          docker push ghcr.io/translation-app/translation-app:latest
 
-      - name: Push to github registry
-        run: docker push docker.pkg.github.com/username/repo-name/production-be:latest
-
-        
-
-      # Additional steps for pushing the image to a registry or deploying it can be added here
+      

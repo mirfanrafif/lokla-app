@@ -1,0 +1,32 @@
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build BE Image
+        run: docker build --target production-be -t translation-api .
+
+      - name: Build FE Image
+        run: docker build --target production-fe -t translation-app .
+        
+
+      - name: Push to github registry
+        run: docker tag production-be docker.pkg.github.com/username/repo-name/production-be:latest
+        
+      - name: Login to github registry
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Push to github registry
+        run: docker push docker.pkg.github.com/username/repo-name/production-be:latest
+
+        
+
+      # Additional steps for pushing the image to a registry or deploying it can be added here

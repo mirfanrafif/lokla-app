@@ -21,3 +21,7 @@ node_modules
 
 # Next.js
 .next
+
+# Dockerfile
+Dockerfile
+.dockerignore

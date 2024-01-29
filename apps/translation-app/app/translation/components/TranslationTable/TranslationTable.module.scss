@@ -1,14 +1,12 @@
 .tableContainer {
   @apply rounded-lg border border-neutral-200;
-  @apply dark:border-neutral-800 dark:bg-neutral-800;
 }
 
 .tableHeader {
-  @apply border-b border-neutral-200 dark:border-neutral-800;
+  @apply border-b border-neutral-200;
 
   > tr > th {
     @apply bg-white py-4 px-4 text-left font-semibold;
-    @apply dark:bg-neutral-700 dark:text-white;
 
     &:first-child {
       @apply w-[100px] rounded-tl-lg;
@@ -21,5 +19,5 @@
 }
 
 .tableBody {
-  @apply divide-y divide-neutral-100 dark:divide-neutral-700;
+  @apply divide-y divide-neutral-100;
 }

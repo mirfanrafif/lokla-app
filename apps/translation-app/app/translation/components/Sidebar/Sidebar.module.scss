@@ -16,7 +16,6 @@
 
 .sidebarItem {
   @apply hover:bg-primary-hover inline-block w-full rounded-lg bg-opacity-10 py-2 px-4 transition-colors;
-  @apply dark:hover:bg-primary-hover;
 }
 
 .groupTitle {

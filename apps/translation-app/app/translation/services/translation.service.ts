@@ -30,7 +30,6 @@ export const getTranslationData = async (params: {
     filter: validate(params.filter),
   };
 
-  console.log(queryString.stringify(requestData));
   const response = await request(
     `/translations?${queryString.stringify(requestData)}`,
     {

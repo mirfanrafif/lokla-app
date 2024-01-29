@@ -21,12 +21,12 @@ const Page = async () => {
       <div className="space-y-4">
         {projects.map((item) => (
           <div
-            className="flex w-full items-center gap-x-4 rounded-lg bg-white p-4 dark:bg-neutral-700"
+            className="flex w-full items-center gap-x-4 rounded-lg bg-white p-4"
             key={item.identifier}
           >
             <div className="flex-1 space-y-2">
               <h1>{item.name}</h1>
-              <p className="dark:text-white">Identifier: {item.identifier}</p>
+              <p>Identifier: {item.identifier}</p>
             </div>
 
             <a

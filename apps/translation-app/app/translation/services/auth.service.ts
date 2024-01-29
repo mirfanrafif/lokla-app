@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { LoginUserSchema } from '../../(auth)/models/ResponseLogin';
 
 export const getAccessToken = () => {
   const accessToken = cookies().get('access_token')?.value;
@@ -9,13 +10,15 @@ export const getAccessToken = () => {
 export const getRole = (): string | undefined => {
   const cookiesStore = cookies();
 
-  const userData = cookiesStore.get('user');
+  const userCookies = cookiesStore.get('user');
 
-  if (userData === undefined) {
+  if (userCookies === undefined) {
     return undefined;
   }
 
-  const role = JSON.parse(userData.value).role;
+  const userData = LoginUserSchema.parse(JSON.parse(userCookies.value));
 
-  return role as string;
+  const role = userData.role;
+
+  return role;
 };

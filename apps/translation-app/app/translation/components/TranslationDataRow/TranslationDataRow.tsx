@@ -38,7 +38,7 @@ export function TranslationDataRow({
       })}
     >
       <td>
-        <div className="h-full w-full text-black dark:text-white">
+        <div className="h-full w-full text-black">
           {item.namespace}
         </div>
       </td>

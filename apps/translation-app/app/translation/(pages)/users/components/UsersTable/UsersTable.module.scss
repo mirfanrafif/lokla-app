@@ -3,7 +3,6 @@
 
   thead tr th {
     @apply bg-white p-4;
-    @apply dark:bg-neutral-800 dark:text-white;
 
     &:first-child {
       @apply rounded-tl-lg;
@@ -15,16 +14,16 @@
   }
 
   tbody {
-    @apply border-t border-gray-200 dark:border-neutral-700;
+    @apply border-t border-gray-200;
 
     tr {
       td {
-        @apply bg-white p-4 text-center dark:bg-neutral-800 dark:text-white;
+        @apply bg-white p-4 text-center;
       }
 
       &:nth-child(2) {
         td {
-          @apply bg-gray-100 dark:bg-neutral-700;
+          @apply bg-gray-100;
         }
       }
 

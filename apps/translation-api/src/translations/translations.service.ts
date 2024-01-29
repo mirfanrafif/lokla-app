@@ -27,6 +27,8 @@ export class TranslationsService {
   async getTranslationList(query: RequestGetTranslationList) {
     let filters = {};
 
+    console.log(query);
+
     if (query.ns !== '' && query.ns !== undefined) {
       filters = {
         ...filters,

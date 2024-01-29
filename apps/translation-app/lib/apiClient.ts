@@ -1,8 +1,9 @@
 export const request = async (
   url: string,
   options: RequestInit,
-  accessToken?: string
+  accessToken?: string,
 ) => {
+  console.log('api request:', url);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api${url}`,
     {
@@ -11,7 +12,7 @@ export const request = async (
         ...options.headers,
         Authorization: `Bearer ${accessToken}`,
       },
-    }
+    },
   );
 
   const data = await response.json();

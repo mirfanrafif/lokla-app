@@ -1,13 +1,40 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { buildTranslationListUrl } from './app/translation/navigations/translations.navigation';
+
+const publicUrl = [
+  '/login',
+  '/signup',
+  '/forgot-password',
+  '/reset-password',
+  '/auth/login',
+];
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
-  if (
-    request.nextUrl.pathname.includes('translation') &&
-    request.cookies.get('access_token') === undefined
-  ) {
+  // redirect root url to translation list
+
+  if (request.nextUrl.pathname === '/') {
+    return NextResponse.redirect(
+      new URL(buildTranslationListUrl(), request.url),
+    );
+  }
+
+  console.log('middleware', request.nextUrl.pathname);
+  if (publicUrl.includes(request.nextUrl.pathname)) {
+    console.log('public url');
+    return NextResponse.next();
+  }
+
+  if (request.cookies.get('access_token') === undefined) {
     return NextResponse.redirect(new URL('/login', request.url));
+  }
+
+  if (request.cookies.get('expiry') !== undefined) {
+    const expiry = new Date(request.cookies.get('expiry')?.value as string);
+    if (expiry < new Date()) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
   }
 
   return NextResponse.next();

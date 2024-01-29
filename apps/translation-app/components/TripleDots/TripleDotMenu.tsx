@@ -20,7 +20,7 @@ const TripleDotMenu = (props: {
         className="relative w-6 h-6"
         onClick={() => setisShowMenu(!isShowMenu)}
       >
-        <FontAwesomeIcon icon={faEllipsisVertical} />
+        <FontAwesomeIcon icon={faEllipsisVertical} className="w-4 h-4" />
 
         {isShowMenu && (
           <div className="absolute top-[calc(100%+8px)] right-0 w-48 bg-white shadow-lg rounded-lg overflow-hidden">

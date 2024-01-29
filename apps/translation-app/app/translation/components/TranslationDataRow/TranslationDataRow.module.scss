@@ -31,7 +31,7 @@
 }
 
 .actionButton {
-  @apply aspect-square  w-10  rounded-lg p-2 transition-colors;
+  @apply aspect-square w-10 rounded-lg p-2 transition-colors;
 
   &.update {
     @apply bg-green-500 hover:bg-green-600;

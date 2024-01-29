@@ -37,7 +37,7 @@ const UploadButton = (props: {
         );
       }}
     >
-      <FontAwesomeIcon icon={faUpload} className="mr-2" />
+      <FontAwesomeIcon icon={faUpload} className="mr-2 w-4 h-4" />
       Upload
     </button>
   );

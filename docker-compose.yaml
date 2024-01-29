@@ -5,8 +5,8 @@ services:
     build:
       context: .
       target: production-fe
-    environment:
-      NEXT_PUBLIC_API_BASE_URL: http://localhost:3001
+    env_file:
+      - .env
     ports:
       - 4200:3000
     depends_on:
@@ -18,11 +18,9 @@ services:
       context: .
       target: production-be
     ports:
-      - 3001:3001
-    environment:
-      API_PORT: 3001
-      MONGODB_URI: mongodb://admin:admin12345678@mongo:27017/?authSource=admin
-      JWT_SECRET: secret
+      - 4201:3001
+    env_file:
+      - .env
     depends_on:
       - mongo
 

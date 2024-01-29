@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserController } from './User.controller';
 import { UserModel, UserSchema } from './User.schema';
 import { UserService } from './User.service';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -26,14 +27,14 @@ import { UserService } from './User.service';
   ],
 })
 export class UserModule implements OnModuleInit {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private configService: ConfigService) {}
 
   async onModuleInit() {
     try {
       await this.userService.createUser({
-        email: 'admin@admin.com',
-        fullName: 'Admin',
-        password: '12345678',
+        email: this.configService.get<string>('ADMIN_EMAIL'),
+        fullName: this.configService.get<string>('ADMIN_NAME'),
+        password: this.configService.get<string>('ADMIN_PASSWORD'),
         projects: [],
         role: 'admin',
       });

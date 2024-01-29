@@ -82,6 +82,7 @@ export function TranslationDataRow({
               {
                 label: 'Ignore',
                 onClick: () => ignoreTranslation(item.key),
+                disabled: translated,
               },
               {
                 label: 'Show Changelog',

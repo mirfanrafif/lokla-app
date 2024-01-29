@@ -9,6 +9,7 @@ const TripleDotMenu = (props: {
   menus: {
     label: string;
     onClick: () => void;
+    disabled?: boolean;
   }[];
 }) => {
   const [isShowMenu, setisShowMenu] = useState(false);
@@ -26,11 +27,12 @@ const TripleDotMenu = (props: {
             {props.menus.map((menu, index) => (
               <button
                 key={index}
-                className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                className="w-full px-4 py-2 text-left hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => {
                   setisShowMenu(false);
                   menu.onClick();
                 }}
+                disabled={menu.disabled}
               >
                 {menu.label}
               </button>

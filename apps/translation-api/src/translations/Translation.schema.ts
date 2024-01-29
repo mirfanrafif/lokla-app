@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
+
+import { TranslationChangeLogModel } from './TranslationChangeLog';
 
 export type TranslationDocument = HydratedDocument<TranslationModel>;
 
@@ -40,6 +42,12 @@ export class TranslationModel {
 
   @Prop()
   translated: boolean;
+
+  @Prop({
+    type: [Types.ObjectId],
+    ref: TranslationChangeLogModel.name,
+  })
+  changeLogs: TranslationChangeLogModel[];
 }
 
 export const TranslationSchema = SchemaFactory.createForClass(TranslationModel);

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { TranslationChangeLogEvent } from 'enums/TranslationChangeLogEvent';
 import { Model } from 'mongoose';
 import { flatten, unflatten } from 'safe-flat';
 
@@ -116,7 +117,10 @@ export class TranslationsService {
     };
   }
 
-  async processJson(json: object, body: RequestImportTranslationFromJson) {
+  private async processJson(
+    json: object,
+    body: RequestImportTranslationFromJson,
+  ) {
     const flatJson = flatten(json);
 
     const isProjectValid = await this.projectModel.findOne({
@@ -166,6 +170,18 @@ export class TranslationsService {
         {
           translations: newTranslation,
           translated: isCompleted && !isUpdated,
+          changeLogs: [
+            ...item.changeLogs,
+            {
+              eventType: isUpdated
+                ? TranslationChangeLogEvent.UPDATE
+                : TranslationChangeLogEvent.CREATE,
+              before: isUpdated ? existingLocale.value : '',
+              after: flatJson[item.key],
+              locale: body.locale,
+              date: new Date(),
+            },
+          ],
         },
       );
     }
@@ -187,6 +203,15 @@ export class TranslationsService {
         },
       ],
       translated: false,
+      changeLogs: [
+        {
+          eventType: TranslationChangeLogEvent.CREATE,
+          before: '',
+          after: flatJson[item],
+          locale: body.locale,
+          date: new Date(),
+        },
+      ],
     }));
 
     await this.translationModel.insertMany(requests);
@@ -195,6 +220,46 @@ export class TranslationsService {
   }
 
   async updateTranslation(request: RequestUpdateTranslation) {
+    const existingTranslation = await this.translationModel.findOne({
+      key: request.oldKey,
+      namespace: request.namespace,
+      project: request.project,
+    });
+
+    if (!existingTranslation) {
+      throw new Error('Translation not found');
+    }
+
+    const changeLog = request.translations
+      .filter(
+        (item) =>
+          !existingTranslation.translations.find(
+            (existingItem) => existingItem.locale === item.locale,
+          ) ||
+          existingTranslation.translations.find(
+            (existingItem) =>
+              existingItem.locale === item.locale &&
+              existingItem.value !== item.value,
+          ),
+      )
+      .map((item) => ({
+        eventType: TranslationChangeLogEvent.UPDATE,
+        before:
+          existingTranslation.translations.find(
+            (existingItem) => existingItem.locale === item.locale,
+          )?.value ?? '',
+        after: item.value,
+        locale: item.locale,
+        date: new Date(),
+      }));
+
+    if (changeLog.length === 0) {
+      return {
+        success: true,
+        data: existingTranslation,
+      };
+    }
+
     const response = await this.translationModel.findOneAndUpdate(
       {
         key: request.oldKey,
@@ -204,6 +269,7 @@ export class TranslationsService {
       {
         translations: request.translations,
         translated: false,
+        changeLogs: [...existingTranslation.changeLogs, ...changeLog],
       },
     );
 

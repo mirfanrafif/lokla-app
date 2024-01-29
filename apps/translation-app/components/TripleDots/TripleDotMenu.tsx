@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { useClickOutside } from '@apps/translation-app/hooks/clickoutside.hooks';
+
 const TripleDotMenu = (props: {
   menus: {
     label: string;
@@ -13,12 +15,18 @@ const TripleDotMenu = (props: {
   }[];
 }) => {
   const [isShowMenu, setisShowMenu] = useState(false);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+  useClickOutside(isShowMenu, [buttonRef], () => {
+    setisShowMenu(false);
+  });
 
   return (
     <div>
       <button
         className="relative w-6 h-6"
         onClick={() => setisShowMenu(!isShowMenu)}
+        ref={buttonRef}
       >
         <FontAwesomeIcon icon={faEllipsisVertical} className="w-4 h-4" />
 

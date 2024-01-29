@@ -138,6 +138,7 @@ input[type='checkbox'] {
 textarea {
   @apply min-h-[100px] resize-none rounded-md bg-transparent bg-neutral-50 p-2;
   @apply focus:outline-primary-default focus:outline-none;
+  @apply disabled:bg-transparent;
 }
 
 select {

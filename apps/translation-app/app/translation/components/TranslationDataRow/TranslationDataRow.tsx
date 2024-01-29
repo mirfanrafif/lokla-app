@@ -3,6 +3,7 @@
 import { faBan, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
+import { Role } from 'enums/Role.enum';
 
 import TripleDotMenu from '@apps/translation-app/components/TripleDots/TripleDotMenu';
 import { TranslationData } from '../../models/TranslationData';
@@ -44,7 +45,11 @@ export function TranslationDataRow({
         <div className="h-full w-full text-black">{item.namespace}</div>
       </td>
       <td className={styles.key}>
-        <textarea className="w-full" {...form.register('key')} />
+        <textarea
+          className="w-full"
+          {...form.register('key')}
+          disabled={role === Role.Editor}
+        />
       </td>
       {fields.map((field, index) => (
         <td key={index}>
@@ -58,7 +63,7 @@ export function TranslationDataRow({
           />
         </td>
       ))}
-      <td>
+      <td className={styles.actions}>
         <div className={styles.actionRow}>
           {form.formState.isDirty && (
             <>

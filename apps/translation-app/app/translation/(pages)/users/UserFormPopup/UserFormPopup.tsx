@@ -39,7 +39,7 @@ const UserFormPopup = (props: {
         ...data,
         oldEmail: props.user.email,
       };
-      request(
+      return request(
         '/users',
         {
           method: 'PUT',
@@ -60,16 +60,19 @@ const UserFormPopup = (props: {
           closePopup();
           router.refresh();
         });
-      return;
     }
 
-    request('/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    return request(
+      '/users',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
       },
-      body: JSON.stringify(data),
-    })
+      props.accessToken,
+    )
       .then(() => {
         toast.success('Success add user');
       })
@@ -128,7 +131,12 @@ const UserFormPopup = (props: {
           </select>
         </div>
 
-        <button className="button w-full">Save</button>
+        <button
+          className="button w-full"
+          disabled={form.formState.isSubmitting}
+        >
+          Save
+        </button>
       </div>
     </form>
   );

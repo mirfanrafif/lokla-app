@@ -1,8 +1,9 @@
 'use client';
 
+import React from 'react';
+
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 
 import { PopupContext } from '../../context/PopupProvider';
 

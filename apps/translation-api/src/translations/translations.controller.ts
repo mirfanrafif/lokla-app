@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Multer from 'multer';
 
+import { ApiKeyAuthGuard } from '../auth/ApiKey.guard';
 import { JwtAuthGuard } from '../auth/Jwt.guard';
 import {
   RequestDeleteTranslation,
@@ -24,7 +25,6 @@ import {
   RequestUpdateTranslation,
 } from './Translation.dto';
 import { TranslationsService } from './translations.service';
-import { ApiKeyAuthGuard } from '../auth/ApiKey.guard';
 
 @Controller('translations')
 export class TranslationsController {

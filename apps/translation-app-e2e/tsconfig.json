@@ -5,7 +5,7 @@
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
     "types": ["cypress", "node"],
-    "sourceMap": false
+    "sourceMap": false,
   },
   "include": [
     "**/*.ts",
@@ -15,6 +15,6 @@
     "**/*.cy.tsx",
     "**/*.cy.js",
     "**/*.cy.jsx",
-    "**/*.d.ts"
-  ]
+    "**/*.d.ts",
+  ],
 }

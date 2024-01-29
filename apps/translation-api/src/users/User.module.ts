@@ -1,10 +1,10 @@
 import { Module, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { UserController } from './User.controller';
 import { UserModel, UserSchema } from './User.schema';
 import { UserService } from './User.service';
-import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -27,7 +27,10 @@ import { ConfigService } from '@nestjs/config';
   ],
 })
 export class UserModule implements OnModuleInit {
-  constructor(private userService: UserService, private configService: ConfigService) {}
+  constructor(
+    private userService: UserService,
+    private configService: ConfigService,
+  ) {}
 
   async onModuleInit() {
     try {

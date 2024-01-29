@@ -1,15 +1,17 @@
 'use client';
 
+import React from 'react';
+
 import { faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import classNames from 'classnames';
-import { Role } from 'enums/Role.enum';
-import React from 'react';
 import { ProjectItem } from '@frontend/app/translation/models/ResponseGetTranslationProject';
 import { usePopup } from '@frontend/hooks/popup.hooks';
+import classNames from 'classnames';
+import { Role } from 'enums/Role.enum';
 
-import UserFormPopup from '../../UserFormPopup/UserFormPopup';
 import { User } from '../../models/User';
+import UserFormPopup from '../../UserFormPopup/UserFormPopup';
+
 import styles from './UsersTable.module.scss';
 
 const UsersTableAction = (props: {

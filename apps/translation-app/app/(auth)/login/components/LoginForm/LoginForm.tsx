@@ -1,14 +1,17 @@
 'use client';
 
-import { RegexPatterns } from 'constants/regexPatterns';
-import { useRouter } from 'next/navigation';
 import React from 'react';
+
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import styles from './LoginForm.module.scss';
+import { RegexPatterns } from 'constants/regexPatterns';
+
 import { buildTranslationListUrl } from '@apps/translation-app/app/translation/navigations/translations.navigation';
 import { LoginFormData } from '../../../models/LoginFormData';
+
+import styles from './LoginForm.module.scss';
 
 const LoginForm = () => {
   const form = useForm<LoginFormData>();

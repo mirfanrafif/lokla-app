@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+
 import { PaginationType } from '../common/models/Pagination';
-import { IsString, IsNotEmpty, IsArray, IsOptional } from 'class-validator';
 
 export class TranslationValue {
   @IsString()

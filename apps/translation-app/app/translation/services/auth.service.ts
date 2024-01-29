@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers';
-import { LoginUserSchema } from '../../(auth)/models/ResponseLogin';
+
 import { CookieKeys } from 'constants/cookieKeys';
+
+import { LoginUserSchema } from '../../(auth)/models/ResponseLogin';
 
 export const getAccessToken = () => {
   const accessToken = cookies().get(CookieKeys.AccessToken)?.value;

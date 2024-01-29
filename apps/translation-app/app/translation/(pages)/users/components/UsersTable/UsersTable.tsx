@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   getAccessToken,
   getRole,
@@ -6,8 +7,9 @@ import {
 import { getProjects } from '@frontend/app/translation/services/project.service';
 import { getUsers } from '@frontend/app/translation/services/translation.service';
 
-import styles from './UsersTable.module.scss';
 import UsersTableAction from './UsersTableAction';
+
+import styles from './UsersTable.module.scss';
 
 const UsersTable = async () => {
   const data = await getUsers();

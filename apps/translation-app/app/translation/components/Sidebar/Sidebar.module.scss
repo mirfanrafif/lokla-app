@@ -17,7 +17,7 @@
 }
 
 .sidebarGroup {
-  @apply flex flex-col gap-y-2 flex-1;
+  @apply flex flex-1 flex-col gap-y-2;
 }
 
 .sidebarItem {
@@ -35,4 +35,3 @@
 .logoutButton {
   @apply mt-auto;
 }
-

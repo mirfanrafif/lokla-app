@@ -4,9 +4,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { compare } from 'bcryptjs';
 import { Model } from 'mongoose';
 
+import { ProjectModel } from '../projects/Project.schema';
 import { UserModel } from '../users/User.schema';
 import { RequestLogin } from './Auth.dto';
-import { ProjectModel } from '../projects/Project.schema';
 
 @Injectable()
 export class AuthService {

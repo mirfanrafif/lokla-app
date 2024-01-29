@@ -1,11 +1,13 @@
 'use client';
 
+import React from 'react';
+
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { languages } from 'constants/languages';
-import { useRouter } from 'next/navigation';
-import React from 'react';
 import { usePopup } from '@frontend/hooks/popup.hooks';
+import { useRouter } from 'next/navigation';
+
+import { languages } from 'constants/languages';
 
 import { ResponseGetTranslationProject } from '../models/ResponseGetTranslationProject';
 import { TranslationUploader } from './TranslationUploader';

@@ -1,7 +1,7 @@
 import CreateProjectButton from '../../components/CreateProjectButton/CreateProjectButton';
-import { getProjects } from '../../services/project.service';
-import { getAccessToken } from '../../services/auth.service';
 import ProjectItemCard from '../../components/ProjectItem/ProjectItem';
+import { getAccessToken } from '../../services/auth.service';
+import { getProjects } from '../../services/project.service';
 
 export const dynamic = 'force-dynamic';
 

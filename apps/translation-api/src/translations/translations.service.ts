@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { languages } from 'constants/languages';
 import { Model } from 'mongoose';
 import { flatten, unflatten } from 'safe-flat';
+
+import { languages } from 'constants/languages';
 
 import { ProjectModel } from '../projects/Project.schema';
 import {

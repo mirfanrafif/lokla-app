@@ -3,6 +3,7 @@ import { Noto_Sans, Noto_Sans_JP } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 
 import './global.scss';
+
 import Popup from '../components/Popup/Popup';
 import PopupContextProvider from '../context/PopupProvider';
 

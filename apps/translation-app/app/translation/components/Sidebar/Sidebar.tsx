@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   faBook,
   faPencil,
@@ -5,9 +7,9 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import { Role } from 'enums/Role.enum';
 import Link from 'next/link';
-import React from 'react';
 
 import {
   buildTranslationListUrl,
@@ -15,8 +17,8 @@ import {
   buildTranslationUsersUrl,
 } from '../../navigations/translations.navigation';
 import { getCurrentUser, getRole } from '../../services/auth.service';
+
 import styles from './Sidebar.module.scss';
-import classNames from 'classnames';
 
 const Sidebar = () => {
   const user = getCurrentUser();

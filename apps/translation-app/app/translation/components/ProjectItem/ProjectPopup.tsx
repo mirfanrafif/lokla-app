@@ -1,16 +1,27 @@
 'use client';
 
-import React from 'react';
-import { ProjectItem } from '../../models/ResponseGetTranslationProject';
-import { request } from '@apps/translation-app/lib/apiClient';
+import React, { useState } from 'react';
 
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+
+import { usePopup } from '@apps/translation-app/hooks/popup.hooks';
+import { request } from '@apps/translation-app/lib/apiClient';
+import { ProjectItem } from '../../models/ResponseGetTranslationProject';
+
+import styles from './ProjectPopup.module.scss';
 
 const ProjectPopup = (props: {
   project: ProjectItem;
   accessToken: string | undefined;
 }) => {
+  const router = useRouter();
+  const { closePopup } = usePopup();
+
+  const [isApiKeyLoading, setIsApiKeyLoading] = useState(false);
+
   const generateNewApiKey = () => {
+    setIsApiKeyLoading(true);
     request(
       '/projects/generateApiKey',
       {
@@ -25,11 +36,17 @@ const ProjectPopup = (props: {
       props.accessToken,
     )
       .then((res) => {
-        console.log(res);
-        toast.success('API Key generated');
+        router.refresh();
+        closePopup();
+
+        window.navigator.clipboard.writeText(res.apiKey);
+        toast.success('API Key generated and copied to clipboard');
       })
       .catch((err) => {
         toast.error(err.message);
+      })
+      .finally(() => {
+        setIsApiKeyLoading(false);
       });
   };
 
@@ -38,12 +55,22 @@ const ProjectPopup = (props: {
       <h1 className="mb-4">Project Details</h1>
       <p>Project Name: {props.project.name}</p>
       <p>Identifier: {props.project.identifier}</p>
-      <p>API Key: {props.project.apiKey ?? '-'}</p>
-      {props.project.apiKey === undefined && (
-        <button className="button mt-4" onClick={generateNewApiKey}>
-          Generate new API Key
-        </button>
-      )}
+      <p
+        className={styles.apiKey}
+        onClick={() => {
+          window.navigator.clipboard.writeText(props.project.apiKey ?? '');
+          toast.success('Copied to clipboard');
+        }}
+      >
+        API Key: <code>{props.project.apiKey ?? '-'}</code>
+      </p>
+      <button
+        className="button mt-4"
+        onClick={generateNewApiKey}
+        disabled={isApiKeyLoading}
+      >
+        {props.project.apiKey ? 'Regenerate API Key' : 'Generate new API Key'}
+      </button>
     </div>
   );
 };

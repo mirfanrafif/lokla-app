@@ -1,9 +1,10 @@
+import { addDays, format } from 'date-fns';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { request } from '@apps/translation-app/lib/apiClient';
-import { format, addDays } from 'date-fns';
 
 import { CookieKeys } from 'constants/cookieKeys';
+
+import { request } from '@apps/translation-app/lib/apiClient';
 import { ResponseLoginSchema } from '../../(auth)/models/ResponseLogin';
 
 export async function POST(params: NextRequest) {
@@ -20,7 +21,6 @@ export async function POST(params: NextRequest) {
     });
 
     const data = ResponseLoginSchema.parse(response);
-    
 
     cookieStore.set(CookieKeys.AccessToken, data.accessToken, {
       secure: true,

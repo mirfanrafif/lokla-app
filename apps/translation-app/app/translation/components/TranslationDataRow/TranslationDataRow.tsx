@@ -5,8 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 
 import { TranslationData } from '../../models/TranslationData';
-import styles from './TranslationDataRow.module.scss';
 import { useTranslationDataRowViewModel } from './TranslationDataRow.viewModel';
+
+import styles from './TranslationDataRow.module.scss';
 
 export type TranslationDataRowProps = {
   item: TranslationData;

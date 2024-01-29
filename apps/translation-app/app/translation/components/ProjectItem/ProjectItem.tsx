@@ -1,11 +1,13 @@
 'use client';
 
 import React from 'react';
+
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { usePopup } from '@apps/translation-app/hooks/popup.hooks';
 import { ProjectItem } from '../../models/ResponseGetTranslationProject';
 import { buildTranslationListUrl } from '../../navigations/translations.navigation';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { usePopup } from '@apps/translation-app/hooks/popup.hooks';
 import ProjectPopup from './ProjectPopup';
 
 const ProjectItemCard = (props: {

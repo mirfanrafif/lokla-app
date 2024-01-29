@@ -1,10 +1,11 @@
 'use client';
 
+import React from 'react';
+
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { usePathname, useSearchParams } from 'next/navigation';
-import React from 'react';
 
 import styles from './Pagination.module.scss';
 
@@ -70,7 +71,7 @@ const Pagination = (props: { totalPage: number; currentPage: number }) => {
           </a>
         ) : (
           <p key={''}>...</p>
-        )
+        ),
       )}
       <a className={styles.paginationItem} href={generatePage(currentPage + 1)}>
         <FontAwesomeIcon icon={faArrowRight} />

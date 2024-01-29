@@ -1,9 +1,10 @@
 import { languages } from 'constants/languages';
 
 import { TranslationData } from '../../models/TranslationData';
-import { TranslationDataRow } from '../TranslationDataRow/TranslationDataRow';
-import styles from './TranslationTable.module.scss';
 import { getAccessToken, getRole } from '../../services/auth.service';
+import { TranslationDataRow } from '../TranslationDataRow/TranslationDataRow';
+
+import styles from './TranslationTable.module.scss';
 
 export function TranslationTable(props: {
   translations: TranslationData[];

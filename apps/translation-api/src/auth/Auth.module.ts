@@ -3,13 +3,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
+import { ProjectModule } from '../projects/Project.module';
 import { UserModule } from '../users/User.module';
+import { ApiKeyStrategy } from './ApiKey.strategy';
 import { AuthController } from './Auth.controller';
 import { AuthService } from './Auth.service';
 import { JwtStrategy } from './Jwt.strategy';
 import { RolesGuard } from './Role.guard';
-import { ProjectModule } from '../projects/Project.module';
-import { ApiKeyStrategy } from './ApiKey.strategy';
 
 @Module({
   imports: [

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { getProjects } from '../../services/project.service';
-import UserAddButton from './UserFormPopup/UserAddButton';
-import UsersTable from './components/UsersTable/UsersTable';
 import { getAccessToken } from '../../services/auth.service';
+import { getProjects } from '../../services/project.service';
+import UsersTable from './components/UsersTable/UsersTable';
+import UserAddButton from './UserFormPopup/UserAddButton';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,15 +1,14 @@
 'use server';
 
-import queryString from 'query-string';
 import { request } from '@frontend/lib/apiClient';
+import queryString from 'query-string';
 
+import { ResponseGetUserListSchema } from '../(pages)/users/models/User';
 import { ResponseGetTranslationNamespacesSchema } from '../models/ResponseGetNamespaces';
 import {
   ResponseGetTranslationData,
   ResponseGetTranslationDataSchema,
 } from '../models/ResponseGetTranslationData';
-
-import { ResponseGetUserListSchema } from '../(pages)/users/models/User';
 import { getAccessToken } from './auth.service';
 
 export const getTranslationData = async (params: {

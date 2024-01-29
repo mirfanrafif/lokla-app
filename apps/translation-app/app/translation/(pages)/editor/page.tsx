@@ -1,5 +1,6 @@
-import { languages } from 'constants/languages';
 import React from 'react';
+
+import { languages } from 'constants/languages';
 
 import Pagination from '../../components/Pagination/Pagination';
 import TranslationFilter from '../../components/TranslationFilter/TranslationFilter';
@@ -11,6 +12,7 @@ import {
   getNamespaces,
   getTranslationData,
 } from '../../services/translation.service';
+
 import styles from './page.module.scss';
 
 export const dynamic = 'force-dynamic';

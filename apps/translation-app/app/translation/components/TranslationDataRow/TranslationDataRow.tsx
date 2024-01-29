@@ -26,7 +26,7 @@ export function TranslationDataRow({
     fields,
     onSubmit,
     resetTranslation,
-    deleteTranslation,
+    ignoreTranslation,
     translated,
   } = useTranslationDataRowViewModel({ item, languages, accessToken, role });
 
@@ -38,9 +38,7 @@ export function TranslationDataRow({
       })}
     >
       <td>
-        <div className="h-full w-full text-black">
-          {item.namespace}
-        </div>
+        <div className="h-full w-full text-black">{item.namespace}</div>
       </td>
       <td className={styles.key}>
         <textarea className="w-full" {...form.register('key')} />
@@ -78,7 +76,7 @@ export function TranslationDataRow({
           {!item.translated && (
             <button
               className={classNames(styles.actionButton, styles.ignore)}
-              onClick={deleteTranslation}
+              onClick={() => ignoreTranslation(item.key)}
               title="Ignore"
             >
               <FontAwesomeIcon icon={faForward} className="text-white" />

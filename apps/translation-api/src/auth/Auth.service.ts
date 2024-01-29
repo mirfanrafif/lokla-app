@@ -6,11 +6,13 @@ import { Model } from 'mongoose';
 
 import { UserModel } from '../users/User.schema';
 import { RequestLogin } from './Auth.dto';
+import { ProjectModel } from '../projects/Project.schema';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(UserModel.name) private userModel: Model<UserModel>,
+    @InjectModel(ProjectModel.name) private projectModel: Model<ProjectModel>,
     private jwtService: JwtService,
   ) {}
   async login(request: RequestLogin) {
@@ -28,11 +30,11 @@ export class AuthService {
       throw new UnauthorizedException('Password mismatch');
     }
 
-    console.log(user);
-
-    const payload = { email: user.email, role: user.role, fullName: user.fullName };
-
-    console.log(payload);
+    const payload = {
+      email: user.email,
+      role: user.role,
+      fullName: user.fullName,
+    };
 
     return {
       accessToken: await this.jwtService.signAsync(payload),
@@ -46,5 +48,13 @@ export class AuthService {
     });
 
     return isUserFound;
+  }
+
+  async validateApiKey(apiKey: string) {
+    const isProjectFound = await this.projectModel.findOne({
+      apiKey,
+    });
+
+    return isProjectFound;
   }
 }

@@ -12,15 +12,18 @@ import { ProjectItem } from '../../../models/ResponseGetTranslationProject';
 import { User } from '../models/User';
 import { UserFormData } from '../models/UserFormData';
 
-const UserFormPopup = (props: { project: ProjectItem[]; user?: User, accessToken: string | undefined }) => {
+const UserFormPopup = (props: {
+  project: ProjectItem[];
+  user?: User;
+  accessToken: string | undefined;
+}) => {
   const defaultValues = props.user
     ? {
         fullName: props.user.fullName,
         email: props.user.email,
         role: props.user.role,
       }
-    : {
-      };
+    : {};
 
   const { closePopup } = usePopup();
   const form = useForm<UserFormData>({
@@ -34,13 +37,17 @@ const UserFormPopup = (props: { project: ProjectItem[]; user?: User, accessToken
         ...data,
         oldEmail: props.user.email,
       };
-      request('/users', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      request(
+        '/users',
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
         },
-        body: JSON.stringify(requestData),
-      }, props.accessToken)
+        props.accessToken,
+      )
         .then(() => {
           toast.success('Success update user');
         })

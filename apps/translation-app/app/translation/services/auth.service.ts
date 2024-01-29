@@ -20,7 +20,7 @@ export const getCurrentUser = () => {
   const userData = LoginUserSchema.parse(JSON.parse(userCookies.value));
 
   return userData;
-}
+};
 
 export const getRole = (): string | undefined => {
   const cookiesStore = cookies();

@@ -14,7 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Multer from 'multer';
 
-import { JwtAuthGuard } from '../auth/Auth.guard';
+import { JwtAuthGuard } from '../auth/Jwt.guard';
 import {
   RequestDeleteTranslation,
   RequestExportTranslation,
@@ -24,6 +24,7 @@ import {
   RequestUpdateTranslation,
 } from './Translation.dto';
 import { TranslationsService } from './translations.service';
+import { ApiKeyAuthGuard } from '../auth/ApiKey.guard';
 
 @Controller('translations')
 export class TranslationsController {
@@ -47,6 +48,7 @@ export class TranslationsController {
 
   @Post('import/ci')
   @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(ApiKeyAuthGuard)
   importTranslationFromJsonCi(
     @Query() body: RequestImportTranslationFromJson,
     @Body() data: RequestImportTranslationFromCi,
@@ -64,6 +66,12 @@ export class TranslationsController {
   @Delete()
   deleteTranslation(@Query() request: RequestDeleteTranslation) {
     return this.service.deleteTranslation(request);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('ignore')
+  ignoreTranslation(@Query('key') key: string) {
+    return this.service.ignoreTranslation(key);
   }
 
   @Get('export')

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { Role } from 'enums/Role.enum';
 
-import { JwtAuthGuard } from '../auth/Auth.guard';
+import { JwtAuthGuard } from '../auth/Jwt.guard';
 import { Roles } from '../auth/Role.decorator';
 import { RequestCreateProject } from './Project.dto';
 import { ProjectService } from './Project.service';

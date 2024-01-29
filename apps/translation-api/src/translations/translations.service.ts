@@ -27,8 +27,6 @@ export class TranslationsService {
   async getTranslationList(query: RequestGetTranslationList) {
     let filters = {};
 
-    console.log(query);
-
     if (query.ns !== '' && query.ns !== undefined) {
       filters = {
         ...filters,
@@ -204,6 +202,7 @@ export class TranslationsService {
       },
       {
         translations: request.translations,
+        translated: false,
       },
     );
 
@@ -259,5 +258,16 @@ export class TranslationsService {
     const result = JSON.stringify(unflatten(outputObject), null, 2);
 
     return `${result}`;
+  }
+
+  ignoreTranslation(key: string) {
+    return this.translationModel.findOneAndUpdate(
+      {
+        key,
+      },
+      {
+        translated: true,
+      },
+    );
   }
 }

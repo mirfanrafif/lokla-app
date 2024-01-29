@@ -16,5 +16,13 @@ import { ProjectService } from './Project.service';
   ],
   providers: [ProjectService],
   controllers: [ProjectController],
+  exports: [
+    MongooseModule.forFeature([
+      {
+        name: ProjectModel.name,
+        schema: ProjectSchema,
+      },
+    ]),
+  ],
 })
 export class ProjectModule {}

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { Role } from 'enums/Role.enum';
 
-import { JwtAuthGuard } from '../auth/Auth.guard';
+import { JwtAuthGuard } from '../auth/Jwt.guard';
 import { Roles } from '../auth/Role.decorator';
 import {
   RequestCreateUser,

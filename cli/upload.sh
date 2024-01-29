@@ -10,13 +10,13 @@ filesChanged=$(git diff --name-only develop)
 
 for locale in "${locales[@]}"; do
   for file in "${directory}/${locale}"/*; do
-    # check if file changed
-    # if [[ ! $filesChanged =~ $file ]]; then
-    #   continue
-    # fi
+    # check if file changed and not force upload
+    if [[ ! $filesChanged =~ $file ]] && [[ $1 != '-f' ]]; then
+      continue
+    fi
 
     namespace=$(basename "$file" .json)
     data=$(cat "$file")
-    curl -s -X POST -H "Content-Type: application/json" -d "{\"data\": $data}" "${host}/translations/import/ci?project=${project}&namespace=${namespace}&locale=${locale}"
+    curl -s -X POST -H "Content-Type: application/json" -H "Authorization: Api-Key ${API_KEY}" -d "{\"data\": $data}" "${host}/translations/import/ci?project=${project}&namespace=${namespace}&locale=${locale}"
   done
 done

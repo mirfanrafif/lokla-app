@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 const Page = async () => {
   const projects = await getProjects();
-  const accessToken = getAccessToken()
+  const accessToken = getAccessToken();
 
   return (
     <div>

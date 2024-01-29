@@ -1,5 +1,8 @@
 import React from 'react';
-import { getRole } from '@frontend/app/translation/services/auth.service';
+import {
+  getAccessToken,
+  getRole,
+} from '@frontend/app/translation/services/auth.service';
 import { getProjects } from '@frontend/app/translation/services/project.service';
 import { getUsers } from '@frontend/app/translation/services/translation.service';
 
@@ -10,6 +13,7 @@ const UsersTable = async () => {
   const data = await getUsers();
   const projects = await getProjects();
   const role = await getRole();
+  const accessToken = getAccessToken();
 
   return (
     <table className={styles.usersTable}>
@@ -29,7 +33,12 @@ const UsersTable = async () => {
             <td>{item.email}</td>
             <td>{item.role}</td>
             <td>
-              <UsersTableAction user={item} projects={projects} role={role} />
+              <UsersTableAction
+                user={item}
+                projects={projects}
+                role={role}
+                accessToken={accessToken}
+              />
             </td>
           </tr>
         ))}

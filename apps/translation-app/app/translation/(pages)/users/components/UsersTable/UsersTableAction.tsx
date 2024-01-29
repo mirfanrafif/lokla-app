@@ -16,6 +16,7 @@ const UsersTableAction = (props: {
   user: User;
   projects: ProjectItem[];
   role: string | undefined;
+  accessToken: string | undefined;
 }) => {
   const { openPopup } = usePopup();
 
@@ -26,7 +27,11 @@ const UsersTableAction = (props: {
         title="Edit"
         onClick={() => {
           openPopup(
-            <UserFormPopup project={props.projects} user={props.user} />,
+            <UserFormPopup
+              project={props.projects}
+              user={props.user}
+              accessToken={props.accessToken}
+            />,
           );
         }}
       >

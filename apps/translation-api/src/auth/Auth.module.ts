@@ -6,12 +6,15 @@ import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../users/User.module';
 import { AuthController } from './Auth.controller';
 import { AuthService } from './Auth.service';
-import { JwtStrategy } from './Auth.strategy';
+import { JwtStrategy } from './Jwt.strategy';
 import { RolesGuard } from './Role.guard';
+import { ProjectModule } from '../projects/Project.module';
+import { ApiKeyStrategy } from './ApiKey.strategy';
 
 @Module({
   imports: [
     UserModule,
+    ProjectModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -28,6 +31,12 @@ import { RolesGuard } from './Role.guard';
     ConfigModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RolesGuard, ConfigService],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    RolesGuard,
+    ConfigService,
+    ApiKeyStrategy,
+  ],
 })
 export class AuthModule {}

@@ -20,9 +20,7 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  console.log('middleware', request.nextUrl.pathname);
   if (publicUrl.includes(request.nextUrl.pathname)) {
-    console.log('public url');
     return NextResponse.next();
   }
 

@@ -2,12 +2,10 @@ import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { usePopup } from '@frontend/hooks/popup.hooks';
 import { request } from '@frontend/lib/apiClient';
 
 import { RequestUpdateTranslation } from '../../models/RequestUpdateTranslation';
 import { TranslationData } from '../../models/TranslationData';
-import DeleteTranslationConfirmationPopup from '../DeleteTranslationConfirmationPopup/DeleteTranslationConfirmationPopup';
 import { TranslationDataRowProps } from './TranslationDataRow';
 
 export const useTranslationDataRowViewModel = ({
@@ -16,7 +14,6 @@ export const useTranslationDataRowViewModel = ({
   accessToken,
 }: TranslationDataRowProps) => {
   const router = useRouter();
-  const { openPopup, closePopup } = usePopup();
 
   const defaultValues = useMemo(
     () => ({
@@ -72,6 +69,7 @@ export const useTranslationDataRowViewModel = ({
           key: data.key,
           translations: data.translations,
         });
+        router.refresh();
       })
       .catch((error) => {
         toast.error(`Error updating translations: ${error.message}`);
@@ -85,33 +83,24 @@ export const useTranslationDataRowViewModel = ({
   const resetTranslation = () => {
     form.reset(defaultValues);
   };
-  const deleteTranslation = () => {
-    openPopup(
-      <DeleteTranslationConfirmationPopup
-        onConfirm={() => {
-          deleteTranslationAction(item.key);
-        }}
-        onCancel={() => {
-          closePopup();
-        }}
-      />,
-    );
-  };
 
-  const deleteTranslationAction = (key: string) => {
-    request(`/translations?key=${key}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
+  const ignoreTranslation = (key: string) => {
+    request(
+      `/translations/ignore?key=${key}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    })
+      accessToken,
+    )
       .then((response) => {
-        closePopup();
+        toast.success('Translations ignored');
         router.refresh();
       })
       .catch((error) => {
         toast.error(`Error updating translations: ${error.message}`);
-        closePopup();
       });
   };
   return {
@@ -119,7 +108,7 @@ export const useTranslationDataRowViewModel = ({
     fields,
     onSubmit,
     resetTranslation,
-    deleteTranslation,
+    ignoreTranslation,
     translated,
   };
 };

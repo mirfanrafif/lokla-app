@@ -13,7 +13,7 @@ import { UserModel } from './User.schema';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(UserModel.name) private userModel: Model<UserModel>
+    @InjectModel(UserModel.name) private userModel: Model<UserModel>,
   ) {}
 
   getAllUsers() {
@@ -40,7 +40,7 @@ export class UserService {
         email: request.email,
         fullName: request.fullName,
         role: request.role,
-      }
+      },
     );
   }
 

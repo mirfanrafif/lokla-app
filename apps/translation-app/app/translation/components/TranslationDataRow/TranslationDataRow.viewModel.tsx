@@ -5,8 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { usePopup } from '@apps/translation-app/hooks/popup.hooks';
 import { RequestUpdateTranslation } from '../../models/RequestUpdateTranslation';
 import { TranslationData } from '../../models/TranslationData';
+import TranslationChangeLogPopup from '../TranslationChangeLogPopup/TranslationChangeLogPopup';
 import { TranslationDataRowProps } from './TranslationDataRow';
 
 export const useTranslationDataRowViewModel = ({
@@ -15,6 +17,7 @@ export const useTranslationDataRowViewModel = ({
   accessToken,
 }: TranslationDataRowProps) => {
   const router = useRouter();
+  const { openPopup } = usePopup();
 
   const defaultValues = useMemo(
     () => ({
@@ -104,6 +107,11 @@ export const useTranslationDataRowViewModel = ({
         toast.error(`Error updating translations: ${error.message}`);
       });
   };
+
+  const showChangelog = () => {
+    openPopup(<TranslationChangeLogPopup changeLog={item.changeLogs} />);
+  };
+
   return {
     form,
     fields,
@@ -111,5 +119,6 @@ export const useTranslationDataRowViewModel = ({
     resetTranslation,
     ignoreTranslation,
     translated,
+    showChangelog,
   };
 };

@@ -1,9 +1,10 @@
 'use client';
 
-import { faBan, faCheck, faForward } from '@fortawesome/free-solid-svg-icons';
+import { faBan, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 
+import TripleDotMenu from '@apps/translation-app/components/TripleDots/TripleDotMenu';
 import { TranslationData } from '../../models/TranslationData';
 import { useTranslationDataRowViewModel } from './TranslationDataRow.viewModel';
 
@@ -29,6 +30,7 @@ export function TranslationDataRow({
     resetTranslation,
     ignoreTranslation,
     translated,
+    showChangelog,
   } = useTranslationDataRowViewModel({ item, languages, accessToken, role });
 
   return (
@@ -74,15 +76,22 @@ export function TranslationDataRow({
               </button>
             </>
           )}
-          {!item.translated && (
-            <button
-              className={classNames(styles.actionButton, styles.ignore)}
-              onClick={() => ignoreTranslation(item.key)}
-              title="Ignore"
-            >
-              <FontAwesomeIcon icon={faForward} className="text-white" />
-            </button>
-          )}
+
+          <TripleDotMenu
+            menus={[
+              {
+                label: 'Ignore',
+                onClick: () => ignoreTranslation(item.key),
+                disabled: translated,
+              },
+              {
+                label: 'Show Changelog',
+                onClick: () => {
+                  showChangelog();
+                },
+              },
+            ]}
+          />
         </div>
       </td>
     </tr>

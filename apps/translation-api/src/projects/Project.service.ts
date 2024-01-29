@@ -24,4 +24,15 @@ export class ProjectService {
       apiKey: v4(),
     });
   }
+
+  generateApiKey(projectId: string) {
+    return this.projectModel.findOneAndUpdate(
+      {
+        identifier: projectId,
+      },
+      {
+        apiKey: v4(),
+      },
+    );
+  }
 }

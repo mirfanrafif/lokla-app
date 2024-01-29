@@ -3,7 +3,7 @@ import { Role } from 'enums/Role.enum';
 
 import { JwtAuthGuard } from '../auth/Jwt.guard';
 import { Roles } from '../auth/Role.decorator';
-import { RequestCreateProject } from './Project.dto';
+import { RequestCreateProject, RequestGenerateApiKey } from './Project.dto';
 import { ProjectService } from './Project.service';
 
 @Controller('projects')
@@ -20,5 +20,10 @@ export class ProjectController {
   @Post()
   createNewProject(@Body() request: RequestCreateProject) {
     return this.service.addProject(request);
+  }
+
+  @Post('generateApiKey')
+  generateApiKey(@Body() request: RequestGenerateApiKey) {
+    return this.service.generateApiKey(request.projectId);
   }
 }

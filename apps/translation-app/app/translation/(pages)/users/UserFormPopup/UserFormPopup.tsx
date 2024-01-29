@@ -12,16 +12,14 @@ import { ProjectItem } from '../../../models/ResponseGetTranslationProject';
 import { User } from '../models/User';
 import { UserFormData } from '../models/UserFormData';
 
-const UserFormPopup = (props: { project: ProjectItem[]; user?: User }) => {
+const UserFormPopup = (props: { project: ProjectItem[]; user?: User, accessToken: string | undefined }) => {
   const defaultValues = props.user
     ? {
         fullName: props.user.fullName,
         email: props.user.email,
-        projects: props.user.projects,
         role: props.user.role,
       }
     : {
-        projects: [],
       };
 
   const { closePopup } = usePopup();
@@ -42,7 +40,7 @@ const UserFormPopup = (props: { project: ProjectItem[]; user?: User }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestData),
-      })
+      }, props.accessToken)
         .then(() => {
           toast.success('Success update user');
         })
@@ -119,39 +117,6 @@ const UserFormPopup = (props: { project: ProjectItem[]; user?: User }) => {
             <option value="dev">Developer</option>
             <option value="admin">Admin</option>
           </select>
-        </div>
-
-        <div className="grid grid-cols-2">
-          {props.project.map((item) => (
-            <div
-              key={item.identifier}
-              className="flex flex-row items-center gap-x-2"
-            >
-              <input
-                type="checkbox"
-                value={item.identifier}
-                className="w-4"
-                checked={form.watch('projects').includes(item.identifier)}
-                onChange={(event) => {
-                  if (!event.target.checked) {
-                    form.setValue('projects', [
-                      ...form
-                        .watch('projects')
-                        .filter((prev) => prev !== item.identifier),
-                    ]);
-                    return;
-                  }
-
-                  form.setValue('projects', [
-                    ...form.watch('projects'),
-                    item.identifier,
-                  ]);
-                  return;
-                }}
-              />
-              <p>{item.name}</p>
-            </div>
-          ))}
         </div>
 
         <button className="button w-full">Save</button>

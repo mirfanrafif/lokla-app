@@ -27,7 +27,6 @@ export class UserService {
       fullName: request.fullName,
       email: request.email,
       password: newPassword,
-      projects: request.projects,
       role: request.role,
     });
   }
@@ -40,7 +39,6 @@ export class UserService {
       {
         email: request.email,
         fullName: request.fullName,
-        projects: request.projects,
         role: request.role,
       }
     );

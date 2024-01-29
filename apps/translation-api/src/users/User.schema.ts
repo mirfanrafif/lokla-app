@@ -23,9 +23,6 @@ export class UserModel {
     required: true,
   })
   role: string;
-
-  @Prop()
-  projects: string[];
 }
 
 export type UserDocument = HydratedDocument<UserModel>;

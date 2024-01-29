@@ -14,13 +14,20 @@ import {
   buildTranslationProjectUrl,
   buildTranslationUsersUrl,
 } from '../../navigations/translations.navigation';
-import { getRole } from '../../services/auth.service';
+import { getCurrentUser, getRole } from '../../services/auth.service';
 import styles from './Sidebar.module.scss';
 import classNames from 'classnames';
 
 const Sidebar = () => {
+  const user = getCurrentUser();
+
   return (
     <div className={styles.sidebar}>
+      <div className={styles.displayName}>
+        <h2>{user?.fullName}</h2>
+        <h3>{user?.role}</h3>
+      </div>
+
       <ul className={styles.sidebarGroup}>
         <SidebarItem
           title="Editor"

@@ -8,10 +8,16 @@
   overflow: auto;
   background-color: var(--primary-700);
   color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.displayName {
+  @apply mb-8 p-2;
 }
 
 .sidebarGroup {
-  @apply flex h-full flex-col gap-y-2;
+  @apply flex flex-col gap-y-2 flex-1;
 }
 
 .sidebarItem {
@@ -29,3 +35,4 @@
 .logoutButton {
   @apply mt-auto;
 }
+

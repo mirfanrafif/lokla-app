@@ -28,7 +28,11 @@ export class AuthService {
       throw new UnauthorizedException('Password mismatch');
     }
 
-    const payload = { email: user.email, role: user.role };
+    console.log(user);
+
+    const payload = { email: user.email, role: user.role, fullName: user.fullName };
+
+    console.log(payload);
 
     return {
       accessToken: await this.jwtService.signAsync(payload),

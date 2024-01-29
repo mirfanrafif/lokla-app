@@ -35,7 +35,6 @@ export class UserModule implements OnModuleInit {
         email: this.configService.get<string>('ADMIN_EMAIL'),
         fullName: this.configService.get<string>('ADMIN_NAME'),
         password: this.configService.get<string>('ADMIN_PASSWORD'),
-        projects: [],
         role: 'admin',
       });
     } catch (error) {

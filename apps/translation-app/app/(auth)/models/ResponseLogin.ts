@@ -3,6 +3,7 @@ import * as z from 'zod';
 export const LoginUserSchema = z.object({
   email: z.string(),
   role: z.string(),
+  fullName: z.string().optional(),
 });
 
 export const ResponseLoginSchema = z.object({

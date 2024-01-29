@@ -18,7 +18,6 @@ const UsersTable = async () => {
           <th>Full Name</th>
           <th>Email</th>
           <th>Role</th>
-          <th>Project Access</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -29,15 +28,6 @@ const UsersTable = async () => {
             <td>{item.fullName}</td>
             <td>{item.email}</td>
             <td>{item.role}</td>
-            <td>
-              {item.projects
-                ?.map(
-                  (item) =>
-                    projects.find((project) => project.identifier == item)
-                      ?.name,
-                )
-                .join(', ')}
-            </td>
             <td>
               <UsersTableAction user={item} projects={projects} role={role} />
             </td>

@@ -115,7 +115,7 @@ h2 {
 
 h3 {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 ul {
@@ -137,9 +137,8 @@ input[type='checkbox'] {
 }
 
 textarea {
-  @apply min-h-[100px] bg-transparent p-2 resize-none outline-neutral-100 outline outline-1 rounded-lg;
+  @apply min-h-[100px] bg-transparent p-2 resize-none rounded-md bg-neutral-50;
   @apply focus:outline-primary-default focus:outline-none;
-  @apply invalid:border-red-600;
 }
 
 select {

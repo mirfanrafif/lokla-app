@@ -1,5 +1,5 @@
 export const CookieKeys = {
-  AccessToken: 'access_token',
+  AccessToken: 'jwt',
   Expiry: 'expiry',
   User: 'user',
 };

@@ -1,13 +1,6 @@
-import { Metadata } from 'next';
-
 import Sidebar from './components/Sidebar/Sidebar';
 
 import styles from './layout.module.scss';
-
-export const metadata: Metadata = {
-  title: 'Translations',
-  description: 'App Translations',
-};
 
 export default async function Layout({
   children,

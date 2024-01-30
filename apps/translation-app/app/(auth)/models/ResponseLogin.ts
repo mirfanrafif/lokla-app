@@ -6,6 +6,8 @@ export const LoginUserSchema = z.object({
   fullName: z.string().optional(),
 });
 
+export type LoginUser = z.infer<typeof LoginUserSchema>;
+
 export const ResponseLoginSchema = z.object({
   accessToken: z.string(),
   user: LoginUserSchema,

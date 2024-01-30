@@ -11,6 +11,7 @@ import { Role } from 'enums/Role.enum';
 
 import { User } from '../../models/User';
 import UserFormPopup from '../../UserFormPopup/UserFormPopup';
+import DeleteUserPopup from '../DeleteUserPopup/DeleteUserPopup';
 
 import styles from './UsersTable.module.scss';
 
@@ -44,6 +45,14 @@ const UsersTableAction = (props: {
         className={classNames(styles.actionButton, styles.delete)}
         title="Delete"
         disabled={props.role === Role.Editor}
+        onClick={() => {
+          openPopup(
+            <DeleteUserPopup
+              accessToken={props.accessToken}
+              email={props.user.email}
+            />,
+          );
+        }}
       >
         <FontAwesomeIcon icon={faTrash} />
       </button>

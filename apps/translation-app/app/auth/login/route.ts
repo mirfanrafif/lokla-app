@@ -22,6 +22,8 @@ export async function POST(params: NextRequest) {
 
     const data = ResponseLoginSchema.parse(response);
 
+    console.log('data', data);
+
     cookieStore.set(CookieKeys.AccessToken, data.accessToken, {
       secure: true,
     });

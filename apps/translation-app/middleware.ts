@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+import { CookieKeys } from 'constants/cookieKeys';
+
 import { buildTranslationListUrl } from './app/translation/navigations/translations.navigation';
 
 const publicUrl = [
@@ -25,7 +27,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (request.cookies.get('access_token') === undefined) {
+  if (request.cookies.get(CookieKeys.AccessToken) === undefined) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 

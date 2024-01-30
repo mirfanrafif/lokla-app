@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 
 import { RegexPatterns } from 'constants/regexPatterns';
 
+import AppLogo from '@apps/translation-app/app/assets/images/app_logo';
 import { buildTranslationListUrl } from '@apps/translation-app/app/translation/navigations/translations.navigation';
 import { LoginFormData } from '../../../models/LoginFormData';
 
@@ -42,6 +43,9 @@ const LoginForm = () => {
 
   return (
     <div>
+      <div className="flex justify-center my-16">
+        <AppLogo />
+      </div>
       <h1 className="mb-12 text-black">Login </h1>
 
       <form

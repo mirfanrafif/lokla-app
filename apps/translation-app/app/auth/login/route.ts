@@ -22,15 +22,15 @@ export async function POST(params: NextRequest) {
 
     const data = ResponseLoginSchema.parse(response);
 
-    console.log('data', data);
-
     cookieStore.set(CookieKeys.AccessToken, data.accessToken, {
-      secure: true,
+      sameSite: 'strict',
     });
     cookieStore.set(CookieKeys.Expiry, format(addDays(new Date(), 1), 't'), {
-      secure: true,
+      sameSite: 'strict',
     });
-    cookieStore.set(CookieKeys.User, JSON.stringify(data.user));
+    cookieStore.set(CookieKeys.User, JSON.stringify(data.user), {
+      sameSite: 'strict',
+    });
 
     return NextResponse.json({
       success: true,

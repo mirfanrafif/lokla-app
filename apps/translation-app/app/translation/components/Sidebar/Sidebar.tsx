@@ -54,9 +54,11 @@ const Sidebar = () => {
 
         <SidebarItem
           title="Logout"
-          href={'/auth/logout'}
           icon={<FontAwesomeIcon icon={faSignOut} className="mr-4 h-6 w-6" />}
           className={styles.logoutButton}
+          onClick={() => {
+            window.location.href = '/auth/logout';
+          }}
         />
       </ul>
     </div>
@@ -66,7 +68,8 @@ const Sidebar = () => {
 const SidebarItem = (props: {
   title: string;
   icon: React.ReactNode;
-  href: string;
+  href?: string;
+  onClick?: () => void;
   role?: Role[];
   className?: string;
 }) => {
@@ -82,12 +85,19 @@ const SidebarItem = (props: {
 
   return (
     <li className={classNames(styles.sidebarItem, props.className)}>
-      <Link href={props.href}>
-        <div className="flex flex-row gap-x-2">
+      {props.href ? (
+        <Link href={props.href}>
+          <div className="flex flex-row gap-x-2">
+            {props.icon}
+            <div className="flex flex-row gap-x-2">{props.title}</div>
+          </div>
+        </Link>
+      ) : (
+        <button className="flex flex-row gap-x-2" onClick={props.onClick}>
           {props.icon}
           <div className="flex flex-row gap-x-2">{props.title}</div>
-        </div>
-      </Link>
+        </button>
+      )}
     </li>
   );
 };

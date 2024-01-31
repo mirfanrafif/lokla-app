@@ -28,9 +28,6 @@ inputs:
 runs:
   using: composite
   steps:
-    # checkout the repository
-    - name: Checkout
-      uses: actions/checkout@v2
     # set as executable
     - name: Set as executable
       shell: bash

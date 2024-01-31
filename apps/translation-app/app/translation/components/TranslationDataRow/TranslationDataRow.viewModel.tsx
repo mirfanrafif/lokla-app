@@ -19,7 +19,7 @@ export const useTranslationDataRowViewModel = ({
   const router = useRouter();
   const { openPopup } = usePopup();
 
-  const defaultValues = useMemo(
+  const defaultValues: TranslationData = useMemo(
     () => ({
       ...item,
       translations: languages.map((lang) => {
@@ -28,7 +28,7 @@ export const useTranslationDataRowViewModel = ({
         );
         if (!existingTranslation) {
           return {
-            language: lang,
+            locale: lang,
             value: '',
           };
         }

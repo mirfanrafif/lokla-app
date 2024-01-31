@@ -1,6 +1,13 @@
 import { TranslationChangeLogEvent } from 'enums/TranslationChangeLogEvent';
 import * as z from 'zod';
 
+export const TranslationItemSchema = z.object({
+  locale: z.string(),
+  value: z.string(),
+})
+
+export type TranslationItem = z.infer<typeof TranslationItemSchema>;
+
 export const TranslationChangeLogSchema = z
   .array(
     z
@@ -8,12 +15,13 @@ export const TranslationChangeLogSchema = z
         eventType: z.nativeEnum(TranslationChangeLogEvent),
         before: z.string(),
         after: z.string(),
-        locale: z.string(),
+        locale: z.string().nullable(),
         date: z.string(),
       })
       .transform((data) => ({
         ...data,
         date: new Date(data.date),
+        locale: data.locale ?? '',
       })),
   )
   .optional();
@@ -24,12 +32,7 @@ export const TranslationDataSchema = z.object({
   key: z.string(),
   namespace: z.string(),
   project: z.string(),
-  translations: z.array(
-    z.object({
-      locale: z.string(),
-      value: z.string(),
-    }),
-  ),
+  translations: z.array(TranslationItemSchema),
   translated: z.boolean().optional(),
   changeLogs: TranslationChangeLogSchema,
 });

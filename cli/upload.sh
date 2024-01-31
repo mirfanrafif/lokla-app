@@ -6,6 +6,7 @@ directory=${DIRECTORY:-$3}
 mainBranch=${MAIN_BRANCH:-$4}
 
 echo "host: ${host} project: ${project} apiKey: ${apiKey} directory: ${directory} mainBranch: ${mainBranch}"
+ls -l $directory
 
 # get file changed compared to branch develop
 filesChanged=$(git diff --name-only $mainBranch)

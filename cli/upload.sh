@@ -6,7 +6,7 @@ directory=${DIRECTORY:-$3}
 mainBranch=${MAIN_BRANCH:-$4}
 
 # get file changed compared to branch develop
-filesChanged=$(git diff --name-only $PROJECT_ID)
+filesChanged=$(git diff --name-only $mainBranch)
 
 for locale in "${locales[@]}"; do
   for file in "${directory}/${locale}"/*; do

@@ -268,7 +268,7 @@ export class TranslationsService {
       },
       {
         translations: request.translations,
-        translated: false,
+        translated: true,
         changeLogs: [...existingTranslation.changeLogs, ...changeLog],
       },
     );

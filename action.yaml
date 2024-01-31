@@ -1,0 +1,30 @@
+name: Lokla Actions
+description: Lokla Actions
+author: Lokla
+branding:
+  icon: globe
+  color: green
+inputs:
+  project-name:
+    description: 'Project name'
+    required: true
+    default: 'Lokla'
+  endpoint:
+    description: 'Endpoint'
+    required: true
+    default: 'https://lokla.mirfanrafif.my.id'
+  api-key:
+    description: 'API Key'
+    required: true
+    default: '1234567890'
+  main-branch:
+    description: 'Main branch'
+    required: true
+    default: 'main'
+runs:
+  using: composite
+  steps:
+    - run: ${{ github.action_path }}/cli/upload.sh
+      shell: bash
+      
+      

@@ -75,6 +75,7 @@ export class TranslationsController {
   }
 
   @Get('export')
+  @UseGuards(ApiKeyAuthGuard)
   exportTranslation(@Query() request: RequestExportTranslation) {
     return this.service.exportTranslation(request);
   }

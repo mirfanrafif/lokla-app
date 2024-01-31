@@ -5,9 +5,6 @@ apiKey=${API_KEY:-$2}
 directory=${DIRECTORY:-$3}
 mainBranch=${MAIN_BRANCH:-$4}
 
-echo "host: ${host} project: ${project} apiKey: ${apiKey} directory: ${directory} mainBranch: ${mainBranch}"
-ls -l $directory
-
 # pull target branch
 git fetch origin $mainBranch
 
@@ -20,9 +17,9 @@ locales=($(ls -d $directory/* | xargs -n 1 basename))
 for locale in "${locales[@]}"; do
   for file in "${directory}/${locale}"/*; do
     # check if file changed and not force upload
-    # if [[ ! $filesChanged =~ $file ]] && [[ $1 != '-f' ]]; then
-    #   continue
-    # fi
+    if [[ ! $filesChanged =~ $file ]] && [[ $1 != '-f' ]]; then
+      continue
+    fi
 
     namespace=$(basename "$file" .json)
     data=$(cat "$file")

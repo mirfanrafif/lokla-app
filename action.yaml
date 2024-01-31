@@ -28,8 +28,15 @@ inputs:
 runs:
   using: composite
   steps:
+    # checkout the repository
     - name: Checkout
       uses: actions/checkout@v2
+    # set as executable
+    - name: Set as executable
+      shell: bash
+      run: chmod +x ${{ github.action_path }}/cli/upload.sh
+
+    # run the upload script
     - run: ${{ github.action_path }}/cli/upload.sh
       shell: bash
       env:

@@ -9,7 +9,7 @@ echo "host: ${host} project: ${project} apiKey: ${apiKey} directory: ${directory
 ls -l $directory
 
 # get file changed compared to branch develop in origin
-filesChanged=$(git diff --name-only origin/${mainBranch}...HEAD)
+filesChanged=$(git diff --name-only $mainBranch...HEAD)
 
 for locale in "${locales[@]}"; do
   for file in "${directory}/${locale}"/*; do

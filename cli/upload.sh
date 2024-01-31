@@ -12,7 +12,7 @@ ls -l $directory
 git fetch origin $mainBranch
 
 # get file changed compared to branch develop in origin
-filesChanged=$(git diff --name-only $mainBranch...HEAD)
+filesChanged=$(git diff --name-only $mainBranch)
 
 for locale in "${locales[@]}"; do
   for file in "${directory}/${locale}"/*; do

@@ -14,6 +14,9 @@ git fetch origin $mainBranch
 # get file changed compared to branch develop in origin
 filesChanged=$(git diff --name-only origin/$mainBranch)
 
+# get all locales
+locales=($(ls -d $directory/* | xargs -n 1 basename))
+
 for locale in "${locales[@]}"; do
   for file in "${directory}/${locale}"/*; do
     # check if file changed and not force upload

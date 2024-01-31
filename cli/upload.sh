@@ -1,12 +1,12 @@
-# upload each file in the selected directory to the server
-
-host='http://localhost:3001/api'
-project='pms'
-locales=('en' 'jp')
-directory='src/core/resources/locales'
+# variables
+host=${ENDPOINT:-https://lokla.mirfanrafif.my.id}
+project=${PROJECT_ID:-$1}
+API_KEY=${API_KEY:-$2}
+directory=${DIRECTORY:-$3}
+PROJECT_ID=${PROJECT_ID:-$4}
 
 # get file changed compared to branch develop
-filesChanged=$(git diff --name-only develop)
+filesChanged=$(git diff --name-only $PROJECT_ID)
 
 for locale in "${locales[@]}"; do
   for file in "${directory}/${locale}"/*; do

@@ -1,14 +1,14 @@
-name: Lokla Actions
-description: Lokla Actions
+name: lokla-actions
+description: Upload your translation files to Lokla
 author: Lokla
 branding:
   icon: globe
   color: green
 inputs:
-  project-name:
-    description: 'Project name'
+  project-id:
+    description: 'Project ID / Identifier'
     required: true
-    default: 'Lokla'
+    default: 'lokla'
   endpoint:
     description: 'Endpoint'
     required: true
@@ -21,10 +21,20 @@ inputs:
     description: 'Main branch'
     required: true
     default: 'main'
+  directory:
+    description: 'Directory'
+    required: true
+    default: 'public/locales'
 runs:
   using: composite
   steps:
     - run: ${{ github.action_path }}/cli/upload.sh
       shell: bash
+      env:
+        PROJECT_ID: ${{ inputs.project-id }}
+        ENDPOINT: ${{ inputs.endpoint }}
+        API_KEY: ${{ inputs.api-key }}
+        MAIN_BRANCH: ${{ inputs.main-branch }}
+        DIRECTORY: ${{ inputs.directory }}
       
       

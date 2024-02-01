@@ -100,7 +100,7 @@ const TranslationFilter = (props: {
       >
         <option value="">No Filter</option>
         <option value="not_translated">Not Translated</option>
-        <option value="duplicated">Duplicate</option>
+        <option value="duplicated">Duplicated</option>
       </select>
     </div>
   );

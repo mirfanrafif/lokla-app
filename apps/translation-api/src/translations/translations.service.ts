@@ -177,7 +177,7 @@ export class TranslationsService {
           changeLogs: [
             ...item.changeLogs,
             {
-              eventType: isUpdated
+              eventType: existingLocale !== undefined
                 ? TranslationChangeLogEvent.UPDATE
                 : TranslationChangeLogEvent.CREATE,
               before: isUpdated ? existingLocale.value : '',

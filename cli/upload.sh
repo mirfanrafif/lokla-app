@@ -23,6 +23,7 @@ for locale in "${locales[@]}"; do
 
     namespace=$(basename "$file" .json)
     data=$(cat "$file")
+    echo "Uploading ${locale}/${namespace} to ${host}..."
     curl -s -X POST -H "Content-Type: application/json" -H "Authorization: Api-Key ${apiKey}" -d "{\"data\": $data}" "${host}/translations/import/ci?project=${project}&namespace=${namespace}&locale=${locale}"
   done
 done

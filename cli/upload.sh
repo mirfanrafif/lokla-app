@@ -16,10 +16,10 @@ locales=($(ls -d $directory/* | xargs -n 1 basename))
 
 for locale in "${locales[@]}"; do
   for file in "${directory}/${locale}"/*; do
-    # check if file changed and not force upload
-    if [[ ! $filesChanged =~ $file ]] && [[ $1 != '-f' ]]; then
-      continue
-    fi
+    # # check if file changed and not force upload
+    # if [[ ! $filesChanged =~ $file ]] && [[ $1 != '-f' ]]; then
+    #   continue
+    # fi
 
     namespace=$(basename "$file" .json)
     data=$(cat "$file")

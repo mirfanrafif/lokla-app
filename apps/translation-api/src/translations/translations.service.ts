@@ -151,6 +151,10 @@ export class TranslationsService {
         ? flatJson[item.key] !== existingLocale.value
         : false;
 
+      if (!isUpdated) {
+        continue;
+      }
+
       const newTranslation = [
         ...item.translations.filter((item) => item.locale !== body.locale),
         {

@@ -59,6 +59,27 @@ export class TranslationsService {
       };
     }
 
+    if (query.filter === 'duplicated') {
+      // check if some of the translation value is same with other locale
+
+      const allTranslations = await this.translationModel.find(filters);
+
+      const duplicatedKeys = allTranslations.filter((item) => {
+        const values = item.translations.map((item) => item.value);
+
+        return new Set(values).size !== values.length;
+      });
+
+
+      return {
+        data: duplicatedKeys,
+        meta: {
+          total_data: duplicatedKeys.length,
+          total_page: 1,
+        },
+      };
+    }
+
     const result = await this.translationModel.find(
       {
         ...filters,

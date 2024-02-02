@@ -1,4 +1,4 @@
-import { addDays, format } from 'date-fns';
+
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -6,6 +6,7 @@ import { CookieKeys } from 'constants/cookieKeys';
 
 import { request } from '@apps/translation-app/lib/apiClient';
 import { ResponseLoginSchema } from '../../(auth)/models/ResponseLogin';
+import { addDays } from 'date-fns';
 
 export async function POST(params: NextRequest) {
   try {
@@ -25,7 +26,7 @@ export async function POST(params: NextRequest) {
     cookieStore.set(CookieKeys.AccessToken, data.accessToken, {
       sameSite: 'strict',
     });
-    cookieStore.set(CookieKeys.Expiry, format(addDays(new Date(), 1), 't'), {
+    cookieStore.set(CookieKeys.Expiry, addDays(new Date(), 1).getTime().toString(), {
       sameSite: 'strict',
     });
     cookieStore.set(CookieKeys.User, JSON.stringify(data.user), {

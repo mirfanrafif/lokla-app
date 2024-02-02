@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import React from 'react';
 
@@ -9,9 +9,7 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import classNames from 'classnames';
 import { Role } from 'enums/Role.enum';
-import Link from 'next/link';
 
 import { LoginUser } from '@apps/translation-app/app/(auth)/models/ResponseLogin';
 import {
@@ -21,8 +19,21 @@ import {
 } from '../../navigations/translations.navigation';
 
 import styles from './Sidebar.module.scss';
+import { SidebarItem } from './SidebarItem';
+import { useRouter } from 'next/navigation';
 
 const Sidebar = (props: { user: LoginUser | undefined }) => {
+  const router = useRouter();
+
+  const logout = () => {
+    fetch('/auth/logout', {
+      method: 'GET',
+    }).then(() => {
+      router.push('/login');
+    });
+  }
+
+
   return (
     <div className={styles.sidebar}>
       <div className={styles.displayName}>
@@ -60,52 +71,12 @@ const Sidebar = (props: { user: LoginUser | undefined }) => {
           icon={<FontAwesomeIcon icon={faSignOut} className="mr-4 h-6 w-6" />}
           className={styles.logoutButton}
           currentRole={props.user?.role as Role | undefined}
-          onClick={() => {
-            window.location.href = '/auth/logout';
-          }}
+          onClick={logout}
         />
       </ul>
     </div>
   );
 };
 
-const SidebarItem = (props: {
-  title: string;
-  icon: React.ReactNode;
-  href?: string;
-  onClick?: () => void;
-  role?: Role[];
-  className?: string;
-  currentRole?: Role | undefined;
-}) => {
-  if (props.currentRole === undefined) {
-    return null;
-  }
-
-  if (
-    props.role !== undefined &&
-    !props.role.includes(props.currentRole as Role)
-  ) {
-    return null;
-  }
-
-  return (
-    <li className={classNames(styles.sidebarItem, props.className)}>
-      {props.href ? (
-        <Link href={props.href}>
-          <div className="flex flex-row gap-x-2">
-            {props.icon}
-            <div className="flex flex-row gap-x-2">{props.title}</div>
-          </div>
-        </Link>
-      ) : (
-        <button className="flex flex-row gap-x-2" onClick={props.onClick}>
-          {props.icon}
-          <div className="flex flex-row gap-x-2">{props.title}</div>
-        </button>
-      )}
-    </li>
-  );
-};
 
 export default Sidebar;

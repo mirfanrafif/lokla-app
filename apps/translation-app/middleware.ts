@@ -4,6 +4,7 @@ import type { NextRequest } from 'next/server';
 import { CookieKeys } from 'constants/cookieKeys';
 
 import { buildTranslationListUrl } from './app/translation/navigations/translations.navigation';
+import { isBefore } from 'date-fns';
 
 const publicUrl = [
   '/login',
@@ -31,11 +32,14 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  if (request.cookies.get('expiry') !== undefined) {
-    const expiry = new Date(request.cookies.get('expiry')?.value as string);
-    if (expiry < new Date()) {
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
+  if (request.cookies.get(CookieKeys.Expiry) === undefined) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+
+  const expiry = new Date(request.cookies.get('expiry')?.value as string);
+  
+  if (isBefore(expiry, new Date())) {
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   return NextResponse.next();

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { TranslationChangeLogEvent } from 'enums/TranslationChangeLogEvent';
 import { Model } from 'mongoose';
@@ -15,7 +15,7 @@ import {
   RequestImportTranslationFromJson,
   RequestUpdateTranslation,
 } from './Translation.dto';
-import { TranslationModel } from './Translation.schema';
+import { TranslationData, TranslationModel } from './Translation.schema';
 
 @Injectable()
 export class TranslationsService {
@@ -143,51 +143,55 @@ export class TranslationsService {
 
     // update existing
     for (const item of existingKeys) {
-      const existingLocale = item.translations.find(
-        (item) => item.locale === body.locale,
-      );
+      try {
+        const existingLocale: TranslationData = item.translations.find(
+          (item) => item.locale === body.locale,
+        );
+  
+        const isSame = existingLocale !== undefined && existingLocale.value === flatJson[item.key];
 
-      const isUpdated = existingLocale !== undefined
-        ? flatJson[item.key] !== existingLocale.value
-        : true
-
-      if (!isUpdated) {
-        continue;
+        
+  
+        if (isSame) {
+          continue;
+        }
+  
+        const newTranslation = [
+          ...item.translations.filter((item) => item.locale !== body.locale),
+          {
+            locale: body.locale,
+            value: flatJson[item.key],
+          },
+        ];
+  
+        const isCompleted = newTranslation.length === languages.length;
+  
+        await this.translationModel.findOneAndUpdate(
+          {
+            key: item.key,
+            namespace: body.namespace,
+            project: body.project,
+          },
+          {
+            translations: newTranslation,
+            translated: isCompleted && !isSame,
+            changeLogs: [
+              ...item.changeLogs,
+              {
+                eventType: existingLocale !== undefined
+                  ? TranslationChangeLogEvent.UPDATE
+                  : TranslationChangeLogEvent.CREATE,
+                before: existingLocale?.value ?? '',
+                after: flatJson[item.key],
+                locale: body.locale,
+                date: new Date(),
+              },
+            ],
+          },
+        );
+      } catch (error) {
+        throw new InternalServerErrorException(`Error when updating translation on locale ${body.locale} for namespace ${body.namespace}`);
       }
-
-      const newTranslation = [
-        ...item.translations.filter((item) => item.locale !== body.locale),
-        {
-          locale: body.locale,
-          value: flatJson[item.key],
-        },
-      ];
-
-      const isCompleted = newTranslation.length === languages.length;
-
-      await this.translationModel.findOneAndUpdate(
-        {
-          key: item.key,
-          namespace: body.namespace,
-          project: body.project,
-        },
-        {
-          translations: newTranslation,
-          translated: isCompleted && !isUpdated,
-          changeLogs: [
-            ...item.changeLogs,
-            {
-              eventType: existingLocale !== undefined
-                ? TranslationChangeLogEvent.UPDATE
-                : TranslationChangeLogEvent.CREATE,
-              before: isUpdated ? existingLocale.value : '',
-              after: flatJson[item.key],
-              locale: body.locale,
-              date: new Date(),
-            },
-          ],
-        },
-      );
     }
 
     // new keys

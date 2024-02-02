@@ -147,9 +147,9 @@ export class TranslationsService {
         (item) => item.locale === body.locale,
       );
 
-      const isUpdated = existingLocale
+      const isUpdated = existingLocale !== undefined
         ? flatJson[item.key] !== existingLocale.value
-        : false;
+        : true
 
       if (!isUpdated) {
         continue;

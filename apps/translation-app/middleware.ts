@@ -1,10 +1,10 @@
+import { isBefore } from 'date-fns';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 import { CookieKeys } from 'constants/cookieKeys';
 
 import { buildTranslationListUrl } from './app/translation/navigations/translations.navigation';
-import { isBefore } from 'date-fns';
 
 const publicUrl = [
   '/login',
@@ -37,7 +37,9 @@ export function middleware(request: NextRequest) {
   }
 
   const expiry = new Date(request.cookies.get('expiry')?.value as string);
-  
+
+  console.log('expiry', expiry, new Date());
+
   if (isBefore(expiry, new Date())) {
     return NextResponse.redirect(new URL('/login', request.url));
   }

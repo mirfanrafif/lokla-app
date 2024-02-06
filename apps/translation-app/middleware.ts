@@ -40,8 +40,6 @@ export function middleware(request: NextRequest) {
     Number(request.cookies.get(CookieKeys.Expiry)?.value),
   );
 
-  console.log('expiry', expiry, new Date());
-
   if (isBefore(expiry, new Date())) {
     return NextResponse.redirect(new URL('/login', request.url));
   }

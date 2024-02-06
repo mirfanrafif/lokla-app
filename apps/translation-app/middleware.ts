@@ -36,7 +36,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  const expiry = new Date(request.cookies.get('expiry')?.value as string);
+  const expiry = new Date(
+    Number(request.cookies.get(CookieKeys.Expiry)?.value),
+  );
 
   console.log('expiry', expiry, new Date());
 

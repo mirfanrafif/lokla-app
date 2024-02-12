@@ -70,7 +70,6 @@ export class TranslationsService {
         return new Set(values).size !== values.length;
       });
 
-
       return {
         data: duplicatedKeys,
         meta: {
@@ -154,13 +153,14 @@ export class TranslationsService {
 
     const keys = Object.keys(flatJson);
 
-    const existingKeys = await this.translationModel.find({
-      key: {
-        $in: keys,
-      },
+    const data = await this.translationModel.find({
       namespace: body.namespace,
       project: body.project,
     });
+
+    const existingKeys = data.filter((item) => keys.includes(item.key));
+
+    const deletedKeys = data.filter((item) => !keys.includes(item.key));
 
     // update existing
     for (const item of existingKeys) {
@@ -168,15 +168,15 @@ export class TranslationsService {
         const existingLocale: TranslationData = item.translations.find(
           (item) => item.locale === body.locale,
         );
-  
-        const isSame = existingLocale !== undefined && existingLocale.value === flatJson[item.key];
 
-        
-  
+        const isSame =
+          existingLocale !== undefined &&
+          existingLocale.value === flatJson[item.key];
+
         if (isSame) {
           continue;
         }
-  
+
         const newTranslation = [
           ...item.translations.filter((item) => item.locale !== body.locale),
           {
@@ -184,9 +184,9 @@ export class TranslationsService {
             value: flatJson[item.key],
           },
         ];
-  
+
         const isCompleted = newTranslation.length === languages.length;
-  
+
         await this.translationModel.findOneAndUpdate(
           {
             key: item.key,
@@ -196,12 +196,14 @@ export class TranslationsService {
           {
             translations: newTranslation,
             translated: isCompleted && !isSame,
+            unused: false,
             changeLogs: [
               ...item.changeLogs,
               {
-                eventType: existingLocale !== undefined
-                  ? TranslationChangeLogEvent.UPDATE
-                  : TranslationChangeLogEvent.CREATE,
+                eventType:
+                  existingLocale !== undefined
+                    ? TranslationChangeLogEvent.UPDATE
+                    : TranslationChangeLogEvent.CREATE,
                 before: existingLocale?.value ?? '',
                 after: flatJson[item.key],
                 locale: body.locale,
@@ -211,12 +213,24 @@ export class TranslationsService {
           },
         );
       } catch (error) {
-        throw new InternalServerErrorException(`Error when updating translation on locale ${body.locale} for namespace ${body.namespace}`);
+        throw new InternalServerErrorException(
+          `Error when updating translation on locale ${body.locale} for namespace ${body.namespace}`,
+        );
       }
     }
 
-    // new keys
+    await this.translationModel.updateMany(
+      {
+        key: {
+          $in: deletedKeys.map((item) => item.key),
+        },
+      },
+      {
+        unused: true,
+      },
+    );
 
+    // new keys
     const newKeys = keys.filter(
       (item) => !existingKeys.find((existingItem) => existingItem.key === item),
     );
@@ -232,6 +246,7 @@ export class TranslationsService {
         },
       ],
       translated: false,
+      unused: false,
       changeLogs: [
         {
           eventType: TranslationChangeLogEvent.CREATE,

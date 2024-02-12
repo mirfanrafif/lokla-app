@@ -48,6 +48,9 @@ export class TranslationModel {
     ref: TranslationChangeLogModel.name,
   })
   changeLogs: TranslationChangeLogModel[];
+
+  @Prop()
+  unused: boolean = false;
 }
 
 export const TranslationSchema = SchemaFactory.createForClass(TranslationModel);

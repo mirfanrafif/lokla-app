@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { languages } from 'constants/languages';
 
 import { TranslationData } from '../../models/TranslationData';
@@ -38,6 +40,22 @@ export function TranslationTable(props: {
           ))}
         </tbody>
       </table>
+      {props.translations.length === 0 && (
+        <>
+          <Image
+            src={'/done.png'}
+            alt=""
+            width={300}
+            height={300}
+            className="mx-auto mt-8"
+          />
+          <p className="text-center mb-8">
+            {role === 'editor'
+              ? "Yay! You're all caught up! All translations are up to date."
+              : 'No translations found.'}
+          </p>
+        </>
+      )}
     </div>
   );
 }

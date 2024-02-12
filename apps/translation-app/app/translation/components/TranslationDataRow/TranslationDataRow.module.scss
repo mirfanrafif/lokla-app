@@ -25,6 +25,12 @@
 
   &.notTranslated {
     > td {
+      @apply bg-amber-200;
+    }
+  }
+
+  &.unused {
+    > td {
       @apply bg-red-200;
     }
   }

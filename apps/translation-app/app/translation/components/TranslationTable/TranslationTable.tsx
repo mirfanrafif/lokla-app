@@ -1,3 +1,4 @@
+import DoneImage from '@frontend/app/translation/images/done.png';
 import Image from 'next/image';
 
 import { languages } from 'constants/languages';
@@ -43,7 +44,7 @@ export function TranslationTable(props: {
       {props.translations.length === 0 && (
         <>
           <Image
-            src={'/done.png'}
+            src={DoneImage}
             alt=""
             width={300}
             height={300}

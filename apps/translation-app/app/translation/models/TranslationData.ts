@@ -4,7 +4,7 @@ import * as z from 'zod';
 export const TranslationItemSchema = z.object({
   locale: z.string(),
   value: z.string(),
-})
+});
 
 export type TranslationItem = z.infer<typeof TranslationItemSchema>;
 
@@ -35,6 +35,7 @@ export const TranslationDataSchema = z.object({
   translations: z.array(TranslationItemSchema),
   translated: z.boolean().optional(),
   changeLogs: TranslationChangeLogSchema,
+  unused: z.boolean().optional().nullable(),
 });
 
 export type TranslationData = z.infer<typeof TranslationDataSchema>;

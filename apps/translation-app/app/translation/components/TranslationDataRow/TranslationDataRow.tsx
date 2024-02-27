@@ -39,6 +39,7 @@ export function TranslationDataRow({
       key={item.key}
       className={classNames(styles.row, {
         [styles.notTranslated]: !translated,
+        [styles.deleted]: item.unused,
       })}
     >
       <td>

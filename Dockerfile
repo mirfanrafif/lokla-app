@@ -23,7 +23,7 @@ ENV NODE_ENV=production
 WORKDIR /app
 
 COPY --from=builder /app/dist/apps/translation-app/next.config.js ./
-COPY --from=builder /app/dist/apps/translation-app/public ./public
+COPY --from=builder /app/dist/apps/translation-app/public ./dist/apps/translation-app/public
 COPY --from=builder /app/dist/apps/translation-app/.next/static ./dist/apps/translation-app/.next/static
 COPY --from=builder /app/dist/apps/translation-app/.next/standalone ./
 

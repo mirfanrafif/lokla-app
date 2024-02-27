@@ -25,13 +25,13 @@
 
   &.notTranslated {
     > td {
-      @apply bg-amber-200;
+      @apply bg-amber-100;
     }
   }
 
   &.unused {
     > td {
-      @apply bg-red-200;
+      @apply bg-red-100;
     }
   }
 }

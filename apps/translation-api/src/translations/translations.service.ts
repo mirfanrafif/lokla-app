@@ -59,6 +59,13 @@ export class TranslationsService {
       };
     }
 
+    if (query.filter === 'unused') {
+      filters = {
+        ...filters,
+        unused: true,
+      };
+    }
+
     if (query.filter === 'duplicated') {
       // check if some of the translation value is same with other locale
 
@@ -160,8 +167,6 @@ export class TranslationsService {
 
     const existingKeys = data.filter((item) => keys.includes(item.key));
 
-    const deletedKeys = data.filter((item) => !keys.includes(item.key));
-
     // update existing
     for (const item of existingKeys) {
       try {
@@ -219,16 +224,21 @@ export class TranslationsService {
       }
     }
 
-    await this.translationModel.updateMany(
-      {
-        key: {
-          $in: deletedKeys.map((item) => item.key),
+    const deletedKeys = data.filter((item) => !keys.includes(item.key));
+
+    //TODO: change after adding default locale on company settings
+    if (body.locale === 'en') {
+      await this.translationModel.updateMany(
+        {
+          key: {
+            $in: deletedKeys.map((item) => item.key),
+          },
         },
-      },
-      {
-        unused: true,
-      },
-    );
+        {
+          unused: true,
+        },
+      );
+    }
 
     // new keys
     const newKeys = keys.filter(

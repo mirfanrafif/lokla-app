@@ -20,6 +20,7 @@ import {
   RequestDeleteTranslation,
   RequestExportTranslation,
   RequestGetTranslationList,
+  RequestGetTranslationStatistics,
   RequestImportTranslationFromCi,
   RequestImportTranslationFromJson,
   RequestUpdateTranslation,
@@ -84,5 +85,11 @@ export class TranslationsController {
   @Get('namespaces')
   getNamespaces(@Query('project') project: string) {
     return this.service.getNamespaces(project);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('statistics')
+  getStatistics(@Query() query: RequestGetTranslationStatistics) {
+    return this.service.getStatistics(query);
   }
 }

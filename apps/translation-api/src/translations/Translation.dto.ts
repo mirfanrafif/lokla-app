@@ -89,3 +89,9 @@ export class RequestExportTranslation {
   @IsNotEmpty()
   locale: string;
 }
+
+export class RequestGetTranslationStatistics {
+  @IsString()
+  @IsNotEmpty()
+  project: string;
+}

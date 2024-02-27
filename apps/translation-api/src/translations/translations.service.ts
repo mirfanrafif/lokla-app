@@ -11,6 +11,7 @@ import {
   RequestDeleteTranslation,
   RequestExportTranslation,
   RequestGetTranslationList,
+  RequestGetTranslationStatistics,
   RequestImportTranslationFromCi,
   RequestImportTranslationFromJson,
   RequestUpdateTranslation,
@@ -390,5 +391,51 @@ export class TranslationsService {
         translated: true,
       },
     );
+  }
+
+  getStatistics(query: RequestGetTranslationStatistics) {
+    // get percentage of translated keys group by namespace
+    return this.translationModel.aggregate([
+      {
+        $match: {
+          project: query.project,
+        },
+      },
+      {
+        $group: {
+          _id: '$namespace',
+          total: {
+            $sum: 1,
+          },
+          translated: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ['$translated', true],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          namespace: '$_id',
+          total: 1,
+          translated: 1,
+          percentage: {
+            $multiply: [
+              {
+                $divide: ['$translated', '$total'],
+              },
+              100,
+            ],
+          },
+        },
+      },
+    ]);
   }
 }

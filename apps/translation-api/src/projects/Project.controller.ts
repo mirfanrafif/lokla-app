@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
 import { Role } from 'enums/Role.enum';
 
 import { JwtAuthGuard } from '../auth/Jwt.guard';
@@ -25,5 +25,10 @@ export class ProjectController {
   @Post('generateApiKey')
   generateApiKey(@Body() request: RequestGenerateApiKey) {
     return this.service.generateApiKey(request.projectId);
+  }
+
+  @Put()
+  updateProject(@Body() body: RequestCreateProject) {
+    return this.service.updateProject(body);
   }
 }

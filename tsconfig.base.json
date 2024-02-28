@@ -17,7 +17,8 @@
     "paths": {
       "@apps/*": ["apps/*"],
       "@backend/*": ["apps/translation-api/*"],
-      "@frontend/*": ["apps/translation-app/*"]
+      "@frontend/*": ["apps/translation-app/*"],
+      "@constants/*": ["constants/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

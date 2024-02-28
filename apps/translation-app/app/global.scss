@@ -158,7 +158,7 @@ a.button {
 }
 
 .popup-popup {
-  @apply relative left-auto z-10 mx-auto my-auto max-h-[700px] max-w-[1000px] overflow-auto rounded-2xl bg-white p-8;
+  @apply relative left-auto z-10 mx-auto my-auto max-h-[700px] max-w-[1000px] overflow-visible rounded-2xl bg-white p-8;
 }
 
 .popup-overlay {

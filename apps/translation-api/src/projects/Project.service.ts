@@ -21,6 +21,8 @@ export class ProjectService {
       name: request.name,
       identifier: request.identifier,
       apiKey: v4(),
+      defaultLanguage: request.defaultLanguage,
+      languages: request.languages,
     });
   }
 
@@ -31,6 +33,19 @@ export class ProjectService {
       },
       {
         apiKey: v4(),
+      },
+    );
+  }
+
+  updateProject(request: RequestCreateProject) {
+    return this.projectModel.findOneAndUpdate(
+      {
+        identifier: request.identifier,
+      },
+      {
+        name: request.name,
+        languages: request.languages,
+        defaultLanguage: request.defaultLanguage,
       },
     );
   }

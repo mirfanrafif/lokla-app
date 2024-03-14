@@ -1,6 +1,6 @@
 .row {
   > td {
-    @apply bg-white py-4 px-2;
+    @apply bg-white py-4 px-2 transition-colors duration-100 ease-in-out;
 
     &:first-child {
       @apply pl-4 pr-2;
@@ -32,6 +32,13 @@
   &.unused {
     > td {
       @apply bg-red-100;
+    }
+  }
+
+  // selector if the textarea inside the column is focused
+  &:focus-within {
+    > td {
+      @apply bg-[var(--primary-light-bg)];
     }
   }
 }

@@ -49,7 +49,7 @@ export class TranslationsService {
       filters = {
         ...filters,
         $text: {
-          $search: query.search,
+          $search: `"${query.search}"`,
         },
       };
     }

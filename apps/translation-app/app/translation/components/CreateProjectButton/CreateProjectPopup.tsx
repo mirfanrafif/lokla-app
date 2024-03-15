@@ -24,14 +24,18 @@ const CreateProjectPopup = (props: {
   return (
     <div className="flex flex-col gap-y-6 w-[500px]">
       <h1>Create New Project</h1>
+
+      <label htmlFor="name">Project Name</label>
       <input
         type="text"
-        placeholder="Name"
+        placeholder="Type here..."
         {...form.register('name', { required: 'Please input the name' })}
       />
+
+      <label htmlFor="identifier">Identifier</label>
       <input
         type="text"
-        placeholder="Identifier"
+        placeholder="Type here..."
         {...form.register('identifier', {
           required: 'Please input the identifier',
           pattern: {
@@ -41,6 +45,7 @@ const CreateProjectPopup = (props: {
         })}
       />
 
+      <label htmlFor="defaultLanguage">Default Language</label>
       <div>
         <Controller
           control={form.control}
@@ -48,7 +53,7 @@ const CreateProjectPopup = (props: {
           render={({ field }) => (
             <div>
               <Dropdown
-                placeholder="Default Language"
+                placeholder="Select item below or type custom language..."
                 options={Locales.map((item) => ({
                   label: `${item.name} (${item.code})`,
                   value: item.code,
@@ -59,7 +64,7 @@ const CreateProjectPopup = (props: {
               />
 
               <p className="text-sm mt-2 text-neutral-500">
-                Base Language:
+                Base Language:{' '}
                 {field.value &&
                   `${field.value} (${Locales.find((item) => item.code === field.value)?.name ?? 'Custom Language'})`}
               </p>

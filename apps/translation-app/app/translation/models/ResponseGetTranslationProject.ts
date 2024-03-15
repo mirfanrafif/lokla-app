@@ -4,8 +4,8 @@ export const ProjectItemSchema = z.object({
   name: z.string(),
   identifier: z.string(),
   apiKey: z.string().optional(),
-  defaultLanguage: z.string().nullable().optional(),
-  languages: z.array(z.string()).nullable(),
+  defaultLanguage: z.string().optional(),
+  languages: z.array(z.string()),
 });
 
 export const ResponseGetTranslationProjectSchema = z.array(ProjectItemSchema);

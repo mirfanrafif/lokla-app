@@ -9,4 +9,13 @@
 
 .search {
   flex: 1;
+  position: relative;
+}
+
+.hint {
+  @apply absolute top-[calc(100%+8px)] hidden rounded-lg bg-white p-4 shadow-lg;
+}
+
+.search:focus-within .hint {
+  @apply block;
 }

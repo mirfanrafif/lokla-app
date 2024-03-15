@@ -23,25 +23,26 @@ const TranslationFilter = (props: {
 
   return (
     <div className={styles.row}>
-      <input
-        placeholder="Search..."
-        className={styles.search}
-        defaultValue={searchParams.get('search') ?? ''}
-        onChange={(event) => {
-          clearTimeout(timoutRef.current);
+      <div className={styles.search}>
+        <input
+          placeholder="Search..."
+          className="w-full"
+          defaultValue={searchParams.get('search') ?? ''}
+          onChange={(event) => {
+            clearTimeout(timoutRef.current);
 
-          timoutRef.current = setTimeout(() => {
-            router.push(
-              buildTranslationListUrl({
-                ...params,
-                search: event.target.value,
-                page: undefined,
-              }),
-            );
-          }, 300);
-        }}
-      />
-
+            timoutRef.current = setTimeout(() => {
+              router.push(
+                buildTranslationListUrl({
+                  ...params,
+                  search: event.target.value,
+                  page: undefined,
+                }),
+              );
+            }, 300);
+          }}
+        />
+      </div>
       <select
         name="project"
         defaultValue={searchParams.get('project') ?? ''}

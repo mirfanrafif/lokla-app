@@ -83,7 +83,7 @@ const ProjectPopup = (props: {
       </p>
 
       <h1 className="my-4">Statistics</h1>
-      <div className="flex flex-col gap-y-4">
+      <div className="flex flex-col gap-y-4 max-h-[300px] overflow-auto">
         {statistics
           .sort((a, b) => (a.namespace > b.namespace ? 1 : -1))
           .map((stat) => (

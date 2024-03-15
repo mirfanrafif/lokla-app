@@ -68,7 +68,7 @@ export class TranslationsService {
     } else {
       filters = {
         ...filters,
-        unused: false,
+        $or: [{ unused: false }, { unused: { $exists: false } }],
       };
     }
 
@@ -96,7 +96,13 @@ export class TranslationsService {
       {
         ...filters,
       },
-      undefined,
+      query.search
+        ? {
+            score: {
+              $meta: 'textScore',
+            },
+          }
+        : undefined,
       {
         skip: query.page * query.limit,
         limit: query.limit,
@@ -384,6 +390,7 @@ export class TranslationsService {
     const translationData = await this.translationModel.find({
       project: request.project,
       namespace: request.namespace,
+      $or: [{ unused: false }, { unused: { $exists: false } }],
     });
     const outputObject: {
       [key: string]: string;

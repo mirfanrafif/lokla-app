@@ -48,14 +48,6 @@ export const useTranslationDataRowViewModel = ({
     name: 'translations',
   });
 
-  const haveTooltip = useMemo(() => {
-    if (item.unused || item.needToVerify) {
-      return true;
-    }
-
-    return false;
-  }, [item.needToVerify, item.unused]);
-
   const onSubmit = form.handleSubmit((data) => {
     const requestData: RequestUpdateTranslation = {
       oldKey: item.key,
@@ -129,7 +121,6 @@ export const useTranslationDataRowViewModel = ({
     ignoreTranslation,
     translated,
     showChangelog,
-    haveTooltip,
     isShowTooltip,
     setIsShowTooltip,
   };

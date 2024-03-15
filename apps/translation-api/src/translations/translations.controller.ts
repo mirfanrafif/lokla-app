@@ -6,6 +6,7 @@ import {
   Post,
   Put,
   Query,
+  Request,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -59,8 +60,11 @@ export class TranslationsController {
 
   @UseGuards(JwtAuthGuard)
   @Put()
-  updateTranslation(@Body() request: RequestUpdateTranslation) {
-    return this.service.updateTranslation(request);
+  updateTranslation(
+    @Request() request,
+    @Body() body: RequestUpdateTranslation,
+  ) {
+    return this.service.updateTranslation(body, request.user);
   }
 
   @UseGuards(JwtAuthGuard)

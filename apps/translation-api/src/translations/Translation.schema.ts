@@ -51,6 +51,9 @@ export class TranslationModel {
 
   @Prop()
   unused: boolean = false;
+
+  @Prop()
+  needToVerify: boolean = false;
 }
 
 export const TranslationSchema = SchemaFactory.createForClass(TranslationModel);

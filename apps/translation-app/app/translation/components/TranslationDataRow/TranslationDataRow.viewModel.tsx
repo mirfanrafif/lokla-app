@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { request } from '@frontend/lib/apiClient';
 import { useRouter } from 'next/navigation';
@@ -18,6 +18,7 @@ export const useTranslationDataRowViewModel = ({
 }: TranslationDataRowProps) => {
   const router = useRouter();
   const { openPopup } = usePopup();
+  const [isShowTooltip, setIsShowTooltip] = useState(false);
 
   const defaultValues: TranslationData = useMemo(
     () => ({
@@ -46,6 +47,14 @@ export const useTranslationDataRowViewModel = ({
     control: form.control,
     name: 'translations',
   });
+
+  const haveTooltip = useMemo(() => {
+    if (item.unused || item.needToVerify) {
+      return true;
+    }
+
+    return false;
+  }, [item.needToVerify, item.unused]);
 
   const onSubmit = form.handleSubmit((data) => {
     const requestData: RequestUpdateTranslation = {
@@ -120,5 +129,8 @@ export const useTranslationDataRowViewModel = ({
     ignoreTranslation,
     translated,
     showChangelog,
+    haveTooltip,
+    isShowTooltip,
+    setIsShowTooltip,
   };
 };

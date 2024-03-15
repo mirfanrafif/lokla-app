@@ -19,31 +19,31 @@ const ProjectItemCard = (props: {
 
   return (
     <div
-      className="flex w-full items-center gap-x-4 rounded-lg bg-white p-4"
+      className="flex w-full items-center gap-x-4 rounded-lg bg-white hover:bg-neutral-50"
       key={props.item.identifier}
     >
-      <div className="flex-1 space-y-2">
+      <div
+        className="flex-1 space-y-2 cursor-pointer p-4"
+        onClick={() => {
+          router.push(
+            buildTranslationListUrl({
+              project: props.item.identifier,
+              filter: undefined,
+              limit: undefined,
+              ns: undefined,
+              page: undefined,
+              search: undefined,
+            }),
+          );
+        }}
+      >
         <h1>{props.item.name}</h1>
         <p>Identifier: {props.item.identifier}</p>
       </div>
 
       <TripleDotMenu
+        className="mr-4"
         menus={[
-          {
-            label: 'Go to translations',
-            onClick: () => {
-              router.push(
-                buildTranslationListUrl({
-                  project: props.item.identifier,
-                  filter: undefined,
-                  limit: undefined,
-                  ns: undefined,
-                  page: undefined,
-                  search: undefined,
-                }),
-              );
-            },
-          },
           {
             label: 'See Details',
             onClick: () => {

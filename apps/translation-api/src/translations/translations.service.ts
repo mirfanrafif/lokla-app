@@ -65,11 +65,6 @@ export class TranslationsService {
         ...filters,
         unused: true,
       };
-    } else {
-      filters = {
-        ...filters,
-        $or: [{ unused: false }, { unused: { $exists: false } }],
-      };
     }
 
     if (query.filter === 'duplicated') {

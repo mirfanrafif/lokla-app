@@ -36,6 +36,7 @@ export const TranslationDataSchema = z.object({
   translated: z.boolean().optional(),
   changeLogs: TranslationChangeLogSchema,
   unused: z.boolean().optional().nullable(),
+  needToVerify: z.boolean().optional(),
 });
 
 export type TranslationData = z.infer<typeof TranslationDataSchema>;

@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { TranslationChangeLogEvent } from 'enums/TranslationChangeLogEvent';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { flatten, unflatten } from 'safe-flat';
 
 import { languages } from 'constants/languages';
@@ -28,7 +28,7 @@ export class TranslationsService {
   ) {}
 
   async getTranslationList(query: RequestGetTranslationList) {
-    let filters = {};
+    let filters: FilterQuery<TranslationModel> = {};
 
     if (query.ns !== '' && query.ns !== undefined) {
       filters = {
@@ -56,7 +56,7 @@ export class TranslationsService {
     if (query.filter === 'not_translated') {
       filters = {
         ...filters,
-        translated: false,
+        $or: [{ translated: false }, { needToVerify: true }],
       };
     }
 
@@ -64,6 +64,11 @@ export class TranslationsService {
       filters = {
         ...filters,
         unused: true,
+      };
+    } else {
+      filters = {
+        ...filters,
+        $or: [{ unused: false }, { unused: { $exists: false } }],
       };
     }
 
@@ -91,7 +96,13 @@ export class TranslationsService {
       {
         ...filters,
       },
-      undefined,
+      query.search
+        ? {
+            score: {
+              $meta: 'textScore',
+            },
+          }
+        : undefined,
       {
         skip: query.page * query.limit,
         limit: query.limit,
@@ -183,6 +194,21 @@ export class TranslationsService {
           continue;
         }
 
+        const isBaseLanguageUpdated = () => {
+          if (existingLocale === undefined) {
+            return false;
+          }
+
+          if (
+            body.locale === 'en' &&
+            existingLocale.value !== flatJson[item.key]
+          ) {
+            return true;
+          }
+
+          return false;
+        };
+
         const newTranslation = [
           ...item.translations.filter((item) => item.locale !== body.locale),
           {
@@ -201,7 +227,7 @@ export class TranslationsService {
           },
           {
             translations: newTranslation,
-            translated: isCompleted && !isSame,
+            translated: isCompleted,
             unused: false,
             changeLogs: [
               ...item.changeLogs,
@@ -216,6 +242,7 @@ export class TranslationsService {
                 date: new Date(),
               },
             ],
+            needToVerify: isBaseLanguageUpdated(),
           },
         );
       } catch (error) {
@@ -258,6 +285,7 @@ export class TranslationsService {
       ],
       translated: false,
       unused: false,
+      needToVerify: false,
       changeLogs: [
         {
           eventType: TranslationChangeLogEvent.CREATE,
@@ -324,6 +352,7 @@ export class TranslationsService {
       {
         translations: request.translations,
         translated: true,
+        needToVerify: false,
         changeLogs: [...existingTranslation.changeLogs, ...changeLog],
       },
     );
@@ -361,6 +390,7 @@ export class TranslationsService {
     const translationData = await this.translationModel.find({
       project: request.project,
       namespace: request.namespace,
+      $or: [{ unused: false }, { unused: { $exists: false } }],
     });
     const outputObject: {
       [key: string]: string;
@@ -389,6 +419,7 @@ export class TranslationsService {
       },
       {
         translated: true,
+        needToVerify: false,
       },
     );
   }

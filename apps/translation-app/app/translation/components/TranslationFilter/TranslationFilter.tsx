@@ -50,8 +50,6 @@ const TranslationFilter = (props: {
             buildTranslationListUrl({
               ...params,
               project: event.target.value,
-              ns: undefined,
-              filter: undefined,
               page: undefined,
             }),
           );

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { request } from '@frontend/lib/apiClient';
 import { useRouter } from 'next/navigation';
@@ -18,6 +18,7 @@ export const useTranslationDataRowViewModel = ({
 }: TranslationDataRowProps) => {
   const router = useRouter();
   const { openPopup } = usePopup();
+  const [isShowTooltip, setIsShowTooltip] = useState(false);
 
   const defaultValues: TranslationData = useMemo(
     () => ({
@@ -120,5 +121,7 @@ export const useTranslationDataRowViewModel = ({
     ignoreTranslation,
     translated,
     showChangelog,
+    isShowTooltip,
+    setIsShowTooltip,
   };
 };

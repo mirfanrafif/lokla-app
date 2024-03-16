@@ -26,6 +26,9 @@ export class TranslationChangeLogModel {
     required: true,
   })
   date: Date;
+
+  @Prop()
+  userId: string | null;
 }
 
 export const TranslationChangeLogSchema = SchemaFactory.createForClass(

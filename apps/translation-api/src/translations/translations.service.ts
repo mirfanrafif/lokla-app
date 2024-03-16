@@ -7,6 +7,7 @@ import { flatten, unflatten } from 'safe-flat';
 import { languages } from 'constants/languages';
 
 import { ProjectModel } from '../projects/Project.schema';
+import { UserModel } from '../users/User.schema';
 import {
   RequestDeleteTranslation,
   RequestExportTranslation,
@@ -189,6 +190,21 @@ export class TranslationsService {
           continue;
         }
 
+        const isTargetLanguageUpdatedByEditor = () => {
+          return (
+            item.changeLogs.find(
+              (item) =>
+                item.locale === body.locale &&
+                item.locale !== 'en' &&
+                item.userId !== null,
+            ) !== undefined
+          );
+        };
+
+        if (isTargetLanguageUpdatedByEditor()) {
+          continue;
+        }
+
         const isBaseLanguageUpdated = () => {
           if (existingLocale === undefined) {
             return false;
@@ -235,6 +251,7 @@ export class TranslationsService {
                 after: flatJson[item.key],
                 locale: body.locale,
                 date: new Date(),
+                userId: null,
               },
             ],
             needToVerify: isBaseLanguageUpdated(),
@@ -288,6 +305,7 @@ export class TranslationsService {
           after: flatJson[item],
           locale: body.locale,
           date: new Date(),
+          userId: null,
         },
       ],
     }));
@@ -297,7 +315,7 @@ export class TranslationsService {
     return true;
   }
 
-  async updateTranslation(request: RequestUpdateTranslation) {
+  async updateTranslation(request: RequestUpdateTranslation, user: UserModel) {
     const existingTranslation = await this.translationModel.findOne({
       key: request.oldKey,
       namespace: request.namespace,
@@ -329,6 +347,7 @@ export class TranslationsService {
         after: item.value,
         locale: item.locale,
         date: new Date(),
+        userId: user.email,
       }));
 
     if (changeLog.length === 0) {

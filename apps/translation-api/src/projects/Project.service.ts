@@ -16,23 +16,37 @@ export class ProjectService {
   ) {}
 
   async getAllProjects() {
-    const result = await this.projectModel.find({});
+    const projectList = await this.projectModel.find({});
 
     const statisticsPerProject = await this.translationModel.aggregate([
       {
+        $unwind: '$translations', // Unwind the translations array
+      },
+      {
         $group: {
-          _id: '$project',
-          total: { $sum: 1 },
-          translated: {
-            $sum: {
-              $cond: [{ $eq: ['$translated', true] }, 1, 0],
+          _id: { project: '$project', locale: '$translations.locale' }, // Group by project and locale
+          count: { $sum: 1 }, // Count the number of documents in each group
+        },
+      },
+      {
+        $group: {
+          _id: '$_id.project', // Group by project
+          translations: {
+            $push: {
+              locale: '$_id.locale',
+              count: '$count',
             },
           },
         },
       },
     ]);
 
-    console.log(statisticsPerProject);
+    const result = projectList.map((project) => ({
+      ...project.toJSON(),
+      statistics:
+        statisticsPerProject.find((stat) => stat._id === project.identifier)
+          ?.translations ?? [],
+    }));
 
     return result;
   }

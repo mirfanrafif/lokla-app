@@ -17,6 +17,10 @@ const ProjectItemCard = (props: {
   const { openPopup } = usePopup();
   const router = useRouter();
 
+  const maxItems = Math.max(
+    ...(props.item.statistics?.map((item) => item.count) ?? []),
+  );
+
   return (
     <div
       className="flex w-full items-center gap-x-4 rounded-lg bg-white hover:bg-neutral-50"
@@ -39,6 +43,20 @@ const ProjectItemCard = (props: {
       >
         <h1>{props.item.name}</h1>
         <p>Identifier: {props.item.identifier}</p>
+      </div>
+
+      <div className="w-[400px]">
+        {props.item.statistics?.map((item) => (
+          <div key={item.locale} className="flex items-center gap-x-4 p-4 ">
+            <div className="w-4">{item.locale}</div>
+            <div
+              className="flex-1 h-4 rounded-full"
+              style={{
+                background: `linear-gradient(to right, var(--primary-default) ${Math.floor((item.count / maxItems) * 100)}%, var(--primary-light-bg) ${Math.floor((item.count / maxItems) * 100)}%)`,
+              }}
+            ></div>
+          </div>
+        ))}
       </div>
 
       <TripleDotMenu

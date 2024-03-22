@@ -217,7 +217,7 @@ export class TranslationsService {
             return true;
           }
 
-          return false;
+          return item.needToVerify;
         };
 
         const newTranslation = [

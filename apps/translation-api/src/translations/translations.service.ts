@@ -57,7 +57,14 @@ export class TranslationsService {
     if (query.filter === 'not_translated') {
       filters = {
         ...filters,
-        $or: [{ translated: false }, { needToVerify: true }],
+        translated: false,
+      };
+    }
+
+    if (query.filter === 'need_to_verify') {
+      filters = {
+        ...filters,
+        needToVerify: true,
       };
     }
 

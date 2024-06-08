@@ -7,14 +7,23 @@ COPY package*.json ./
 RUN npm install
 
 # Build
-FROM node:18.18.2-buster-slim as builder
+FROM node:18.18.2-buster-slim as builder-be
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 
 COPY . .
 
-RUN npx nx run-many --target=build --all --parallel
+RUN npx nx run translation-api:build
+
+FROM node:18.18.2-buster-slim as builder-fe
+
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+
+COPY . .
+
+RUN npx nx run translation-app:build
 
 # Production Image - Frontend
 FROM node:18.18.2-buster-slim as production-fe

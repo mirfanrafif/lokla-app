@@ -56,7 +56,6 @@ const TranslationFilter = (props: {
           );
         }}
       >
-        <option value={''}>All Projects</option>
         {props.projects.map((item) => (
           <option key={item.identifier} value={item.identifier}>
             {item.name}

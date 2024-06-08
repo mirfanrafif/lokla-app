@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { languages } from 'constants/languages';
-
 import Pagination from '../../components/Pagination/Pagination';
 import TranslationFilter from '../../components/TranslationFilter/TranslationFilter';
 import { TranslationTable } from '../../components/TranslationTable/TranslationTable';
@@ -9,6 +7,7 @@ import UploadButton from '../../components/UploadButton';
 import { getAccessToken } from '../../services/auth.service';
 import { getProjects } from '../../services/project.service';
 import {
+  getLocales,
   getNamespaces,
   getTranslationData,
 } from '../../services/translation.service';
@@ -31,7 +30,7 @@ const Page = async ({
 }: {
   searchParams: TranslationListSearchParams;
 }) => {
-  const [translationData, namespaces, projects] = await Promise.all([
+  const [translationData, namespaces, projects, locales] = await Promise.all([
     getTranslationData({
       search: searchParams.search,
       page: searchParams.page ? Number(searchParams.page) : 0,
@@ -42,7 +41,10 @@ const Page = async ({
     }),
     getNamespaces(searchParams.project),
     getProjects(),
+    getLocales(searchParams.project ?? ''),
   ]);
+
+  console.log(locales);
 
   return (
     <div>
@@ -54,7 +56,7 @@ const Page = async ({
       <TranslationFilter namespaces={namespaces} projects={projects} />
       <TranslationTable
         translations={translationData.data}
-        languages={languages}
+        languages={locales}
       />
 
       <Pagination

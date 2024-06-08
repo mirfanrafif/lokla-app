@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 
 import { CookieKeys } from 'constants/cookieKeys';
 
-import { buildTranslationListUrl } from './app/translation/navigations/translations.navigation';
+import { buildTranslationProjectUrl } from './app/translation/navigations/translations.navigation';
 
 const publicUrl = [
   '/login',
@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
 
   if (request.nextUrl.pathname === '/') {
     return NextResponse.redirect(
-      new URL(buildTranslationListUrl(), request.url),
+      new URL(buildTranslationProjectUrl(), request.url),
     );
   }
 

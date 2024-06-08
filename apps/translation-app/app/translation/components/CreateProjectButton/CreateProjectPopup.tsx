@@ -5,6 +5,7 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Controller, useForm } from 'react-hook-form';
 
+import { getLocaleLabel } from '../../helpers';
 import { RequestCreateProject } from '../../models/RequestCreateProject';
 import Dropdown from '../Dropdown/Dropdown';
 
@@ -27,10 +28,6 @@ const CreateProjectPopup = (props: {
       value: item.code.toLowerCase(),
     }));
   }, []);
-
-  const getValueLabel = (code: string) => {
-    return `${code} (${Locales.find((item) => item.code === code)?.name ?? 'Custom Language'})`;
-  };
 
   return (
     <div className="flex flex-col gap-y-6 w-[500px]">
@@ -72,7 +69,7 @@ const CreateProjectPopup = (props: {
               />
 
               <p className="text-sm mt-2 text-neutral-500">
-                Base Language: {field.value && getValueLabel(field.value)}
+                Base Language: {field.value && getLocaleLabel(field.value)}
               </p>
             </div>
           )}
@@ -105,7 +102,7 @@ const CreateProjectPopup = (props: {
                   key={index}
                   className="bg-neutral-100 rounded-lg p-2 text-sm"
                 >
-                  {getValueLabel(item)}
+                  {getLocaleLabel(item)}
                   <FontAwesomeIcon
                     icon={faClose}
                     className="ml-2"

@@ -11,6 +11,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      -
+        # Add support for more platforms with QEMU (optional)
+        # https://github.com/docker/setup-qemu-action
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Docker BuildX
+        uses: docker/setup-buildx-action@v1
+        with: 
+          platform: linux/amd64,linux/arm64/v8
+
       - name: Build BE Image
         run: docker build --target production-be -t translation-api .
 

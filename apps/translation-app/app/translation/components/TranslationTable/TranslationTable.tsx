@@ -1,15 +1,14 @@
 import DoneImage from '@frontend/app/translation/images/done.png';
 import Image from 'next/image';
 
-import { languages } from 'constants/languages';
-
+import { getLocaleLabel } from '../../helpers';
 import { TranslationData } from '../../models/TranslationData';
 import { getAccessToken, getRole } from '../../services/auth.service';
 import { TranslationDataRow } from '../TranslationDataRow/TranslationDataRow';
 
 import styles from './TranslationTable.module.scss';
 
-export function TranslationTable(props: {
+export async function TranslationTable(props: {
   translations: TranslationData[];
   languages: string[];
 }) {
@@ -23,8 +22,8 @@ export function TranslationTable(props: {
           <tr>
             <th>Namespace / Domain</th>
             <th>Key</th>
-            {languages.map((item, index) => (
-              <th key={index}>{item}</th>
+            {props.languages.map((item, index) => (
+              <th key={index}>{getLocaleLabel(item)}</th>
             ))}
             <th>Actions</th>
           </tr>

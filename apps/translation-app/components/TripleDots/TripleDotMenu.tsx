@@ -13,6 +13,7 @@ const TripleDotMenu = (props: {
     onClick: () => void;
     disabled?: boolean;
   }[];
+  className?: string;
 }) => {
   const [isShowMenu, setisShowMenu] = useState(false);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
@@ -22,7 +23,7 @@ const TripleDotMenu = (props: {
   });
 
   return (
-    <div>
+    <div className={props.className}>
       <button
         className="relative w-6 h-6"
         onClick={() => setisShowMenu(!isShowMenu)}

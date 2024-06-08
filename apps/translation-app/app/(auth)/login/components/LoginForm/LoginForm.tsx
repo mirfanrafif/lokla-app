@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { RegexPatterns } from 'constants/regexPatterns';
 
 import AppLogo from '@apps/translation-app/app/assets/images/app_logo';
-import { buildTranslationListUrl } from '@apps/translation-app/app/translation/navigations/translations.navigation';
+import { buildTranslationProjectUrl } from '@apps/translation-app/app/translation/navigations/translations.navigation';
 import { LoginFormData } from '../../../models/LoginFormData';
 
 import styles from './LoginForm.module.scss';
@@ -34,7 +34,7 @@ const LoginForm = () => {
         }
 
         toast.success('Success login');
-        router.push(buildTranslationListUrl());
+        router.push(buildTranslationProjectUrl());
       })
       .catch((error) => {
         toast.error(`Error login: ${error.message}`);

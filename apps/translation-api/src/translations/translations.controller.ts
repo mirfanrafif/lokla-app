@@ -33,6 +33,12 @@ export class TranslationsController {
   constructor(private service: TranslationsService) {}
 
   @UseGuards(JwtAuthGuard)
+  @Get('locales')
+  getTranslationKeys(@Query('projectId') projectId: string) {
+    return this.service.getLocales(projectId);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get()
   getAllTranslation(@Query() query: RequestGetTranslationList) {
     return this.service.getTranslationList(query);

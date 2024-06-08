@@ -28,6 +28,14 @@ export class TranslationsService {
     private projectModel: Model<ProjectModel>,
   ) {}
 
+  async getLocales(projectId: string) {
+    const data = await this.projectModel.findOne({
+      identifier: projectId,
+    });
+
+    return Array.from(new Set([data.defaultLanguage, ...data.languages]));
+  }
+
   async getTranslationList(query: RequestGetTranslationList) {
     let filters: FilterQuery<TranslationModel> = {};
 
@@ -49,7 +57,7 @@ export class TranslationsService {
       filters = {
         ...filters,
         $text: {
-          $search: query.search,
+          $search: `"${query.search}"`,
         },
       };
     }

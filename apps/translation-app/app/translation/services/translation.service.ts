@@ -4,6 +4,7 @@ import { request } from '@frontend/lib/apiClient';
 import queryString from 'query-string';
 
 import { ResponseGetUserListSchema } from '../(pages)/users/models/User';
+import { ResponseGetLocalesSchema } from '../models/ResponseGetLocales';
 import { ResponseGetTranslationNamespacesSchema } from '../models/ResponseGetNamespaces';
 import {
   ResponseGetTranslationData,
@@ -71,6 +72,21 @@ export const getUsers = async () => {
   );
 
   const data = ResponseGetUserListSchema.parse(response);
+
+  return data;
+};
+
+export const getLocales = async (projectId: string) => {
+  const response = await request(
+    '/translations/locales?projectId=' + projectId,
+    {
+      method: 'GET',
+      cache: 'no-cache',
+    },
+    getAccessToken(),
+  );
+
+  const data = ResponseGetLocalesSchema.parse(response);
 
   return data;
 };

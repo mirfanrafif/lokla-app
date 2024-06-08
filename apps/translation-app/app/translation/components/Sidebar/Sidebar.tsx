@@ -1,26 +1,20 @@
-'use client'
+'use client';
 
 import React from 'react';
 
-import {
-  faBook,
-  faPencil,
-  faSignOut,
-  faUser,
-} from '@fortawesome/free-solid-svg-icons';
+import { faBook, faSignOut, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Role } from 'enums/Role.enum';
+import { useRouter } from 'next/navigation';
 
 import { LoginUser } from '@apps/translation-app/app/(auth)/models/ResponseLogin';
 import {
-  buildTranslationListUrl,
   buildTranslationProjectUrl,
   buildTranslationUsersUrl,
 } from '../../navigations/translations.navigation';
+import { SidebarItem } from './SidebarItem';
 
 import styles from './Sidebar.module.scss';
-import { SidebarItem } from './SidebarItem';
-import { useRouter } from 'next/navigation';
 
 const Sidebar = (props: { user: LoginUser | undefined }) => {
   const router = useRouter();
@@ -31,8 +25,7 @@ const Sidebar = (props: { user: LoginUser | undefined }) => {
     }).then(() => {
       router.push('/login');
     });
-  }
-
+  };
 
   return (
     <div className={styles.sidebar}>
@@ -42,14 +35,6 @@ const Sidebar = (props: { user: LoginUser | undefined }) => {
       </div>
 
       <ul className={styles.sidebarGroup}>
-        <SidebarItem
-          title="Editor"
-          role={[Role.Editor, Role.Developer, Role.Admin]}
-          href={buildTranslationListUrl()}
-          icon={<FontAwesomeIcon icon={faPencil} className="mr-4 h-6 w-6" />}
-          currentRole={props.user?.role as Role | undefined}
-        />
-
         <SidebarItem
           title="Project"
           role={[Role.Developer, Role.Admin]}
@@ -77,6 +62,5 @@ const Sidebar = (props: { user: LoginUser | undefined }) => {
     </div>
   );
 };
-
 
 export default Sidebar;

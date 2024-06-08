@@ -8,6 +8,8 @@ export const dynamic = 'force-dynamic';
 const Page = async () => {
   const projects = await getProjects();
 
+  console.log(projects);
+
   return (
     <div>
       <div className="mb-6 flex items-center">

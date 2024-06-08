@@ -23,6 +23,11 @@ export class ProjectModel {
     required: true,
   })
   languages: string[];
+
+  @Prop({
+    required: true,
+  })
+  defaultLanguage: string;
 }
 
 export type ProjectDocument = HydratedDocument<ProjectModel>;

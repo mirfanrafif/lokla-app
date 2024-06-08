@@ -12,9 +12,7 @@ services:
 
   translation-be:
     container_name: translation-be
-    build:
-      context: .
-      target: ghcr.io/mirfanrafif/lokla-api:latest
+    image: ghcr.io/mirfanrafif/lokla-api:latest
     ports:
       - 4201:3000
     env_file:

@@ -19,14 +19,12 @@ jobs:
 
       - name: Setup Docker BuildX
         uses: docker/setup-buildx-action@v1
-        with: 
-          platforms: linux/amd64,linux/arm64/v8
 
       - name: Build BE Image
-        run: docker build --target production-be -t translation-api .
+        run: docker buildx build --target production-be -t translation-api --platform "linux/amd64,linux/arm64/v8" .
 
       - name: Build FE Image
-        run: docker build --target production-fe -t translation-app .
+        run: docker buildx build --target production-fe -t translation-app --platform "linux/amd64,linux/arm64/v8" .
 
       - name: Push to github container registry
         run: |

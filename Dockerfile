@@ -31,10 +31,10 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY --from=builder /app/dist/apps/translation-app/next.config.js ./
-COPY --from=builder /app/dist/apps/translation-app/public ./dist/apps/translation-app/public
-COPY --from=builder /app/dist/apps/translation-app/.next/static ./dist/apps/translation-app/.next/static
-COPY --from=builder /app/dist/apps/translation-app/.next/standalone ./
+COPY --from=builder-fe /app/dist/apps/translation-app/next.config.js ./
+COPY --from=builder-fe /app/dist/apps/translation-app/public ./dist/apps/translation-app/public
+COPY --from=builder-fe /app/dist/apps/translation-app/.next/static ./dist/apps/translation-app/.next/static
+COPY --from=builder-fe /app/dist/apps/translation-app/.next/standalone ./
 
 EXPOSE 3000
 
@@ -47,7 +47,7 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY --from=builder /app/dist/apps/translation-api ./
+COPY --from=builder-be /app/dist/apps/translation-api ./
 RUN npm install --only=production
 
 EXPOSE 3001

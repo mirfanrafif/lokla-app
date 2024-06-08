@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Locales } from '@constants/locales';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
@@ -20,6 +20,17 @@ const CreateProjectPopup = (props: {
       languages: [],
     },
   });
+
+  const countryList = useMemo(() => {
+    return Locales.map((item) => ({
+      label: `${item.name} (${item.code})`,
+      value: item.code.toLowerCase(),
+    }));
+  }, []);
+
+  const getValueLabel = (code: string) => {
+    return `${code} (${Locales.find((item) => item.code === code)?.name ?? 'Custom Language'})`;
+  };
 
   return (
     <div className="flex flex-col gap-y-6 w-[500px]">
@@ -54,19 +65,14 @@ const CreateProjectPopup = (props: {
             <div>
               <Dropdown
                 placeholder="Select item below or type custom language..."
-                options={Locales.map((item) => ({
-                  label: `${item.name} (${item.code})`,
-                  value: item.code,
-                }))}
+                options={countryList}
                 value={field.value}
                 onSelectItem={(value) => field.onChange(value)}
                 onChange={(e) => field.onChange(e.target.value)}
               />
 
               <p className="text-sm mt-2 text-neutral-500">
-                Base Language:{' '}
-                {field.value &&
-                  `${field.value} (${Locales.find((item) => item.code === field.value)?.name ?? 'Custom Language'})`}
+                Base Language: {field.value && getValueLabel(field.value)}
               </p>
             </div>
           )}
@@ -80,10 +86,7 @@ const CreateProjectPopup = (props: {
           <div>
             <Dropdown
               placeholder="Target Languages (Press Enter to add custom languages)"
-              options={Locales.map((item) => ({
-                label: `${item.name} (${item.code})`,
-                value: item.code,
-              }))}
+              options={countryList}
               onSelectItem={(value) => {
                 field.onChange([...field.value, value]);
               }}
@@ -102,7 +105,7 @@ const CreateProjectPopup = (props: {
                   key={index}
                   className="bg-neutral-100 rounded-lg p-2 text-sm"
                 >
-                  {`${item} (${Locales.find((locale) => locale.code === item)?.name ?? 'Custom Language'})`}
+                  {getValueLabel(item)}
                   <FontAwesomeIcon
                     icon={faClose}
                     className="ml-2"

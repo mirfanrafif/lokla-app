@@ -11,25 +11,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      -
-        # Add support for more platforms with QEMU (optional)
-        # https://github.com/docker/setup-qemu-action
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Setup Docker BuildX
-        uses: docker/setup-buildx-action@v1
-
       - name: Build BE Image
-        run: docker buildx build --target production-be -t translation-api --platform "linux/amd64,linux/arm64/v8" .
+        run: docker build --target production-be -t translation-api .
 
       - name: Build FE Image
-        run: docker buildx build --target production-fe -t translation-app --platform "linux/amd64,linux/arm64/v8" .
+        run: docker build --target production-fe -t translation-app .
 
-      - name: Push to github container registry
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      
+      - name: Deploy to fly
         run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker tag translation-api ghcr.io/mirfanrafif/lokla-api:preview-$(echo $GITHUB_SHA | cut -c1-7)
-          docker tag translation-app ghcr.io/mirfanrafif/lokla-app:preview-$(echo $GITHUB_SHA | cut -c1-7)
-          docker push ghcr.io/mirfanrafif/lokla-api:preview-$(echo $GITHUB_SHA | cut -c1-7)
-          docker push ghcr.io/mirfanrafif/lokla-app:preview-$(echo $GITHUB_SHA | cut -c1-7)
+          flyctl deploy -i ghcr.io/mirfanrafif/lokla-api:preview-$(echo $GITHUB_SHA | cut -c1-7) -i ghcr.io/mirfanrafif/lokla-app:preview-$(echo $GITHUB_SHA | cut -c1-7)
+        env: 
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        
+
+      

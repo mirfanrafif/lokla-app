@@ -41,7 +41,7 @@ WORKDIR /app
 COPY --from=builder /app/dist/apps/translation-api ./
 RUN npm install --only=production
 
-EXPOSE 3001
+EXPOSE 3000
 
 CMD ["node", "main.js"]
 

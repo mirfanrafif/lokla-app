@@ -27,20 +27,6 @@ jobs:
           docker push ghcr.io/mirfanrafif/lokla-api:latest
           docker push ghcr.io/mirfanrafif/lokla-app:latest
 
-
-      - name: Deploy API to fly
-        run: |
-          cp apps/translation-api/fly.toml fly.toml
-          flyctl deploy -i ghcr.io/mirfanrafif/lokla-api:latest
-        env: 
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-
-      - name: Deploy APP to fly
-        run: |
-          cp apps/translation-app/fly.toml fly.toml
-          flyctl deploy -i ghcr.io/mirfanrafif/lokla-app:latest
-        env: 
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
         
 
       

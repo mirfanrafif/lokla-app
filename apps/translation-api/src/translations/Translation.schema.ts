@@ -10,7 +10,9 @@ export type TranslationData = {
   value: string;
 };
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class TranslationModel {
   @Prop({
     required: true,

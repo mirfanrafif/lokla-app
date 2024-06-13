@@ -11,23 +11,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      -
-        # Add support for more platforms with QEMU (optional)
-        # https://github.com/docker/setup-qemu-action
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: linux/amd64,linux/arm64/v8
-
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Build BE Image
-        run: docker buildx build --target production-be -t translation-api --platform linux/amd64,linux/arm64/v8 .
+        run: docker build --target production-be -t translation-api .
 
       - name: Build FE Image
-        run: docker buildx build --target production-fe -t translation-app --platform linux/amd64,linux/arm64/v8 .
+        run: docker build --target production-fe -t translation-app .
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 

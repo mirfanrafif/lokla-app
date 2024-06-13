@@ -4,8 +4,6 @@ import { TranslationChangeLogEvent } from 'enums/TranslationChangeLogEvent';
 import { FilterQuery, Model } from 'mongoose';
 import { flatten, unflatten } from 'safe-flat';
 
-import { languages } from 'constants/languages';
-
 import { ProjectModel } from '../projects/Project.schema';
 import { UserModel } from '../users/User.schema';
 import {
@@ -18,6 +16,7 @@ import {
   RequestUpdateTranslation,
 } from './Translation.dto';
 import { TranslationData, TranslationModel } from './Translation.schema';
+import { TranslationChangeLogModel } from './TranslationChangeLog';
 
 @Injectable()
 export class TranslationsService {
@@ -173,11 +172,11 @@ export class TranslationsService {
   ) {
     const flatJson = flatten(json);
 
-    const isProjectValid = await this.projectModel.findOne({
+    const project = await this.projectModel.findOne({
       identifier: body.project,
     });
 
-    if (!isProjectValid) {
+    if (!project) {
       throw new Error('Project not found');
     }
 
@@ -190,6 +189,28 @@ export class TranslationsService {
 
     const existingKeys = data.filter((item) => keys.includes(item.key));
 
+    await this.updateExistingKeys(flatJson, existingKeys, body, project);
+
+    const deletedKeys = data.filter((item) => !keys.includes(item.key));
+
+    await this.setKeysToUnused(deletedKeys, body, project);
+
+    // new keys
+    const newKeys = keys.filter(
+      (item) => !existingKeys.find((existingItem) => existingItem.key === item),
+    );
+
+    await this.createNewKeys(newKeys, flatJson, body);
+
+    return true;
+  }
+
+  private async updateExistingKeys(
+    flatJson: object,
+    existingKeys: TranslationModel[],
+    body: RequestImportTranslationFromJson,
+    project: ProjectModel,
+  ) {
     // update existing
     for (const item of existingKeys) {
       try {
@@ -210,7 +231,7 @@ export class TranslationsService {
             item.changeLogs.find(
               (item) =>
                 item.locale === body.locale &&
-                item.locale !== 'en' &&
+                item.locale !== project.defaultLanguage &&
                 item.userId !== null,
             ) !== undefined
           );
@@ -226,7 +247,7 @@ export class TranslationsService {
           }
 
           if (
-            body.locale === 'en' &&
+            body.locale === project.defaultLanguage &&
             existingLocale.value !== flatJson[item.key]
           ) {
             return true;
@@ -243,7 +264,24 @@ export class TranslationsService {
           },
         ];
 
+        const languages = await this.getLocales(body.project);
+
         const isCompleted = newTranslation.length === languages.length;
+
+        const newChangeLog: TranslationChangeLogModel[] = [
+          ...item.changeLogs,
+          {
+            eventType:
+              existingLocale !== undefined
+                ? TranslationChangeLogEvent.UPDATE
+                : TranslationChangeLogEvent.CREATE,
+            before: existingLocale?.value ?? '',
+            after: flatJson[item.key],
+            locale: body.locale,
+            date: new Date(),
+            userId: null,
+          },
+        ];
 
         await this.translationModel.findOneAndUpdate(
           {
@@ -255,20 +293,7 @@ export class TranslationsService {
             translations: newTranslation,
             translated: isCompleted,
             unused: false,
-            changeLogs: [
-              ...item.changeLogs,
-              {
-                eventType:
-                  existingLocale !== undefined
-                    ? TranslationChangeLogEvent.UPDATE
-                    : TranslationChangeLogEvent.CREATE,
-                before: existingLocale?.value ?? '',
-                after: flatJson[item.key],
-                locale: body.locale,
-                date: new Date(),
-                userId: null,
-              },
-            ],
+            changeLogs: newChangeLog,
             needToVerify: isBaseLanguageUpdated(),
           },
         );
@@ -278,11 +303,14 @@ export class TranslationsService {
         );
       }
     }
+  }
 
-    const deletedKeys = data.filter((item) => !keys.includes(item.key));
-
-    //TODO: change after adding default locale on company settings
-    if (body.locale === 'en') {
+  private async setKeysToUnused(
+    deletedKeys: TranslationModel[],
+    body: RequestImportTranslationFromJson,
+    project: ProjectModel,
+  ) {
+    if (body.locale === project.defaultLanguage) {
       await this.translationModel.updateMany(
         {
           key: {
@@ -294,12 +322,13 @@ export class TranslationsService {
         },
       );
     }
+  }
 
-    // new keys
-    const newKeys = keys.filter(
-      (item) => !existingKeys.find((existingItem) => existingItem.key === item),
-    );
-
+  private async createNewKeys(
+    newKeys: string[],
+    flatJson: object,
+    body: RequestImportTranslationFromJson,
+  ) {
     const requests: TranslationModel[] = newKeys.map((item) => ({
       key: item,
       project: body.project,
@@ -326,8 +355,6 @@ export class TranslationsService {
     }));
 
     await this.translationModel.insertMany(requests);
-
-    return true;
   }
 
   async updateTranslation(request: RequestUpdateTranslation, user: UserModel) {

@@ -7,14 +7,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { usePopup } from '@frontend/hooks/popup.hooks';
 import { useRouter } from 'next/navigation';
 
-import { languages } from 'constants/languages';
-
 import { ResponseGetTranslationProject } from '../models/ResponseGetTranslationProject';
 import { TranslationUploader } from './TranslationUploader';
 
 const UploadButton = (props: {
   project: ResponseGetTranslationProject;
   accessToken: string | undefined;
+  languages: string[];
 }) => {
   const { openPopup, closePopup } = usePopup();
   const router = useRouter();
@@ -26,7 +25,7 @@ const UploadButton = (props: {
       onClick={() => {
         openPopup(
           <TranslationUploader
-            languages={languages}
+            languages={props.languages}
             projects={props.project}
             closePopup={() => {
               closePopup();

@@ -44,14 +44,16 @@ const Page = async ({
     getLocales(searchParams.project ?? ''),
   ]);
 
-  console.log(locales);
-
   return (
     <div>
       <div className={styles.titleRow}>
         <h1 className={styles.title}>Editor</h1>
 
-        <UploadButton project={projects} accessToken={getAccessToken()} />
+        <UploadButton
+          project={projects}
+          accessToken={getAccessToken()}
+          languages={locales}
+        />
       </div>
       <TranslationFilter namespaces={namespaces} projects={projects} />
       <TranslationTable

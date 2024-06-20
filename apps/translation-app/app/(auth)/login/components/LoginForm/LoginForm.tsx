@@ -2,44 +2,17 @@
 
 import React from 'react';
 
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 
 import { RegexPatterns } from 'constants/regexPatterns';
 
 import AppLogo from '@apps/translation-app/app/assets/images/app_logo';
-import { buildTranslationProjectUrl } from '@apps/translation-app/app/translation/navigations/translations.navigation';
 import { LoginFormData } from '../../../models/LoginFormData';
 
 import styles from './LoginForm.module.scss';
 
-const LoginForm = () => {
+const LoginForm = (props: { onSubmit: (data: string) => void }) => {
   const form = useForm<LoginFormData>();
-  const router = useRouter();
-
-  const loginAction = async (data: LoginFormData) => {
-    return fetch('/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(async (response) => {
-        const data = await response.json();
-
-        if (response.status >= 400) {
-          throw Error(data.message);
-        }
-
-        toast.success('Success login');
-        router.push(buildTranslationProjectUrl());
-      })
-      .catch((error) => {
-        toast.error(`Error login: ${error.message}`);
-      });
-  };
 
   return (
     <div>
@@ -50,7 +23,9 @@ const LoginForm = () => {
 
       <form
         action=""
-        onSubmit={form.handleSubmit(loginAction)}
+        onSubmit={form.handleSubmit((data) =>
+          props.onSubmit(JSON.stringify(data)),
+        )}
         className={styles.form}
       >
         <input

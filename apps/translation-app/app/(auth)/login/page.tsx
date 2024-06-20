@@ -2,8 +2,8 @@
 
 import React from 'react';
 
+import login from '../actions/login';
 import LoginForm from './components/LoginForm/LoginForm';
-import login from './LoginAction';
 
 const page = () => {
   return <LoginForm onSubmit={login} />;

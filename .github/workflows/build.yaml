@@ -11,6 +11,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Copy ENV_FILE contents from github actions secret to this folder
+        run: echo "${{ secrets.ENV_FILE }}" > .env
+
       - name: Build BE Image
         run: docker build --target production-be -t translation-api .
 

@@ -18,7 +18,8 @@
       "@apps/*": ["apps/*"],
       "@backend/*": ["apps/translation-api/*"],
       "@frontend/*": ["apps/translation-app/*"],
-      "@constants/*": ["constants/*"]
+      "@constants/*": ["constants/*"],
+      "@enums/*": ["enums/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

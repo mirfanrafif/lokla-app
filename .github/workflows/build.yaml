@@ -30,6 +30,12 @@ jobs:
           docker push ghcr.io/mirfanrafif/lokla-api:latest
           docker push ghcr.io/mirfanrafif/lokla-app:latest
 
+      - name: Write artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: env-file
+          
+
         
 
       

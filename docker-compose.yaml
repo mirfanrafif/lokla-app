@@ -2,38 +2,11 @@ version: '3'
 services:
   translation-fe:
     container_name: translation-fe
-    build:
-      context: .
-      target: production-fe
+    image: ghcr.io/mirfanrafif/lokla-app:latest
     env_file:
       - .env
     ports:
       - 4200:3000
-    depends_on:
-      - translation-be
-
-  translation-be:
-    container_name: translation-be
-    build:
-      context: .
-      target: production-be
-    ports:
-      - 4201:3000
-    env_file:
-      - .env
-    depends_on:
-      - mongo
-
-  mongo:
-    container_name: mongo
-    image: mongo:latest
-    ports:
-      - 27017:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin12345678
-    volumes:
-      - mongodata:/data/db
 
 networks:
   default:

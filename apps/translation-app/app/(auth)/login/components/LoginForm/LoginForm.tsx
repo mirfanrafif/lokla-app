@@ -2,6 +2,9 @@
 
 import React from 'react';
 
+import { CookieKeys } from '@constants/cookieKeys';
+import { addDays } from 'date-fns';
+import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -10,7 +13,9 @@ import { RegexPatterns } from 'constants/regexPatterns';
 
 import AppLogo from '@apps/translation-app/app/assets/images/app_logo';
 import { buildTranslationProjectUrl } from '@apps/translation-app/app/translation/navigations/translations.navigation';
+import { request } from '@apps/translation-app/lib/apiClient';
 import { LoginFormData } from '../../../models/LoginFormData';
+import { ResponseLoginSchema } from '../../../models/ResponseLogin';
 
 import styles from './LoginForm.module.scss';
 
@@ -19,7 +24,7 @@ const LoginForm = (props: { onSubmit: (data: string) => void }) => {
   const router = useRouter();
 
   const loginAction = async (data: LoginFormData) => {
-    return fetch('/auth/login', {
+    return request('/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -27,12 +32,21 @@ const LoginForm = (props: { onSubmit: (data: string) => void }) => {
       body: JSON.stringify(data),
     })
       .then(async (response) => {
-        const data = await response.json();
+        const data = ResponseLoginSchema.parse(response);
 
-        if (response.status >= 400) {
-          throw Error(data.message);
-        }
-
+        Cookies.set(CookieKeys.AccessToken, data.accessToken, {
+          sameSite: 'strict',
+        });
+        Cookies.set(
+          CookieKeys.Expiry,
+          addDays(new Date(), 1).getTime().toString(),
+          {
+            sameSite: 'strict',
+          },
+        );
+        Cookies.set(CookieKeys.User, JSON.stringify(data.user), {
+          sameSite: 'strict',
+        });
         toast.success('Success login');
         router.push(buildTranslationProjectUrl());
       })

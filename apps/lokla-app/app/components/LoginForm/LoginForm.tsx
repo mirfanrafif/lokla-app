@@ -49,7 +49,7 @@ const LoginForm = () => {
       </FormControl>
 
       <Button
-        colorScheme="blue"
+        colorScheme="green"
         className="w-full"
         onClick={submit}
         isDisabled={login.isPending}

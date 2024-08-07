@@ -1,0 +1,9 @@
+{
+  "name": "lokla-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/lokla-app",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project lokla-app --web",
+  "targets": {}
+}

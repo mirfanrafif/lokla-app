@@ -1,0 +1,26 @@
+{
+  "name": "lokla-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/lokla-api/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "lokla-api:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "lokla-api:build:development"
+        },
+        "production": {
+          "buildTarget": "lokla-api:build:production"
+        }
+      }
+    }
+  }
+}

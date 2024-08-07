@@ -3,17 +3,15 @@ import React from 'react';
 import { Card, FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
 
 import { useForm } from 'react-hook-form';
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
+import { LoginFormData } from '../../types/LoginFormData';
+import { useLogin } from '../../usecases/LoginUseCase';
 
 const LoginForm = () => {
   const form = useForm<LoginFormData>();
+  const login = useLogin();
 
   const submit = form.handleSubmit((data) => {
-    console.log(data);
+    login.mutate(data);
   });
 
   return (
@@ -50,7 +48,12 @@ const LoginForm = () => {
         />
       </FormControl>
 
-      <Button colorScheme="blue" className="w-full" onClick={submit}>
+      <Button
+        colorScheme="blue"
+        className="w-full"
+        onClick={submit}
+        isDisabled={login.isPending}
+      >
         Login
       </Button>
     </Card>

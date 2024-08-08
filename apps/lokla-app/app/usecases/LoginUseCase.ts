@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { apiClient } from '../utils/apiClient';
+import { getApiClient } from '../utils/apiClient';
 import { LoginFormData } from '../types/LoginFormData';
 
 import { useToast } from '@chakra-ui/react';
@@ -12,7 +12,7 @@ export const useLogin = () => {
   const mutation = useMutation({
     mutationKey: ['login'],
     mutationFn: async (data: LoginFormData) => {
-      const response = await apiClient.post('/auth/login', data);
+      const response = await getApiClient().post('/auth/login', data);
 
       Cookies.set('lokla_auth_data', JSON.stringify(response.data));
 

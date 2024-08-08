@@ -5,6 +5,7 @@ import { LoginFormData } from '../types/LoginFormData';
 import { useToast } from '@chakra-ui/react';
 
 import Cookies from 'js-cookie';
+import { AxiosError } from 'axios';
 
 export const useLogin = () => {
   const toast = useToast();
@@ -24,6 +25,26 @@ export const useLogin = () => {
         isClosable: true,
       });
       return response.data;
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast({
+          title: 'Login Failed',
+          description: error.response?.data.message,
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      toast({
+        title: 'Login Failed',
+        description: error.message,
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
     },
   });
 

@@ -7,13 +7,25 @@ export const useGetTranslationsData = () => {
   const [searchParams] = useSearchParams();
 
   const query = useQuery({
-    queryKey: ['project', searchParams.get('project'), 'translations'],
+    queryKey: [
+      'project',
+      searchParams.get('project'),
+      'translations',
+      {
+        page: searchParams.get('page') ?? 0,
+        limit: searchParams.get('limit') ?? 15,
+        search: searchParams.get('search') ?? '',
+        filter: searchParams.get('filter'),
+      },
+    ],
     queryFn: async () => {
       const response = await getApiClient().get('/translations', {
         params: {
           project: searchParams.get('project'),
           page: searchParams.get('page') ?? 0,
           limit: searchParams.get('limit') ?? 15,
+          search: searchParams.get('search') ?? '',
+          filter: searchParams.get('filter'),
         },
       });
 

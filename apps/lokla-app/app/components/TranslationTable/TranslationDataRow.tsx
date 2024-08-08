@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TranslationData } from '../../data/models/TranslationData';
 import { IconButton, Tag, Td, Textarea, Tr, Text } from '@chakra-ui/react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -31,6 +31,7 @@ const TranslationDataRow = (props: {
   const { fields } = useFieldArray({
     control: form.control,
     name: 'translations',
+    keyName: 'formKey',
   });
 
   const updateTranslation = useUpdateTranslation();
@@ -56,7 +57,7 @@ const TranslationDataRow = (props: {
         </div>
       </Td>
       {fields.map((translation, index) => (
-        <Td key={translation.locale}>
+        <Td key={translation.formKey}>
           <Textarea {...form.register(`translations.${index}.value`)} />
         </Td>
       ))}

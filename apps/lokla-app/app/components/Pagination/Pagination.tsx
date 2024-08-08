@@ -1,14 +1,7 @@
 'use client';
 
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from '@chakra-ui/icons';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { useSearchParams } from '@remix-run/react';
-import React from 'react';
 
 type PaginationProps = {
   totalPage: number;
@@ -59,7 +52,7 @@ const Pagination = (props: PaginationProps) => {
       >
         <ChevronLeftIcon />
       </IconButton>
-      {generatePageItem().map((item) =>
+      {generatePageItem().map((item, index) =>
         item >= 0 ? (
           <IconButton
             aria-label="Pagination"
@@ -70,7 +63,7 @@ const Pagination = (props: PaginationProps) => {
             <div>{item + 1}</div>
           </IconButton>
         ) : (
-          <p key={''}>...</p>
+          <p key={`blank_${index}`}>...</p>
         )
       )}
       <IconButton

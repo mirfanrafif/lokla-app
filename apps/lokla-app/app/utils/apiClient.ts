@@ -12,7 +12,7 @@ export const getApiClient = () => {
     baseURL:
       typeof window !== 'undefined'
         ? `${window.ENV.API_BASE_URL}/api`
-        : 'http://localhost:3000',
+        : `${process.env.API_BASE_URL}/api`,
     headers: {
       'Content-Type': 'application/json',
       Authorization: accessToken ? `Bearer ${accessToken}` : undefined,

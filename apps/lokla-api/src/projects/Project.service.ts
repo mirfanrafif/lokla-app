@@ -12,7 +12,7 @@ export class ProjectService {
   constructor(
     @InjectModel(ProjectModel.name) private projectModel: Model<ProjectModel>,
     @InjectModel(TranslationModel.name)
-    private translationModel: Model<TranslationModel>,
+    private translationModel: Model<TranslationModel>
   ) {}
 
   async getAllProjects() {
@@ -51,6 +51,36 @@ export class ProjectService {
     return result;
   }
 
+  async getProjectByIdentifier(identifier: string) {
+    const project = await this.projectModel.findOne({ identifier });
+
+    if (!project) {
+      return null;
+    }
+
+    const statistics = await this.translationModel.aggregate([
+      {
+        $match: {
+          project: project.identifier,
+        },
+      },
+      {
+        $unwind: '$translations',
+      },
+      {
+        $group: {
+          _id: '$translations.locale',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    return {
+      ...project.toJSON(),
+      statistics,
+    };
+  }
+
   addProject(request: RequestCreateProject) {
     return this.projectModel.create({
       name: request.name,
@@ -68,7 +98,7 @@ export class ProjectService {
       },
       {
         apiKey: v4(),
-      },
+      }
     );
   }
 
@@ -81,7 +111,7 @@ export class ProjectService {
         name: request.name,
         languages: request.languages,
         defaultLanguage: request.defaultLanguage,
-      },
+      }
     );
   }
 }

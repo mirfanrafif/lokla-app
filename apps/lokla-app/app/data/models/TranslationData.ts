@@ -1,4 +1,4 @@
-import { TranslationChangeLogEvent } from 'enums/TranslationChangeLogEvent';
+import { TranslationChangeLogEvent } from 'lib/enums/TranslationChangeLogEvent';
 import * as z from 'zod';
 
 export const TranslationItemSchema = z.object({
@@ -22,7 +22,7 @@ export const TranslationChangeLogSchema = z
         ...data,
         date: new Date(data.date),
         locale: data.locale ?? '',
-      })),
+      }))
   )
   .optional();
 

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { Role } from 'lib/enums/Role.enum';
 
 import { JwtAuthGuard } from '../auth/Jwt.guard';
@@ -30,5 +38,10 @@ export class ProjectController {
   @Put()
   updateProject(@Body() body: RequestCreateProject) {
     return this.service.updateProject(body);
+  }
+
+  @Get(':identifier')
+  getProjectByIdentifier(@Param('identifier') identifier: string) {
+    return this.service.getProjectByIdentifier(identifier);
   }
 }

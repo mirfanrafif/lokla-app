@@ -1,9 +1,8 @@
-import React from 'react';
 import { useGetProject } from '../usecases/GetProjectUseCase';
 import ProjectCard from '../components/ProjectItem/ProjectItem';
 import DashboardContainer from '../components/DashboardContainer/DashboardContainer';
-import { Button, Heading } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
+import { Heading } from '@chakra-ui/react';
+import AddProjectModal from '../components/AddProjectModal/AddProjectModal';
 
 const ProjectListPage = () => {
   const { data: projects } = useGetProject();
@@ -13,9 +12,7 @@ const ProjectListPage = () => {
       <div className="space-y-6">
         <div className="w-full flex flex-row justify-between">
           <Heading size="lg">Projects</Heading>
-          <Button colorScheme="green" leftIcon={<AddIcon />}>
-            Add Project
-          </Button>
+          <AddProjectModal />
         </div>
 
         <div className="grid grid-cols-3 gap-4">

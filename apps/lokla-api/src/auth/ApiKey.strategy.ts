@@ -7,7 +7,7 @@ import { AuthService } from './Auth.service';
 @Injectable()
 export class ApiKeyStrategy extends PassportStrategy(
   HeaderAPIKeyStrategy,
-  'api-key',
+  'api-key'
 ) {
   constructor(private authService: AuthService) {
     super(
@@ -20,7 +20,7 @@ export class ApiKeyStrategy extends PassportStrategy(
         }
 
         return done(null, project);
-      },
+      }
     );
   }
 }

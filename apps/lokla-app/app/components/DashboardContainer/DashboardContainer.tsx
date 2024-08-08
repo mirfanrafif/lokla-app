@@ -10,7 +10,7 @@ const DashboardContainer = (props: { children: React.ReactNode }) => {
 
   return (
     <div className="min-h-screen bg-[#f5f6f8]">
-      <div className="flex flex-row justify-between p-4 bg-white shadow-md">
+      <div className="flex flex-row justify-between p-4 bg-white shadow-md sticky top-0 z-50">
         <IconButton
           aria-label="Sidebar"
           onClick={() => onOpen()}

@@ -1,0 +1,10 @@
+# Node Modules
+node_modules
+
+# Build files
+.nx
+apps/*/build
+
+# Output files
+dist
+coverage

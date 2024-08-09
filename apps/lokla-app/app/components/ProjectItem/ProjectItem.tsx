@@ -14,6 +14,7 @@ import {
 import { Locales } from 'lib/constants/locales';
 import { Link } from '@remix-run/react';
 import { buildTranslationListUrl } from '../../routes/translations';
+import ProjectDetailModal from '../ProjectDetailModal/ProjectDetailModal';
 
 const ProjectCard = (props: { project: ProjectItem }) => {
   const baseLanguageCount = props.project.statistics?.find(
@@ -64,7 +65,7 @@ const ProjectCard = (props: { project: ProjectItem }) => {
             ))}
         </div>
       </CardBody>
-      <CardFooter>
+      <CardFooter className="flex flex-row gap-2">
         <Link
           to={buildTranslationListUrl({
             project: props.project.identifier,
@@ -77,6 +78,7 @@ const ProjectCard = (props: { project: ProjectItem }) => {
         >
           <Button colorScheme="blue">Translate</Button>
         </Link>
+        <ProjectDetailModal project={props.project} />
       </CardFooter>
     </Card>
   );

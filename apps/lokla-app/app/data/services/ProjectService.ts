@@ -8,3 +8,9 @@ export const getProjectList = async () => {
 
   return data;
 };
+
+export const getProjectDetail = async (id: string) => {
+  const response = await getApiClient().get(`/projects/${id}`);
+
+  return response.data;
+};

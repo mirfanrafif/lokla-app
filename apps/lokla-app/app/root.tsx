@@ -30,7 +30,7 @@ export async function loader() {
 
 export const meta: MetaFunction = () => [
   {
-    title: 'New Remix App',
+    title: 'Lokla',
   },
 ];
 

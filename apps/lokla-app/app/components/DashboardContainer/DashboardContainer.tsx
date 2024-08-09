@@ -1,12 +1,15 @@
 import React, { useRef } from 'react';
 
 import { HamburgerIcon } from '@chakra-ui/icons';
-import { IconButton, useDisclosure } from '@chakra-ui/react';
+import { IconButton, useDisclosure, Text, Heading } from '@chakra-ui/react';
 import Sidebar from './Sidebar';
+import { useGetCurrentUser } from '../../usecases/GetCurrentUserUseCase';
 
 const DashboardContainer = (props: { children: React.ReactNode }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const { data: currentUser } = useGetCurrentUser();
 
   return (
     <div className="min-h-screen bg-[#f5f6f8]">
@@ -18,6 +21,15 @@ const DashboardContainer = (props: { children: React.ReactNode }) => {
         >
           <HamburgerIcon />
         </IconButton>
+
+        <div>
+          {currentUser && (
+            <div className="text-right">
+              <Heading size={'sm'}>{currentUser.user.fullName}</Heading>
+              <Text>{currentUser.user.email}</Text>
+            </div>
+          )}
+        </div>
       </div>
 
       <Sidebar isOpen={isOpen} onClose={onClose} />

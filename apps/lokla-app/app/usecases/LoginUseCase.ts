@@ -6,16 +6,21 @@ import { useToast } from '@chakra-ui/react';
 
 import Cookies from 'js-cookie';
 import { AxiosError } from 'axios';
+import { useNavigate } from '@remix-run/react';
+import { CookieKeys } from 'lib/constants/cookieKeys';
 
 export const useLogin = () => {
   const toast = useToast();
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationKey: ['login'],
     mutationFn: async (data: LoginFormData) => {
       const response = await getApiClient().post('/auth/login', data);
 
-      Cookies.set('lokla_auth_data', JSON.stringify(response.data));
+      Cookies.set(CookieKeys.User, JSON.stringify(response.data));
+
+      navigate('/projects');
 
       toast({
         title: 'Login Success',

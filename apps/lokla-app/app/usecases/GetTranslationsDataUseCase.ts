@@ -8,10 +8,9 @@ export const useGetTranslationsData = () => {
 
   const query = useQuery({
     queryKey: [
-      'project',
-      searchParams.get('project'),
       'translations',
       {
+        project: searchParams.get('project'),
         page: searchParams.get('page') ?? 0,
         limit: searchParams.get('limit') ?? 15,
         search: searchParams.get('search') ?? '',

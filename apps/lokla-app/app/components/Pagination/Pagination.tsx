@@ -48,7 +48,12 @@ const Pagination = (props: PaginationProps) => {
     <div className="flex flex-row gap-x-4 justify-end mt-6 items-end">
       <IconButton
         aria-label="Pagination"
-        onClick={() => props.onPageChange(props.currentPage - 1)}
+        onClick={() => {
+          if (props.currentPage > 0) {
+            props.onPageChange(props.currentPage - 1);
+          }
+        }}
+        isDisabled={props.currentPage === 0}
       >
         <ChevronLeftIcon />
       </IconButton>
@@ -68,7 +73,12 @@ const Pagination = (props: PaginationProps) => {
       )}
       <IconButton
         aria-label="Pagination"
-        onClick={() => props.onPageChange(props.currentPage + 1)}
+        onClick={() => {
+          if (props.currentPage < props.totalPage - 1) {
+            props.onPageChange(props.currentPage + 1);
+          }
+        }}
+        isDisabled={props.currentPage === props.totalPage - 1}
       >
         <ChevronRightIcon />
       </IconButton>

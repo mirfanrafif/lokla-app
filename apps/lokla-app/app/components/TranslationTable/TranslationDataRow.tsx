@@ -28,11 +28,7 @@ const TranslationDataRow = (props: {
   const form = useForm<TranslationDataRowForm>({
     defaultValues: {
       key: props.data.key,
-      translations: props.locales.map((locale) => ({
-        locale,
-        value:
-          props.data.translations.find((t) => t.locale === locale)?.value ?? '',
-      })),
+      translations: [],
     },
   });
 
@@ -41,6 +37,17 @@ const TranslationDataRow = (props: {
     name: 'translations',
     keyName: 'formKey',
   });
+
+  useEffect(() => {
+    form.reset({
+      key: props.data.key,
+      translations: props.locales.map((locale) => ({
+        locale,
+        value:
+          props.data.translations.find((t) => t.locale === locale)?.value ?? '',
+      })),
+    });
+  }, [props.data.translations, props.locales]);
 
   const updateTranslation = useUpdateTranslation();
 
@@ -87,6 +94,7 @@ const TranslationDataRow = (props: {
                 })),
               });
             })}
+            disabled={updateTranslation.isPending}
           >
             <CheckIcon />
           </IconButton>

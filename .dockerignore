@@ -8,3 +8,8 @@ apps/*/build
 # Output files
 dist
 coverage
+
+# Docker related
+.dockerignore
+Dockerfile
+docker-compose.yaml

@@ -21,19 +21,27 @@ services:
     ports:
       - '3001:3000'
     depends_on:
-      - mongodb
+      - mongo
     networks:
       - default
     env_file:
       - .env
 
-  mongodb:
+  mongo:
     image: mongo
     ports:
       - '27017:27017'
     networks:
       - default
+    env_file:
+      - .env
+    volumes:
+      - mongodata:/data/db
 
 networks:
   default:
     driver: bridge
+
+volumes:
+  mongodata:
+    driver: local

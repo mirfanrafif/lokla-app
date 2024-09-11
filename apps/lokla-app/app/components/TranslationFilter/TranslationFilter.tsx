@@ -1,14 +1,8 @@
-import {
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Switch,
-} from '@chakra-ui/react';
+import { Input, Select } from '@chakra-ui/react';
 import { useSearchParams } from '@remix-run/react';
 import { useEffect, useRef, useState } from 'react';
 
-const TranslationFilter = () => {
+const TranslationFilter = (props: { namespaces: string[] | undefined }) => {
   const [params, setParams] = useSearchParams();
 
   const timeoutRef = useRef<NodeJS.Timeout>();
@@ -56,6 +50,26 @@ const TranslationFilter = () => {
         <option value="all">All</option>
 
         <option value="not_translated">Untranslated</option>
+      </Select>
+
+      <Select
+        value={params.get('namespace') ?? 'all'}
+        onChange={(e) =>
+          setParams({
+            ...Object.fromEntries(params),
+            namespace: e.target.value !== 'all' ? e.target.value : '',
+          })
+        }
+        width={'200px'}
+        backgroundColor={'white'}
+      >
+        <option value="all">All</option>
+
+        {props.namespaces?.map((namespace) => (
+          <option key={namespace} value={namespace}>
+            {namespace}
+          </option>
+        ))}
       </Select>
     </div>
   );

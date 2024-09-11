@@ -7,6 +7,7 @@ import { useGetTranslationsData } from '../usecases/GetTranslationsDataUseCase';
 import { useSearchParams } from '@remix-run/react';
 import TranslationFilter from '../components/TranslationFilter/TranslationFilter';
 import queryString from 'query-string';
+import { useGetNamespace } from '../usecases/GetNamespacesUseCase';
 
 export type TranslationListSearchParams = {
   search: string | undefined;
@@ -27,13 +28,14 @@ const TranslationsPage = () => {
   const [params, setParams] = useSearchParams();
   const { data: locales } = useGetProjectLocales();
   const { data: translations } = useGetTranslationsData();
+  const { data: namespaces } = useGetNamespace();
 
   return (
     <DashboardContainer>
       <div className="space-y-6">
         <Heading>Translations</Heading>
 
-        <TranslationFilter />
+        <TranslationFilter namespaces={namespaces} />
 
         <TranslationsTable locales={locales} translations={translations} />
 

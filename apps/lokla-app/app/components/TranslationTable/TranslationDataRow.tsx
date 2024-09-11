@@ -1,6 +1,14 @@
 import React, { useEffect } from 'react';
 import { TranslationData } from '../../data/models/TranslationData';
-import { IconButton, Tag, Td, Textarea, Tr, Text } from '@chakra-ui/react';
+import {
+  IconButton,
+  Tag,
+  Td,
+  Textarea,
+  Tr,
+  Text,
+  Badge,
+} from '@chakra-ui/react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { CheckIcon } from '@chakra-ui/icons';
 import { useUpdateTranslation } from '../../usecases/UpdateTranslationUseCase';
@@ -40,6 +48,7 @@ const TranslationDataRow = (props: {
     <Tr>
       <Td className="w-[300px]">
         <div className="space-y-2">
+          <Badge>{props.data.namespace}</Badge>
           <Text className="w-[200px] whitespace-pre-wrap">
             {props.data.key.split('.').map((item, index, arr) => (
               <>

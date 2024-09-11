@@ -15,38 +15,39 @@ const LoginForm = () => {
   });
 
   return (
-    <Card className="w-full max-w-[400px] space-y-6 bg-white p-4">
+    <Card className="w-full max-w-[400px] space-y-12 bg-white p-8 rounded-2xl">
       <img src="/app_logo.png" alt="App Logo" className="w-1/2 mx-auto" />
 
-      <FormControl isInvalid={!!form.formState.errors.email}>
-        <FormLabel>Email</FormLabel>
-        <Input
-          type="email"
-          placeholder="Type here"
-          {...form.register('email', {
-            required: 'Email is required',
-            pattern: {
-              value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-              message: 'Invalid email address',
-            },
-          })}
-        />
-      </FormControl>
+      <div className="space-y-6">
+        <FormControl isInvalid={!!form.formState.errors.email}>
+          <FormLabel>Email</FormLabel>
+          <Input
+            type="email"
+            placeholder="Type here"
+            {...form.register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                message: 'Invalid email address',
+              },
+            })}
+          />
+        </FormControl>
 
-      <FormControl isInvalid={!!form.formState.errors.password}>
-        <FormLabel>Password</FormLabel>
-        <Input
-          type="password"
-          placeholder="Type here"
-          {...form.register('password', {
-            required: 'Password is required',
-          })}
-        />
-      </FormControl>
-
+        <FormControl isInvalid={!!form.formState.errors.password}>
+          <FormLabel>Password</FormLabel>
+          <Input
+            type="password"
+            placeholder="Type here"
+            {...form.register('password', {
+              required: 'Password is required',
+            })}
+          />
+        </FormControl>
+      </div>
       <Button
         colorScheme="green"
-        className="w-full"
+        className="w-full mt-12"
         onClick={submit}
         isDisabled={login.isPending}
       >

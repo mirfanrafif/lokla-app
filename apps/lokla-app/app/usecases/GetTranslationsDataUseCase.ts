@@ -16,6 +16,7 @@ export const useGetTranslationsData = () => {
         limit: searchParams.get('limit') ?? 15,
         search: searchParams.get('search') ?? '',
         filter: searchParams.get('filter'),
+        namespace: searchParams.get('namespace'),
       },
     ],
     queryFn: async () => {
@@ -26,6 +27,7 @@ export const useGetTranslationsData = () => {
           limit: searchParams.get('limit') ?? 15,
           search: searchParams.get('search') ?? '',
           filter: searchParams.get('filter'),
+          ns: searchParams.get('namespace'),
         },
       });
 

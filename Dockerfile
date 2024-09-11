@@ -30,6 +30,7 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy package.json
 COPY package.json yarn.lock ./
 
+
 COPY --from=builder /app/apps/lokla-app ./
 COPY --from=builder /app/apps/lokla-app/public ./public
 

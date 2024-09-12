@@ -18,9 +18,10 @@ const ProjectListPage = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-4">
-          {projects?.map((project) => (
-            <ProjectCard key={project.identifier} project={project} />
-          ))}
+          {projects &&
+            projects?.map((project) => (
+              <ProjectCard key={project.identifier} project={project} />
+            ))}
         </div>
       </div>
     </DashboardContainer>

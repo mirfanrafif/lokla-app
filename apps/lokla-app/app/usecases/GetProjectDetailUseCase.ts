@@ -3,7 +3,7 @@ import { getProjectDetail } from '../data/services/ProjectService';
 
 export const useGetProjectDetail = (identifier: string, enabled: boolean) => {
   const query = useQuery({
-    queryKey: ['projects'],
+    queryKey: ['projects', identifier],
     queryFn: async () => getProjectDetail(identifier),
     enabled,
   });

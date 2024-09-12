@@ -22,7 +22,7 @@ export type TranslationListSearchParams = {
 export const buildTranslationListUrl = (
   params: TranslationListSearchParams
 ) => {
-  return `/translations?${queryString.stringify(params)}`;
+  return `/app/translations?${queryString.stringify(params)}`;
 };
 
 const TranslationsPage = () => {

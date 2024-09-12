@@ -38,7 +38,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   // commit the session
 
-  return redirect('/projects', {
+  return redirect('/app/projects', {
     headers: [
       ['Set-Cookie', commitSessionResult],
       ['Set-Cookie', `${CookieKeys.User}=${JSON.stringify(user)}; Path=/`],

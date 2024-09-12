@@ -13,7 +13,7 @@ import {
 
 import { Locales } from 'lib/constants/locales';
 import { Link } from '@remix-run/react';
-import { buildTranslationListUrl } from '../../routes/translations';
+import { buildTranslationListUrl } from '../../routes/app.translations';
 import ProjectDetailModal from '../ProjectDetailModal/ProjectDetailModal';
 
 const ProjectCard = (props: { project: ProjectItem }) => {

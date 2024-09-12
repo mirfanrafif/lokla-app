@@ -1,6 +1,5 @@
 import { Heading } from '@chakra-ui/react';
 import TranslationsTable from '../components/TranslationTable/TranslationsTable';
-import DashboardContainer from '../components/DashboardContainer/DashboardContainer';
 import Pagination from '../components/Pagination/Pagination';
 import { useGetProjectLocales } from '../usecases/GetProjectLocaleUseCase';
 import { useGetTranslationsData } from '../usecases/GetTranslationsDataUseCase';
@@ -33,28 +32,26 @@ const TranslationsPage = () => {
   const { data: namespaces } = useGetNamespace();
 
   return (
-    <DashboardContainer>
-      <div className="space-y-6">
-        <Heading>Translations</Heading>
+    <div className="space-y-6">
+      <Heading>Translations</Heading>
 
-        <TranslationFilter namespaces={namespaces} />
+      <TranslationFilter namespaces={namespaces} />
 
-        <TranslationsTable locales={locales} translations={translations} />
+      <TranslationsTable locales={locales} translations={translations} />
 
-        <Pagination
-          currentPage={params.get('page') ? Number(params.get('page')) : 0}
-          totalPage={translations?.meta.total_page ?? 1}
-          onPageChange={(newPage) => {
-            const currentParams = Object.fromEntries(params);
+      <Pagination
+        currentPage={params.get('page') ? Number(params.get('page')) : 0}
+        totalPage={translations?.meta.total_page ?? 1}
+        onPageChange={(newPage) => {
+          const currentParams = Object.fromEntries(params);
 
-            setParams({
-              ...currentParams,
-              page: newPage.toString(),
-            });
-          }}
-        />
-      </div>
-    </DashboardContainer>
+          setParams({
+            ...currentParams,
+            page: newPage.toString(),
+          });
+        }}
+      />
+    </div>
   );
 };
 

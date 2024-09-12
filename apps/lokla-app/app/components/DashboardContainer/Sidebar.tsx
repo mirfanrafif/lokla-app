@@ -8,7 +8,7 @@ import {
   DrawerHeader,
   DrawerOverlay,
 } from '@chakra-ui/react';
-import { NavLink } from '@remix-run/react';
+import { Form, NavLink } from '@remix-run/react';
 
 const Sidebar = (props: { isOpen: boolean; onClose: () => void }) => {
   const { isOpen, onClose } = props;
@@ -21,16 +21,18 @@ const Sidebar = (props: { isOpen: boolean; onClose: () => void }) => {
         <DrawerHeader>Lokla</DrawerHeader>
 
         <DrawerBody>
-          <NavLink to={'/projects'}>
+          <NavLink to={'/app/projects'}>
             <Button w="full" variant="ghost" justifyContent="start">
               Projects
             </Button>
           </NavLink>
         </DrawerBody>
         <DrawerFooter>
-          <Button variant="outline" mr={3} onClick={onClose}>
-            Cancel
-          </Button>
+          <Form action="/logout" method="post">
+            <Button variant="outline" mr={3} onClick={onClose} type="submit">
+              Logout
+            </Button>
+          </Form>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

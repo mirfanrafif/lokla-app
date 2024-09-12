@@ -20,7 +20,7 @@ export const useLogin = () => {
 
       Cookies.set(CookieKeys.User, JSON.stringify(response.data));
 
-      navigate('/projects');
+      navigate('/app/projects');
 
       toast({
         title: 'Login Success',

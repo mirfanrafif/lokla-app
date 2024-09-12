@@ -1,59 +1,28 @@
-import React from 'react';
-
 import { Card, FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
-
-import { useForm } from 'react-hook-form';
-import { LoginFormData } from '../../types/LoginFormData';
-import { useLogin } from '../../usecases/LoginUseCase';
+import { Form } from '@remix-run/react';
 
 const LoginForm = () => {
-  const form = useForm<LoginFormData>();
-  const login = useLogin();
-
-  const submit = form.handleSubmit((data) => {
-    login.mutate(data);
-  });
-
   return (
-    <Card className="w-full max-w-[400px] space-y-12 bg-white p-8 rounded-2xl">
-      <img src="/app_logo.png" alt="App Logo" className="w-1/2 mx-auto" />
+    <Form method="post">
+      <Card className="w-full max-w-[400px] space-y-12 bg-white p-8 rounded-2xl">
+        <img src="/app_logo.png" alt="App Logo" className="w-1/2 mx-auto" />
 
-      <div className="space-y-6">
-        <FormControl isInvalid={!!form.formState.errors.email}>
-          <FormLabel>Email</FormLabel>
-          <Input
-            type="email"
-            placeholder="Type here"
-            {...form.register('email', {
-              required: 'Email is required',
-              pattern: {
-                value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                message: 'Invalid email address',
-              },
-            })}
-          />
-        </FormControl>
+        <div className="space-y-6">
+          <FormControl>
+            <FormLabel>Email</FormLabel>
+            <Input type="email" placeholder="Type here" name="email" />
+          </FormControl>
 
-        <FormControl isInvalid={!!form.formState.errors.password}>
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            placeholder="Type here"
-            {...form.register('password', {
-              required: 'Password is required',
-            })}
-          />
-        </FormControl>
-      </div>
-      <Button
-        colorScheme="green"
-        className="w-full mt-12"
-        onClick={submit}
-        isDisabled={login.isPending}
-      >
-        Login
-      </Button>
-    </Card>
+          <FormControl>
+            <FormLabel>Password</FormLabel>
+            <Input type="password" placeholder="Type here" name="password" />
+          </FormControl>
+        </div>
+        <Button colorScheme="green" className="w-full mt-12" type="submit">
+          Login
+        </Button>
+      </Card>
+    </Form>
   );
 };
 

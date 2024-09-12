@@ -3,6 +3,8 @@ import ProjectCard from '../components/ProjectItem/ProjectItem';
 import DashboardContainer from '../components/DashboardContainer/DashboardContainer';
 import { Heading } from '@chakra-ui/react';
 import AddProjectModal from '../components/AddProjectModal/AddProjectModal';
+import { LoaderFunctionArgs } from '@remix-run/node';
+import { authenticator } from '../utils/auth';
 
 const ProjectListPage = () => {
   const { data: projects } = useGetProject();
@@ -24,5 +26,12 @@ const ProjectListPage = () => {
     </DashboardContainer>
   );
 };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  // If the user is already authenticated redirect to /projects directly
+  return await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login',
+  });
+}
 
 export default ProjectListPage;

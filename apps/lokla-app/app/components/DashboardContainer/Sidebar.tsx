@@ -4,6 +4,7 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
 } from '@chakra-ui/react';
@@ -26,6 +27,11 @@ const Sidebar = (props: { isOpen: boolean; onClose: () => void }) => {
             </Button>
           </NavLink>
         </DrawerBody>
+        <DrawerFooter>
+          <Button variant="outline" mr={3} onClick={onClose}>
+            Cancel
+          </Button>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

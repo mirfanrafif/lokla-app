@@ -67,9 +67,12 @@ const TranslationDataRow = (props: {
             ))}
           </Text>
 
-          {!props.data.translated && (
-            <Tag colorScheme="red">Not Translated</Tag>
-          )}
+          <div>
+            {!props.data.translated && (
+              <Tag colorScheme="red">Not Translated</Tag>
+            )}
+            {props.data.unused && <Tag colorScheme="red">Unused</Tag>}
+          </div>
         </div>
       </Td>
       {fields.map((translation, index) => (

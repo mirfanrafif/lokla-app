@@ -191,9 +191,11 @@ export class TranslationsService {
 
     await this.updateExistingKeys(flatJson, existingKeys, body, project);
 
-    const deletedKeys = data.filter((item) => !keys.includes(item.key));
+    if (body.locale === project.defaultLanguage) {
+      const deletedKeys = data.filter((item) => !keys.includes(item.key));
 
-    await this.setKeysToUnused(deletedKeys, body, project);
+      await this.setKeysToUnused(deletedKeys, body, project);
+    }
 
     // new keys
     const newKeys = keys.filter(
@@ -321,6 +323,32 @@ export class TranslationsService {
           unused: true,
         }
       );
+
+      for (const item of deletedKeys) {
+        await this.translationModel.findOneAndUpdate(
+          {
+            key: item.key,
+            namespace: body.namespace,
+            project: body.project,
+          },
+          {
+            changeLogs: [
+              ...item.changeLogs,
+              {
+                eventType: TranslationChangeLogEvent.DELETE,
+                before:
+                  item.translations
+                    .find((item) => item.locale === body.locale)
+                    ?.value.toString() ?? '',
+                after: '',
+                locale: body.locale,
+                date: new Date(),
+                userId: null,
+              },
+            ],
+          }
+        );
+      }
     }
   }
 

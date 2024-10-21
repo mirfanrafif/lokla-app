@@ -39,38 +39,49 @@ const TranslationFilter = (props: { namespaces: string[] | undefined }) => {
         backgroundColor={'white'}
       />
 
-      <Select
-        value={params.get('filter') ?? 'all'}
-        onChange={(e) =>
-          setParams({ ...Object.fromEntries(params), filter: e.target.value })
-        }
-        width={'200px'}
-        backgroundColor={'white'}
-      >
-        <option value="all">All</option>
+      <div>
+        <label htmlFor="filter">Filter:</label>
+        <Select
+          value={params.get('filter') ?? 'all'}
+          onChange={(e) =>
+            setParams({ ...Object.fromEntries(params), filter: e.target.value })
+          }
+          width={'200px'}
+          backgroundColor={'white'}
+          id="filter"
+        >
+          <option value="all">All</option>
 
-        <option value="not_translated">Untranslated</option>
-      </Select>
+          <option value="not_translated">Untranslated</option>
 
-      <Select
-        value={params.get('namespace') ?? 'all'}
-        onChange={(e) =>
-          setParams({
-            ...Object.fromEntries(params),
-            namespace: e.target.value !== 'all' ? e.target.value : '',
-          })
-        }
-        width={'200px'}
-        backgroundColor={'white'}
-      >
-        <option value="all">All</option>
+          <option value="unused">Unused</option>
+        </Select>
+      </div>
 
-        {props.namespaces?.map((namespace) => (
-          <option key={namespace} value={namespace}>
-            {namespace}
-          </option>
-        ))}
-      </Select>
+      <div>
+        <label htmlFor="namespace">Namespace:</label>
+
+        <Select
+          value={params.get('namespace') ?? 'all'}
+          onChange={(e) =>
+            setParams({
+              ...Object.fromEntries(params),
+              namespace: e.target.value !== 'all' ? e.target.value : '',
+            })
+          }
+          width={'200px'}
+          backgroundColor={'white'}
+          id="namespace"
+        >
+          <option value="all">All</option>
+
+          {props.namespaces?.map((namespace) => (
+            <option key={namespace} value={namespace}>
+              {namespace}
+            </option>
+          ))}
+        </Select>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { TranslationChangeLogEvent } from 'lib/enums/TranslationChangeLogEvent';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, UpdateQuery } from 'mongoose';
 import { flatten, unflatten } from 'safe-flat';
 
 import { ProjectModel } from '../projects/Project.schema';
@@ -191,9 +191,11 @@ export class TranslationsService {
 
     await this.updateExistingKeys(flatJson, existingKeys, body, project);
 
-    const deletedKeys = data.filter((item) => !keys.includes(item.key));
+    if (body.locale === project.defaultLanguage) {
+      const deletedKeys = data.filter((item) => !keys.includes(item.key));
 
-    await this.setKeysToUnused(deletedKeys, body, project);
+      await this.setKeysToUnused(deletedKeys, body, project);
+    }
 
     // new keys
     const newKeys = keys.filter(
@@ -214,15 +216,29 @@ export class TranslationsService {
     // update existing
     for (const item of existingKeys) {
       try {
+        const newValue = flatJson[item.key];
+
+        const updateQuery: UpdateQuery<TranslationModel> = {
+          unused: false,
+        };
+
         const existingLocale: TranslationData = item.translations.find(
           (item) => item.locale === body.locale
         );
 
         const isSame =
-          existingLocale !== undefined &&
-          existingLocale.value === flatJson[item.key];
+          existingLocale !== undefined && existingLocale.value === newValue;
 
         if (isSame) {
+          // Update current translation unused to false
+          await this.translationModel.findOneAndUpdate(
+            {
+              key: item.key,
+              namespace: body.namespace,
+              project: body.project,
+            },
+            updateQuery
+          );
           continue;
         }
 
@@ -238,8 +254,45 @@ export class TranslationsService {
         };
 
         if (isTargetLanguageUpdatedByEditor()) {
+          await this.translationModel.findOneAndUpdate(
+            {
+              key: item.key,
+              namespace: body.namespace,
+              project: body.project,
+            },
+            updateQuery
+          );
           continue;
         }
+
+        const newTranslation = [
+          ...item.translations.filter((item) => item.locale !== body.locale),
+          {
+            locale: body.locale,
+            value: newValue,
+          },
+        ];
+
+        updateQuery.translations = newTranslation;
+
+        const languages = await this.getLocales(body.project);
+
+        updateQuery.translated = newTranslation.length === languages.length;
+
+        updateQuery.changeLogs = [
+          ...item.changeLogs,
+          {
+            eventType:
+              existingLocale !== undefined
+                ? TranslationChangeLogEvent.UPDATE
+                : TranslationChangeLogEvent.CREATE,
+            before: existingLocale?.value ?? '',
+            after: newValue,
+            locale: body.locale,
+            date: new Date(),
+            userId: null,
+          },
+        ];
 
         const isBaseLanguageUpdated = () => {
           if (existingLocale === undefined) {
@@ -248,7 +301,7 @@ export class TranslationsService {
 
           if (
             body.locale === project.defaultLanguage &&
-            existingLocale.value !== flatJson[item.key]
+            existingLocale.value !== newValue
           ) {
             return true;
           }
@@ -256,32 +309,7 @@ export class TranslationsService {
           return item.needToVerify;
         };
 
-        const newTranslation = [
-          ...item.translations.filter((item) => item.locale !== body.locale),
-          {
-            locale: body.locale,
-            value: flatJson[item.key],
-          },
-        ];
-
-        const languages = await this.getLocales(body.project);
-
-        const isCompleted = newTranslation.length === languages.length;
-
-        const newChangeLog: TranslationChangeLogModel[] = [
-          ...item.changeLogs,
-          {
-            eventType:
-              existingLocale !== undefined
-                ? TranslationChangeLogEvent.UPDATE
-                : TranslationChangeLogEvent.CREATE,
-            before: existingLocale?.value ?? '',
-            after: flatJson[item.key],
-            locale: body.locale,
-            date: new Date(),
-            userId: null,
-          },
-        ];
+        updateQuery.needToVerify = isBaseLanguageUpdated();
 
         await this.translationModel.findOneAndUpdate(
           {
@@ -289,13 +317,7 @@ export class TranslationsService {
             namespace: body.namespace,
             project: body.project,
           },
-          {
-            translations: newTranslation,
-            translated: isCompleted,
-            unused: false,
-            changeLogs: newChangeLog,
-            needToVerify: isBaseLanguageUpdated(),
-          }
+          updateQuery
         );
       } catch (error) {
         throw new InternalServerErrorException(
@@ -321,6 +343,32 @@ export class TranslationsService {
           unused: true,
         }
       );
+
+      for (const item of deletedKeys) {
+        await this.translationModel.findOneAndUpdate(
+          {
+            key: item.key,
+            namespace: body.namespace,
+            project: body.project,
+          },
+          {
+            changeLogs: [
+              ...item.changeLogs,
+              {
+                eventType: TranslationChangeLogEvent.DELETE,
+                before:
+                  item.translations
+                    .find((item) => item.locale === body.locale)
+                    ?.value.toString() ?? '',
+                after: '',
+                locale: body.locale,
+                date: new Date(),
+                userId: null,
+              },
+            ],
+          }
+        );
+      }
     }
   }
 
@@ -463,7 +511,11 @@ export class TranslationsService {
       outputObject[translationItem.key] = translationValue.value;
     }
 
-    const result = JSON.stringify(unflatten(outputObject), null, 2);
+    const unflattenObject = unflatten(outputObject);
+
+    const sortedObject = this.sortKeys(unflattenObject);
+
+    const result = JSON.stringify(sortedObject, null, 2);
 
     return `${result}`;
   }
@@ -477,6 +529,99 @@ export class TranslationsService {
         translated: true,
         needToVerify: false,
       }
+    );
+  }
+
+  private sortKeys(
+    object,
+    options = {
+      deep: true,
+      compare: (a, b) => a.localeCompare(b),
+    }
+  ) {
+    if (!this.isPlainObject(object) && !Array.isArray(object)) {
+      throw new TypeError('Expected a plain object or array');
+    }
+
+    const { deep, compare } = options;
+    const cache = new WeakMap();
+
+    const deepSortArray = (array) => {
+      const resultFromCache = cache.get(array);
+      if (resultFromCache !== undefined) {
+        return resultFromCache;
+      }
+
+      const result = [];
+      cache.set(array, result);
+
+      result.push(
+        ...array.map((item) => {
+          if (Array.isArray(item)) {
+            return deepSortArray(item);
+          }
+
+          if (this.isPlainObject(item)) {
+            return _sortKeys(item);
+          }
+
+          return item;
+        })
+      );
+
+      return result;
+    };
+
+    const _sortKeys = (object) => {
+      const resultFromCache = cache.get(object);
+      if (resultFromCache !== undefined) {
+        return resultFromCache;
+      }
+
+      const result = {};
+      const keys = Object.keys(object).sort(compare);
+
+      cache.set(object, result);
+
+      for (const key of keys) {
+        const value = object[key];
+        let newValue;
+
+        if (deep && Array.isArray(value)) {
+          newValue = deepSortArray(value);
+        } else {
+          newValue =
+            deep && this.isPlainObject(value) ? _sortKeys(value) : value;
+        }
+
+        Object.defineProperty(result, key, {
+          ...Object.getOwnPropertyDescriptor(object, key),
+          value: newValue,
+        });
+      }
+
+      return result;
+    };
+
+    if (Array.isArray(object)) {
+      return deep ? deepSortArray(object) : [...object];
+    }
+
+    return _sortKeys(object);
+  }
+
+  private isPlainObject(value: any) {
+    if (typeof value !== 'object' || value === null) {
+      return false;
+    }
+
+    const prototype = Object.getPrototypeOf(value);
+    return (
+      (prototype === null ||
+        prototype === Object.prototype ||
+        Object.getPrototypeOf(prototype) === null) &&
+      !(Symbol.toStringTag in value) &&
+      !(Symbol.iterator in value)
     );
   }
 

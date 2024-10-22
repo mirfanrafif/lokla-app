@@ -314,9 +314,12 @@ export class TranslationsService {
     updateQuery: UpdateQuery<TranslationModel>,
     item: TranslationModel
   ) {
+    console.log('To be updated', updateQuery);
     if (Object.keys(updateQuery).length === 0) {
       return;
     }
+
+    console.log('Updating', updateQuery);
 
     this.translationModel.findOneAndUpdate(
       {

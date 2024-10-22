@@ -233,7 +233,7 @@ export class TranslationsService {
 
         if (isSame) {
           // Check if update query is not empty and update if is something to update
-          await this.updateIfSomethingToUpdate(updateQuery, item);
+          this.updateIfSomethingToUpdate(updateQuery, item);
           // Update current translation unused to false
           continue;
         }
@@ -251,7 +251,7 @@ export class TranslationsService {
 
         if (isTargetLanguageUpdatedByEditor()) {
           // Check if update query is not empty and update if is something to update
-          await this.updateIfSomethingToUpdate(updateQuery, item);
+          this.updateIfSomethingToUpdate(updateQuery, item);
           continue;
         }
 
@@ -301,14 +301,7 @@ export class TranslationsService {
 
         updateQuery.needToVerify = isBaseLanguageUpdated();
 
-        await this.translationModel.findOneAndUpdate(
-          {
-            key: item.key,
-            namespace: body.namespace,
-            project: body.project,
-          },
-          updateQuery
-        );
+        this.updateIfSomethingToUpdate(updateQuery, item);
       } catch (error) {
         throw new InternalServerErrorException(
           `Error when updating translation on locale ${body.locale} for namespace ${body.namespace}`
@@ -317,7 +310,7 @@ export class TranslationsService {
     }
   }
 
-  private async updateIfSomethingToUpdate(
+  private updateIfSomethingToUpdate(
     updateQuery: UpdateQuery<TranslationModel>,
     item: TranslationModel
   ) {
@@ -325,7 +318,7 @@ export class TranslationsService {
       return;
     }
 
-    await this.translationModel.findOneAndUpdate(
+    this.translationModel.findOneAndUpdate(
       {
         key: item.key,
         namespace: item.namespace,

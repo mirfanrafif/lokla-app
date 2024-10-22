@@ -218,9 +218,11 @@ export class TranslationsService {
       try {
         const newValue = flatJson[item.key];
 
-        const updateQuery: UpdateQuery<TranslationModel> = {
-          unused: false,
-        };
+        const updateQuery: UpdateQuery<TranslationModel> = {};
+
+        if (item.unused === true) {
+          updateQuery.unused = false;
+        }
 
         const existingLocale: TranslationData = item.translations.find(
           (item) => item.locale === body.locale
@@ -230,15 +232,9 @@ export class TranslationsService {
           existingLocale !== undefined && existingLocale.value === newValue;
 
         if (isSame) {
+          // Check if update query is not empty and update if is something to update
+          await this.updateIfSomethingToUpdate(updateQuery, item);
           // Update current translation unused to false
-          await this.translationModel.findOneAndUpdate(
-            {
-              key: item.key,
-              namespace: body.namespace,
-              project: body.project,
-            },
-            updateQuery
-          );
           continue;
         }
 
@@ -254,14 +250,8 @@ export class TranslationsService {
         };
 
         if (isTargetLanguageUpdatedByEditor()) {
-          await this.translationModel.findOneAndUpdate(
-            {
-              key: item.key,
-              namespace: body.namespace,
-              project: body.project,
-            },
-            updateQuery
-          );
+          // Check if update query is not empty and update if is something to update
+          await this.updateIfSomethingToUpdate(updateQuery, item);
           continue;
         }
 
@@ -325,6 +315,24 @@ export class TranslationsService {
         );
       }
     }
+  }
+
+  private async updateIfSomethingToUpdate(
+    updateQuery: UpdateQuery<TranslationModel>,
+    item: TranslationModel
+  ) {
+    if (Object.keys(updateQuery).length === 0) {
+      return;
+    }
+
+    await this.translationModel.findOneAndUpdate(
+      {
+        key: item.key,
+        namespace: item.namespace,
+        project: item.project,
+      },
+      updateQuery
+    );
   }
 
   private async setKeysToUnused(

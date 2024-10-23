@@ -17,6 +17,18 @@ import { useGetProjectDetail } from '../../usecases/GetProjectDetailUseCase';
 import { Locales } from 'lib/constants/locales';
 import { CopyIcon } from '@chakra-ui/icons';
 import { useGetProjectStatistics } from '../../usecases/GetProjectStatisticsUseCase';
+import { useGetTranslatedItemsPerDay } from '../../usecases/GetTranslatedItemsPerDayUseCase';
+
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
+
+import { eachDayOfInterval, format, subDays } from 'date-fns';
 
 type Props = {
   project: ProjectItem;
@@ -34,6 +46,27 @@ const ProjectDetailModal = (props: Props) => {
     props.project.identifier,
     isOpen
   );
+
+  const { data: translatedItemsPerDay } = useGetTranslatedItemsPerDay(
+    props.project.identifier,
+    isOpen
+  );
+
+  const chartsData = eachDayOfInterval({
+    start: subDays(new Date(), 30),
+    end: new Date(),
+  }).map((date) => {
+    const dateString = format(date, 'yyyy-MM-dd');
+
+    const translatedItems = translatedItemsPerDay?.find(
+      (item) => item._id === dateString
+    );
+
+    return {
+      name: dateString,
+      total: translatedItems?.total ?? 0,
+    };
+  });
 
   return (
     <>
@@ -85,6 +118,37 @@ const ProjectDetailModal = (props: Props) => {
                     )
                     .join(', ')}
                 </Text>
+              </div>
+
+              <div className="space-y-2">
+                <Heading size={'sm'} className="mb-4">
+                  Translated Items Per Day
+                </Heading>
+
+                <AreaChart
+                  width={528}
+                  height={250}
+                  data={chartsData}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Tooltip />
+                  <Area
+                    type="monotone"
+                    dataKey="total"
+                    stroke="#8884d8"
+                    fillOpacity={1}
+                    fill="url(#colorUv)"
+                  />
+                </AreaChart>
               </div>
 
               <div className="space-y-2">

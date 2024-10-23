@@ -18,6 +18,8 @@ import {
 import { TranslationData, TranslationModel } from './Translation.schema';
 import { TranslationChangeLogModel } from './TranslationChangeLog';
 
+import { subDays } from 'date-fns';
+
 @Injectable()
 export class TranslationsService {
   constructor(
@@ -337,18 +339,11 @@ export class TranslationsService {
     project: ProjectModel
   ) {
     if (body.locale === project.defaultLanguage) {
-      await this.translationModel.updateMany(
-        {
-          key: {
-            $in: deletedKeys.map((item) => item.key),
-          },
-        },
-        {
-          unused: true,
-        }
-      );
-
       for (const item of deletedKeys) {
+        if (item.unused === true) {
+          continue;
+        }
+
         await this.translationModel.findOneAndUpdate(
           {
             key: item.key,
@@ -670,6 +665,48 @@ export class TranslationsService {
               100,
             ],
           },
+        },
+      },
+    ]);
+  }
+
+  getTranslatedItemsPerDay(project: string) {
+    return this.translationModel.aggregate([
+      {
+        $match: {
+          project,
+        },
+      },
+      {
+        $unwind: '$changeLogs',
+      },
+      {
+        $match: {
+          'changeLogs.date': {
+            $gte: subDays(new Date(), 30),
+          },
+          'changeLogs.userId': {
+            $ne: null,
+          },
+          'changeLogs.eventType': TranslationChangeLogEvent.UPDATE,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: '%Y-%m-%d',
+              date: '$changeLogs.date',
+            },
+          },
+          total: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
         },
       },
     ]);

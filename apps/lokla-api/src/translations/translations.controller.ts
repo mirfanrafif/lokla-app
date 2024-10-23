@@ -102,4 +102,10 @@ export class TranslationsController {
   getStatistics(@Query() query: RequestGetTranslationStatistics) {
     return this.service.getStatistics(query);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('translated-itemms-per-day')
+  getTranslatedItemsPerDay(@Query('projectId') projectId: string) {
+    return this.service.getTranslatedItemsPerDay(projectId);
+  }
 }

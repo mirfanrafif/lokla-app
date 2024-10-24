@@ -25,8 +25,6 @@ authenticator.use(
         password,
       });
 
-      console.log(response.data);
-
       const data = ResponseLoginSchema.parse(response.data);
 
       // the type of this user must match the type you pass to the Authenticator

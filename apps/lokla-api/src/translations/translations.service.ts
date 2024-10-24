@@ -16,7 +16,6 @@ import {
   RequestUpdateTranslation,
 } from './Translation.dto';
 import { TranslationData, TranslationModel } from './Translation.schema';
-import { TranslationChangeLogModel } from './TranslationChangeLog';
 
 import { subDays } from 'date-fns';
 

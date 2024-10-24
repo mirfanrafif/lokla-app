@@ -1,56 +1,53 @@
+import { CopyIcon } from '@chakra-ui/icons';
 import {
-  Button,
-  Heading,
-  IconButton,
   Modal,
-  ModalBody,
+  ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalOverlay,
+  ModalBody,
+  Heading,
+  IconButton,
   Progress,
   Text,
-  useDisclosure,
+  ModalCloseButton,
 } from '@chakra-ui/react';
-import React from 'react';
-import { ProjectItem } from '../../data/models/ResponseGetTranslationProject';
-import { useGetProjectDetail } from '../../usecases/GetProjectDetailUseCase';
+import { eachDayOfInterval, subDays } from 'date-fns';
 import { Locales } from 'lib/constants/locales';
-import { CopyIcon } from '@chakra-ui/icons';
-import { useGetProjectStatistics } from '../../usecases/GetProjectStatisticsUseCase';
-import { useGetTranslatedItemsPerDay } from '../../usecases/GetTranslatedItemsPerDayUseCase';
-
+import { format } from 'date-fns';
 import {
-  Area,
   AreaChart,
-  CartesianGrid,
-  Tooltip,
   XAxis,
   YAxis,
+  CartesianGrid,
+  Tooltip,
+  Area,
 } from 'recharts';
 
-import { eachDayOfInterval, format, subDays } from 'date-fns';
-
+import { ProjectItem } from '../data/models/ResponseGetTranslationProject';
+import { LoaderFunctionArgs } from '@remix-run/node';
+import {
+  getProjectDetail,
+  getProjectStatistics,
+  getTranslatedItemsPerDay,
+} from '../data/services/TranslationService';
+import { authenticator } from '../utils/auth';
+import { useLoaderData, useNavigate } from '@remix-run/react';
+import { ResponseGetProjectDetail } from '../data/models/ResponseGetProjectDetail';
+import { ResponseGetStatistics } from '../data/models/ResponseGetStatistics';
+import { ResponseGetTranslatedItemsPerDay } from '../data/models/ResponseGetTranslatedItemsPerDay';
 type Props = {
   project: ProjectItem;
 };
 
-const ProjectDetailModal = (props: Props) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+type LoaderData = {
+  projectDetail: ResponseGetProjectDetail;
+  statistics: ResponseGetStatistics;
+  translatedItemsPerDay: ResponseGetTranslatedItemsPerDay;
+};
 
-  const { data: projectDetail } = useGetProjectDetail(
-    props.project.identifier,
-    isOpen
-  );
-
-  const { data: statistics } = useGetProjectStatistics(
-    props.project.identifier,
-    isOpen
-  );
-
-  const { data: translatedItemsPerDay } = useGetTranslatedItemsPerDay(
-    props.project.identifier,
-    isOpen
-  );
+const ProjectDetailModal = () => {
+  const { projectDetail, statistics, translatedItemsPerDay } =
+    useLoaderData<LoaderData>();
 
   const chartsData = eachDayOfInterval({
     start: subDays(new Date(), 30),
@@ -68,12 +65,20 @@ const ProjectDetailModal = (props: Props) => {
     };
   });
 
+  const navigate = useNavigate();
+
   return (
     <>
-      <Button onClick={onOpen}>See Detail</Button>
-      <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+      <Modal
+        isOpen={true}
+        onClose={() => {
+          navigate(-1);
+        }}
+        size={'xl'}
+      >
         <ModalOverlay />
         <ModalContent>
+          <ModalCloseButton />
           <ModalHeader>Project Detail</ModalHeader>
           <ModalBody>
             <div className="space-y-6">
@@ -126,7 +131,7 @@ const ProjectDetailModal = (props: Props) => {
                 </Heading>
 
                 <AreaChart
-                  width={528}
+                  width={window.innerWidth > 768 ? 528 : 250}
                   height={250}
                   data={chartsData}
                   margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
@@ -139,7 +144,7 @@ const ProjectDetailModal = (props: Props) => {
                   </defs>
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <CartesianGrid strokeDasharray="3 3" />
+
                   <Tooltip />
                   <Area
                     type="monotone"
@@ -175,5 +180,37 @@ const ProjectDetailModal = (props: Props) => {
     </>
   );
 };
+
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const authData = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login',
+  });
+
+  const projectId = params.projectId;
+
+  if (!projectId) {
+    return {
+      project: null,
+    };
+  }
+
+  const projectDetail = await getProjectDetail(projectId, authData.accessToken);
+
+  const statistics = await getProjectStatistics(
+    projectId,
+    authData.accessToken
+  );
+
+  const translatedItemsPerDay = await getTranslatedItemsPerDay(
+    projectId,
+    authData.accessToken
+  );
+
+  return {
+    project: projectDetail,
+    statistics: statistics,
+    translatedItemsPerDay: translatedItemsPerDay,
+  };
+}
 
 export default ProjectDetailModal;

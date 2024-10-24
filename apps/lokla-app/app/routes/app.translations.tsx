@@ -133,7 +133,6 @@ export async function action({ request }: ActionFunctionArgs) {
   );
 
   if (errors) {
-    console.log('Error', errors);
     return json({ errors, defaultValues });
   }
 

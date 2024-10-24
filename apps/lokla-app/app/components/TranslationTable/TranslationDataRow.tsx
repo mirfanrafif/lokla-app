@@ -59,18 +59,16 @@ const TranslationDataRow = (props: {
     });
   }, [props.data]);
 
-  console.log(form.formState.isSubmitting);
-
   return (
     <Form onSubmit={form.handleSubmit} method="POST">
       <Card className="p-4">
         {/* id */}
         <input type="hidden" {...form.register('key')} />
-        <div className="flex flex-row gap-4">
-          <div className="w-[300px]">
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="w-full lg:w-[300px]">
             <div className="space-y-2">
               <Badge>{props.data.namespace}</Badge>
-              <Text className="w-[200px] whitespace-pre-wrap">
+              <Text className="w-full lg:w-[200px] whitespace-pre-wrap">
                 {props.data.key.split('.').map((item, index, arr) => (
                   <>
                     <span>{item}</span>

@@ -1,11 +1,13 @@
 import DashboardContainer from '../components/DashboardContainer/DashboardContainer';
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { json, LoaderFunctionArgs } from '@remix-run/node';
 import { authenticator } from '../utils/auth';
-import { Outlet } from '@remix-run/react';
+import { Outlet, useLoaderData } from '@remix-run/react';
 
 const ProjectListPage = () => {
+  const data = useLoaderData<typeof loader>();
+
   return (
-    <DashboardContainer>
+    <DashboardContainer authData={data}>
       <Outlet />
     </DashboardContainer>
   );
@@ -13,9 +15,11 @@ const ProjectListPage = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /projects directly
-  return await authenticator.isAuthenticated(request, {
+  const data = await authenticator.isAuthenticated(request, {
     failureRedirect: '/login',
   });
+
+  return json(data);
 }
 
 export default ProjectListPage;

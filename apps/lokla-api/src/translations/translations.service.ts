@@ -16,7 +16,8 @@ import {
   RequestUpdateTranslation,
 } from './Translation.dto';
 import { TranslationData, TranslationModel } from './Translation.schema';
-import { TranslationChangeLogModel } from './TranslationChangeLog';
+
+import { subDays } from 'date-fns';
 
 @Injectable()
 export class TranslationsService {
@@ -218,9 +219,11 @@ export class TranslationsService {
       try {
         const newValue = flatJson[item.key];
 
-        const updateQuery: UpdateQuery<TranslationModel> = {
-          unused: false,
-        };
+        const updateQuery: UpdateQuery<TranslationModel> = {};
+
+        if (item.unused === true) {
+          updateQuery.unused = false;
+        }
 
         const existingLocale: TranslationData = item.translations.find(
           (item) => item.locale === body.locale
@@ -230,15 +233,9 @@ export class TranslationsService {
           existingLocale !== undefined && existingLocale.value === newValue;
 
         if (isSame) {
+          // Check if update query is not empty and update if is something to update
+          this.updateIfSomethingToUpdate(updateQuery, item);
           // Update current translation unused to false
-          await this.translationModel.findOneAndUpdate(
-            {
-              key: item.key,
-              namespace: body.namespace,
-              project: body.project,
-            },
-            updateQuery
-          );
           continue;
         }
 
@@ -254,14 +251,8 @@ export class TranslationsService {
         };
 
         if (isTargetLanguageUpdatedByEditor()) {
-          await this.translationModel.findOneAndUpdate(
-            {
-              key: item.key,
-              namespace: body.namespace,
-              project: body.project,
-            },
-            updateQuery
-          );
+          // Check if update query is not empty and update if is something to update
+          this.updateIfSomethingToUpdate(updateQuery, item);
           continue;
         }
 
@@ -311,14 +302,7 @@ export class TranslationsService {
 
         updateQuery.needToVerify = isBaseLanguageUpdated();
 
-        await this.translationModel.findOneAndUpdate(
-          {
-            key: item.key,
-            namespace: body.namespace,
-            project: body.project,
-          },
-          updateQuery
-        );
+        this.updateIfSomethingToUpdate(updateQuery, item);
       } catch (error) {
         throw new InternalServerErrorException(
           `Error when updating translation on locale ${body.locale} for namespace ${body.namespace}`
@@ -327,24 +311,38 @@ export class TranslationsService {
     }
   }
 
+  private updateIfSomethingToUpdate(
+    updateQuery: UpdateQuery<TranslationModel>,
+    item: TranslationModel
+  ) {
+    console.log('To be updated', updateQuery);
+    if (Object.keys(updateQuery).length === 0) {
+      return;
+    }
+
+    console.log('Updating', updateQuery);
+
+    this.translationModel.findOneAndUpdate(
+      {
+        key: item.key,
+        namespace: item.namespace,
+        project: item.project,
+      },
+      updateQuery
+    );
+  }
+
   private async setKeysToUnused(
     deletedKeys: TranslationModel[],
     body: RequestImportTranslationFromJson,
     project: ProjectModel
   ) {
     if (body.locale === project.defaultLanguage) {
-      await this.translationModel.updateMany(
-        {
-          key: {
-            $in: deletedKeys.map((item) => item.key),
-          },
-        },
-        {
-          unused: true,
-        }
-      );
-
       for (const item of deletedKeys) {
+        if (item.unused === true) {
+          continue;
+        }
+
         await this.translationModel.findOneAndUpdate(
           {
             key: item.key,
@@ -666,6 +664,48 @@ export class TranslationsService {
               100,
             ],
           },
+        },
+      },
+    ]);
+  }
+
+  getTranslatedItemsPerDay(project: string) {
+    return this.translationModel.aggregate([
+      {
+        $match: {
+          project,
+        },
+      },
+      {
+        $unwind: '$changeLogs',
+      },
+      {
+        $match: {
+          'changeLogs.date': {
+            $gte: subDays(new Date(), 30),
+          },
+          'changeLogs.userId': {
+            $ne: null,
+          },
+          'changeLogs.eventType': TranslationChangeLogEvent.UPDATE,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: '%Y-%m-%d',
+              date: '$changeLogs.date',
+            },
+          },
+          total: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
         },
       },
     ]);

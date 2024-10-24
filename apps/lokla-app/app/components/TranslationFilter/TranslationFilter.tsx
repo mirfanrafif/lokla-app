@@ -1,4 +1,4 @@
-import { Input, Select } from '@chakra-ui/react';
+import { FormControl, FormLabel, Input, Select } from '@chakra-ui/react';
 import { useSearchParams } from '@remix-run/react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -29,7 +29,7 @@ const TranslationFilter = (props: { namespaces: string[] | undefined }) => {
   }, [search]);
 
   return (
-    <div className="flex flex-row w-full gap-4 items-end">
+    <div className="flex flex-col lg:flex-row w-full gap-4 items-stretch lg:items-end">
       <Input
         placeholder="Search..."
         value={search}
@@ -37,16 +37,17 @@ const TranslationFilter = (props: { namespaces: string[] | undefined }) => {
           setSearch(e.target.value);
         }}
         backgroundColor={'white'}
+        className="w-full"
       />
 
-      <div>
-        <label htmlFor="filter">Filter:</label>
+      <FormControl>
+        <FormLabel htmlFor="filter">Filter:</FormLabel>
         <Select
           value={params.get('filter') ?? 'all'}
           onChange={(e) =>
             setParams({ ...Object.fromEntries(params), filter: e.target.value })
           }
-          width={'200px'}
+          className="w-full lg:w-[200px]"
           backgroundColor={'white'}
           id="filter"
         >
@@ -56,20 +57,20 @@ const TranslationFilter = (props: { namespaces: string[] | undefined }) => {
 
           <option value="unused">Unused</option>
         </Select>
-      </div>
+      </FormControl>
 
-      <div>
-        <label htmlFor="namespace">Namespace:</label>
+      <FormControl>
+        <FormLabel htmlFor="namespace">Namespace:</FormLabel>
 
         <Select
-          value={params.get('namespace') ?? 'all'}
+          value={params.get('ns') ?? 'all'}
           onChange={(e) =>
             setParams({
               ...Object.fromEntries(params),
-              namespace: e.target.value !== 'all' ? e.target.value : '',
+              ns: e.target.value !== 'all' ? e.target.value : '',
             })
           }
-          width={'200px'}
+          className="w-full lg:w-[200px]"
           backgroundColor={'white'}
           id="namespace"
         >
@@ -81,7 +82,7 @@ const TranslationFilter = (props: { namespaces: string[] | undefined }) => {
             </option>
           ))}
         </Select>
-      </div>
+      </FormControl>
     </div>
   );
 };

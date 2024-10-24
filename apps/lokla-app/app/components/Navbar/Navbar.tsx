@@ -8,10 +8,11 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react';
-import { useGetCurrentUser } from '../../usecases/GetCurrentUserUseCase';
 
-const Navbar = (props: { onOpen: () => void }) => {
-  const { data: currentUser } = useGetCurrentUser();
+import { ResponseLogin } from '../../data/models/ResponseLogin';
+
+const Navbar = (props: { authData: ResponseLogin; onOpen: () => void }) => {
+  const { authData: currentUser } = props;
 
   return (
     <div className="flex flex-row justify-between p-4 bg-white shadow-md sticky top-0 z-50">

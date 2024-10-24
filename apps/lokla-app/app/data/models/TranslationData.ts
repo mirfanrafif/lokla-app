@@ -20,7 +20,6 @@ export const TranslationChangeLogSchema = z
       })
       .transform((data) => ({
         ...data,
-        date: new Date(data.date),
         locale: data.locale ?? '',
       }))
   )

@@ -3,5 +3,12 @@ export const mapUrlSearchParamsToObj = <T>(
 ): T => {
   const params = Object.fromEntries(searchParams);
 
+  // filter empty string
+  Object.keys(params).forEach((key) => {
+    if (params[key] === '') {
+      delete params[key];
+    }
+  });
+
   return params as T;
 };

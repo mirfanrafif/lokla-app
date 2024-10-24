@@ -32,7 +32,7 @@ export type TranslationListSearchParams = {
   limit: string | undefined;
   project: string | undefined;
   ns: string | undefined;
-  filter: 'not_translated' | 'all' | undefined;
+  filter: string | undefined;
 };
 
 export const buildTranslationListUrl = (
@@ -83,26 +83,36 @@ export async function loader({ request }: LoaderFunctionArgs) {
     failureRedirect: '/login',
   });
 
-  const urlParams = new URLSearchParams(request.url.split('?')[1]);
-  const urlObj: TranslationListSearchParams =
-    mapUrlSearchParamsToObj(urlParams);
+  const params = mapUrlSearchParamsToObj<TranslationListSearchParams>(
+    new URLSearchParams(request.url.split('?')[1])
+  );
 
-  if (!urlObj.project) {
+  if (!params.project) {
     return {
       status: 404,
       error: 'Project not found',
     };
   }
 
-  const translations = await getTranslations(urlObj, authData.accessToken);
+  const translations = await getTranslations(
+    {
+      filter: params.filter,
+      limit: params.limit || '15',
+      page: params.page || '0',
+      ns: params.ns,
+      project: params.project,
+      search:
+        params.search !== undefined && params.search !== ''
+          ? params.search
+          : undefined,
+    },
+    authData.accessToken
+  );
   const namespaces = await getProjectNamespaces(
-    urlObj.project ?? '',
+    params.project,
     authData.accessToken
   );
-  const locales = await getProjectLocales(
-    urlObj.project ?? '',
-    authData.accessToken
-  );
+  const locales = await getProjectLocales(params.project, authData.accessToken);
 
   return {
     translations,

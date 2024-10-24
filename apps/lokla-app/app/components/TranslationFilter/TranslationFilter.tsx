@@ -67,7 +67,7 @@ const TranslationFilter = (props: { namespaces: string[] | undefined }) => {
           onChange={(e) =>
             setParams({
               ...Object.fromEntries(params),
-              namespace: e.target.value !== 'all' ? e.target.value : '',
+              ns: e.target.value !== 'all' ? e.target.value : '',
             })
           }
           className="w-full lg:w-[200px]"

@@ -70,7 +70,7 @@ const ProjectCard = (props: { project: ProjectItem }) => {
             project: props.project.identifier,
             page: '0',
             limit: '15',
-            search: '',
+            search: undefined,
             filter: 'not_translated',
             ns: undefined,
           })}

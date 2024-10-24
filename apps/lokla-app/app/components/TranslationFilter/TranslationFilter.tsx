@@ -63,7 +63,7 @@ const TranslationFilter = (props: { namespaces: string[] | undefined }) => {
         <FormLabel htmlFor="namespace">Namespace:</FormLabel>
 
         <Select
-          value={params.get('namespace') ?? 'all'}
+          value={params.get('ns') ?? 'all'}
           onChange={(e) =>
             setParams({
               ...Object.fromEntries(params),

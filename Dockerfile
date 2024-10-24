@@ -5,8 +5,8 @@ WORKDIR /app
 
 RUN corepack enable
 
-COPY package.json yarn.lock ./
-RUN yarn
+COPY package.json package-lock.json ./
+RUN npm install --frozen-lockfile
 
 # Build
 FROM node:18.18.2-buster-slim as builder
@@ -16,7 +16,7 @@ COPY --from=deps /app/node_modules ./node_modules
 
 COPY . .
 
-RUN yarn nx run-many --target=build --all --parallel
+RUN npx nx run-many --target=build --all --parallel
 
 # Production FE - Remix
 
@@ -28,7 +28,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 
 # Copy package.json
-COPY package.json yarn.lock ./
+COPY package.json package-lock.json ./
 
 
 COPY --from=builder /app/apps/lokla-app ./
@@ -36,7 +36,7 @@ COPY --from=builder /app/apps/lokla-app/public ./public
 
 EXPOSE 3000
 
-CMD ["yarn", "remix-serve", "./build/index.js"]
+CMD ["npx", "remix-serve", "./build/index.js"]
 
 # Production BE - NestJS
 

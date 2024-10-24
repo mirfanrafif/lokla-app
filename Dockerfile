@@ -46,7 +46,7 @@ WORKDIR /app
 
 # Copy the node_modules from the deps stage
 COPY --from=deps /app/node_modules ./node_modules
-COPY package.json yarn.lock ./
+COPY package.json package-lock.json ./
 
 COPY --from=builder /app/dist/apps/ ./dist/apps/
 

@@ -2,8 +2,8 @@ import { getApiClient } from '../../utils/apiClient';
 import { ResponseGetProjectDetailSchema } from '../models/ResponseGetProjectDetail';
 import { ResponseGetTranslationProjectSchema } from '../models/ResponseGetTranslationProject';
 
-export const getProjectList = async () => {
-  const response = await getApiClient().get('/projects');
+export const getProjectList = async (accessToken?: string) => {
+  const response = await getApiClient(accessToken).get('/projects');
 
   const data = ResponseGetTranslationProjectSchema.parse(response.data);
 

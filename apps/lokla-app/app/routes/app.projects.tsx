@@ -1,12 +1,18 @@
-import { useGetProject } from '../usecases/GetProjectUseCase';
 import ProjectCard from '../components/ProjectItem/ProjectItem';
 import { Heading } from '@chakra-ui/react';
 import AddProjectModal from '../components/AddProjectModal/AddProjectModal';
 import { LoaderFunctionArgs } from '@remix-run/node';
 import { authenticator } from '../utils/auth';
+import { getProjectList } from '../data/services/ProjectService';
+import { ProjectItem } from '../data/models/ResponseGetTranslationProject';
+import { useLoaderData } from '@remix-run/react';
+
+type ProjectListPageProps = {
+  projects: ProjectItem[];
+};
 
 const ProjectListPage = () => {
-  const { data: projects } = useGetProject();
+  const { projects } = useLoaderData<ProjectListPageProps>();
 
   return (
     <div className="space-y-6">
@@ -27,9 +33,15 @@ const ProjectListPage = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /projects directly
-  return await authenticator.isAuthenticated(request, {
+  const authData = await authenticator.isAuthenticated(request, {
     failureRedirect: '/login',
   });
+
+  const projects = await getProjectList(authData.accessToken);
+
+  return {
+    projects,
+  };
 }
 
 export default ProjectListPage;

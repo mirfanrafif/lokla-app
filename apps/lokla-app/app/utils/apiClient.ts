@@ -2,18 +2,11 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { CookieKeys } from 'lib/constants/cookieKeys';
 
-declare const window: any;
+// declare const window: any;
 
-export const getApiClient = () => {
-  const authData = Cookies.get(CookieKeys.User);
-
-  const accessToken = authData ? JSON.parse(authData).accessToken : undefined;
-
+export const getApiClient = (accessToken?: string) => {
   return axios.create({
-    baseURL:
-      typeof window !== 'undefined'
-        ? window.ENV.API_BASE_URL
-        : process.env.API_BASE_URL,
+    baseURL: process.env.API_BASE_URL,
     headers: {
       'Content-Type': 'application/json',
       Authorization: accessToken ? `Bearer ${accessToken}` : undefined,

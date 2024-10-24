@@ -1,14 +1,30 @@
 import { Heading } from '@chakra-ui/react';
 import TranslationsTable from '../components/TranslationTable/TranslationsTable';
 import Pagination from '../components/Pagination/Pagination';
-import { useGetProjectLocales } from '../usecases/GetProjectLocaleUseCase';
-import { useGetTranslationsData } from '../usecases/GetTranslationsDataUseCase';
-import { useSearchParams } from '@remix-run/react';
+
+import {
+  ShouldRevalidateFunction,
+  useLoaderData,
+  useSearchParams,
+} from '@remix-run/react';
 import TranslationFilter from '../components/TranslationFilter/TranslationFilter';
 import queryString from 'query-string';
-import { useGetNamespace } from '../usecases/GetNamespacesUseCase';
-import { LoaderFunctionArgs } from '@remix-run/node';
+
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/node';
 import { authenticator } from '../utils/auth';
+import { ResponseGetTranslationData } from '../data/models/ResponseGetTranslationData';
+import {
+  getProjectLocales,
+  getProjectNamespaces,
+  getTranslations,
+  updateTranslation,
+} from '../data/services/TranslationService';
+import { mapUrlSearchParamsToObj } from '../utils/urlSearchParamsToObj';
+import { getValidatedFormData } from 'remix-hook-form';
+import {
+  TranslationDataRowForm,
+  translationFormResolver,
+} from '../data/models/TranslationForm';
 
 export type TranslationListSearchParams = {
   search: string | undefined;
@@ -25,11 +41,17 @@ export const buildTranslationListUrl = (
   return `/app/translations?${queryString.stringify(params)}`;
 };
 
+type TranslationsPageProps = {
+  translations: ResponseGetTranslationData;
+  namespaces: string[];
+  locales: string[];
+};
+
 const TranslationsPage = () => {
   const [params, setParams] = useSearchParams();
-  const { data: locales } = useGetProjectLocales();
-  const { data: translations } = useGetTranslationsData();
-  const { data: namespaces } = useGetNamespace();
+
+  const { translations, namespaces, locales } =
+    useLoaderData<TranslationsPageProps>();
 
   return (
     <div className="space-y-6">
@@ -57,9 +79,89 @@ const TranslationsPage = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // If the user is already authenticated redirect to /projects directly
-  return await authenticator.isAuthenticated(request, {
+  const authData = await authenticator.isAuthenticated(request, {
     failureRedirect: '/login',
   });
+
+  const urlParams = new URLSearchParams(request.url.split('?')[1]);
+  const urlObj: TranslationListSearchParams =
+    mapUrlSearchParamsToObj(urlParams);
+
+  if (!urlObj.project) {
+    return {
+      status: 404,
+      error: 'Project not found',
+    };
+  }
+
+  const translations = await getTranslations(urlObj, authData.accessToken);
+  const namespaces = await getProjectNamespaces(
+    urlObj.project ?? '',
+    authData.accessToken
+  );
+  const locales = await getProjectLocales(
+    urlObj.project ?? '',
+    authData.accessToken
+  );
+
+  return {
+    translations,
+    namespaces,
+    locales,
+  };
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const authData = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login',
+  });
+
+  const params = new URLSearchParams(request.url.split('?')[1]);
+  const project = params.get('project');
+
+  if (!project) {
+    return json({ error: 'Invalid project' }, { status: 400 });
+  }
+
+  const {
+    errors,
+    data,
+    receivedValues: defaultValues,
+  } = await getValidatedFormData<TranslationDataRowForm>(
+    request,
+    translationFormResolver
+  );
+
+  if (errors) {
+    console.log('Error', errors);
+    return json({ errors, defaultValues });
+  }
+
+  if (!data) {
+    return json({ error: 'Invalid data' }, { status: 400 });
+  }
+
+  // Do something with the data
+  try {
+    await updateTranslation(
+      {
+        namespace: data.namespace,
+        oldKey: data.key,
+        newKey: data.key,
+        project: project,
+        translations: data.translations.map((t) => ({
+          locale: t.locale,
+          value: t.value,
+        })),
+      },
+      authData.accessToken
+    );
+
+    // refresh the page
+    return json({ success: true });
+  } catch (error) {
+    return json({ error: 'Something went wrong' }, { status: 500 });
+  }
 }
 
 export default TranslationsPage;

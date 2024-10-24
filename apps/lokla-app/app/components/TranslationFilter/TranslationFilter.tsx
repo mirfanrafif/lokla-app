@@ -37,7 +37,7 @@ const TranslationFilter = (props: { namespaces: string[] | undefined }) => {
           setSearch(e.target.value);
         }}
         backgroundColor={'white'}
-        className="flex-1"
+        className="w-full"
       />
 
       <FormControl>

@@ -29,7 +29,7 @@ const TranslationFilter = (props: { namespaces: string[] | undefined }) => {
   }, [search]);
 
   return (
-    <div className="flex flex-row w-full gap-4 items-end">
+    <div className="flex flex-col lg:flex-row w-full gap-4 items-stretch lg:items-end">
       <Input
         placeholder="Search..."
         value={search}
